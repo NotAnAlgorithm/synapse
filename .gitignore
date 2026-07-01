@@ -18,8 +18,11 @@ node_modules
 yarn-error.log
 ts/.svelte-kit
 .yarn
+.agents
 .claude/settings.local.json
 .claude/user.md
+.claude/worktrees
+.cursor
 .venv
 docs/_build/
 docs/autoapi/
