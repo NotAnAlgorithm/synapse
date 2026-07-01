@@ -21,6 +21,9 @@ members = [
   "rslib/sync",
   "tools/minilints",
 ]
+# The Android backend (android/backend) is a self-contained Cargo workspace
+# with its own Cargo.lock and Android-only deps; keep it out of the main one.
+exclude = ["android/backend"]
 resolver = "2"
 
 [workspace.dependencies.percent-encoding-iri]
