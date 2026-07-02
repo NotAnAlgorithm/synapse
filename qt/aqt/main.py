@@ -248,6 +248,11 @@ class AnkiQt(QMainWindow):
         self.toolbar.draw()
         # add-ons are only available here after setupAddons
         gui_hooks.reviewer_did_init(self.reviewer)
+        # Synapse desktop UX: adds Tools-menu actions + mint hooks. Wired here so
+        # our menu items append after add-ons, and this runs exactly once.
+        from aqt import synapse
+
+        synapse.init(self)
 
     def setupProfileAfterWebviewsLoaded(self) -> None:
         for w in (self.web, self.bottomWeb):

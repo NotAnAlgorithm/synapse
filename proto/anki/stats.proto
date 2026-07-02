@@ -16,6 +16,7 @@ service StatsService {
   rpc Graphs(GraphsRequest) returns (GraphsResponse);
   rpc GetGraphPreferences(generic.Empty) returns (GraphPreferences);
   rpc SetGraphPreferences(GraphPreferences) returns (generic.Empty);
+  rpc ConceptMemory(ConceptMemoryRequest) returns (ConceptMemoryResponse);
 }
 
 // Implicitly includes any of the above methods that are not listed in the
@@ -241,4 +242,27 @@ message Dataset {
   repeated CardEntry cards = 2;
   repeated DeckEntry decks = 3;
   int64 next_day_at = 4;
+}
+
+message ConceptMemoryRequest {
+  // scope filter, e.g. "deck:Synapse"; empty = whole collection
+  string search = 1;
+}
+
+message ConceptMemoryResponse {
+  message ConceptScore {
+    // full tag, e.g. concept::biochem::amino_acid_charge
+    string concept = 1;
+    // 2nd tag segment, e.g. biochem ("" if absent)
+    string section = 2;
+    // mean retrievability 0..100 over scored cards
+    float memory = 3;
+    // total cards mapped to this concept (coverage)
+    uint32 card_count = 4;
+    // cards with memory_state contributing to `memory`
+    uint32 scored_card_count = 5;
+    // scored_card_count >= 3
+    bool sufficient_data = 6;
+  }
+  repeated ConceptScore concepts = 1;
 }

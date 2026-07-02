@@ -422,6 +422,7 @@ def is_sveltekit_page(path: str) -> bool:
         "import-csv",
         "import-page",
         "image-occlusion",
+        "synapse",
     ]
 
 
@@ -746,6 +747,7 @@ exposed_backend_list = [
     "graphs",
     "get_graph_preferences",
     "set_graph_preferences",
+    "concept_memory",
     # TagsService
     "complete_tag",
     # ImageOcclusionService

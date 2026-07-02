@@ -36,6 +36,13 @@ impl crate::services::StatsService for Collection {
     ) -> error::Result<()> {
         self.set_graph_preferences(input)
     }
+
+    fn concept_memory(
+        &mut self,
+        input: anki_proto::stats::ConceptMemoryRequest,
+    ) -> error::Result<anki_proto::stats::ConceptMemoryResponse> {
+        self.concept_memory(&input.search)
+    }
 }
 
 impl From<RevlogReviewKind> for i32 {
