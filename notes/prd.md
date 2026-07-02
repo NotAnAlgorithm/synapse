@@ -6,6 +6,8 @@ Version 0.1 (draft for internal review) · Status: proposal · Owner: e
 
 > The name Synapse reflects what the product is built to do: strengthen the connections between concepts the way a synapse strengthens with repeated use. It also mirrors the app's knowledge-graph design, where concepts are nodes joined by prerequisite links, and it signals the memory-and-neuroscience heritage of the spaced-repetition engine underneath.
 
+> **Companion document.** This PRD states the decisions. The reasoning behind them, the source-by-source evidence, the effect sizes, and the places where sources disagree, lives in the **Synapse Brainlift**. If a choice here looks surprising (for example, keeping FSRS retention high rather than lowering it early, or refusing to credit placement mastery from a single answer), the brainlift is where the argument and the counter-argument are worked out.
+
 ---
 
 ## 1. Vision and the one goal
@@ -24,13 +26,13 @@ The dominant MCAT Anki workflow is to download a 5,000+ card premade deck (AnKin
 
 **Bare recall transfers weakly to the exam.** The MCAT almost never asks "what is X." It asks you to use X inside a novel experiment or passage, and CARS is pure reasoning with nothing to memorize. The best evidence here is Pan & Rickard's 2018 meta-analysis (192 effect sizes, ~10,000 participants): retrieval practice does transfer to application and inference, but only at about d = 0.40 overall, and that falls to d = 0.28 when the practiced answer doesn't overlap the tested one. It climbs to d = 0.58 with response congruency and gets another ~0.23 boost from "elaborated" retrieval. A 2023 preregistered replication (Mayrhofer et al.) also showed that a chunk of the famous testing-effect advantage over concept mapping was really an artifact of extra memorization time. Put together: plain cloze cards sit in the weak end of the transfer range, which is exactly the wrong end for a reasoning test.
 
-**"Completion" is a vanity metric.** Across the cohort studies we checked (Wright State n=130, UNLV n=36, Wothe n=165), the Anki statistic that most reliably tracks exam performance is percent of cards *mature*, not card count, review count, retention rate, or ease. The brainlift's original claim that maturity is the *only* thing that predicts anything turned out to be too strong (the UNLV cohort found study hours and unsuspended-card count correlated too, they just lose independent significance because they're collinear with mature-card count). But the direction holds: hours ground and cards created are not the target. All of these studies are correlational and single-institution, and none used the MCAT, so we treat them as directional, not causal.
+**"Completion" is a vanity metric.** Across the cohort studies we checked (Wright State n=130, UNLV n=36, Wothe n=165), the Anki statistic that most reliably tracks exam performance is percent of cards *mature*, not card count, review count, retention rate, or ease. It isn't the *only* signal that correlates (the UNLV cohort found study hours and unsuspended-card count did too), but those lose independent significance once mature-card count is in the model, because they're collinear with it. The direction is what matters: hours ground and cards created are not the target. All of these studies are correlational and single-institution, and none used the MCAT, so we treat them as directional, not causal.
 
 **Nothing schedules against the test date.** FSRS is deadline-agnostic by design; it optimizes for indefinite retention, not for peak recall on one specific Saturday. That is a real gap. Cepeda et al. (2008) showed the optimal spacing gap shrinks as the horizon to the test shrinks. The naive fix (lower your retention target early to "add difficulty") is actually a category error, and we explain why in Feature A1/A2.
 
 **Ungrounded AI hallucinates badly.** The current wave of AI flashcard and quiz generators spins content out of a model's parametric memory. In an adversarial medical study (Omar et al. 2025), models elaborated a planted false detail in 50–82% of cases, and prompting only cut that to ~44%. Fabricated citations are rampant (Chelli et al. 2024: GPT-4 got 28.6% of references wrong, Bard 91.4%). Grounding the model in real source text drops error dramatically but never to zero. So AI has to be a grounded transformer with human review, not an oracle.
 
-Our bet is that fixing these four things beats the *worst* existing workflow (mindless deck-grinding) comfortably, and that with the knowledge graph and grounded AI it can also beat the *disciplined* workflow that top scorers already use by hand (content review → practice → error-logged custom cards). The counter-assessment is right that we shouldn't assume the second part; we treat it as the thing to prove, which is why several features ship as A/B experiments with kill criteria.
+Our bet is that fixing these four things beats the *worst* existing workflow (mindless deck-grinding) comfortably, and that with the knowledge graph and grounded AI it can also beat the *disciplined* workflow that top scorers already use by hand (content review → practice → error-logged custom cards). That second claim we do not assume; it's the thing to prove, which is why several features ship as A/B experiments with kill criteria.
 
 ---
 
@@ -42,7 +44,7 @@ These come straight out of the research and act as guardrails.
 2. **Difficulty must be earned, not imposed.** A desirable difficulty only helps if the learner has the prerequisites to succeed at it. When retrieval fails, you get almost no learning. So difficulty gets titrated to per-concept mastery, never applied blindly.
 3. **Spacing and interleaving are close to free wins.** They are among the most replicated effects in the field, they cost mostly acquisition speed (which students misread as the technique "not working"), and they map cleanly onto what FSRS already does.
 4. **Ground the AI or don't ship it.** AI may transform vetted content. It may not originate facts. Every generated item cites its source and passes a quality gate before a student sees it.
-5. **Measure learning, not activity.** The north-star metrics are mature concepts, unaided next-item correctness, and projected test-day readiness. Card counts, hours, and streaks are deliberately de-emphasized.
+5. **Measure learning, not activity.** The scores we surface are Memory (can you recall it), Performance (can you apply it to a novel item), and Readiness (your projected score), each shown with an honest range. Card counts, hours, and streaks are deliberately de-emphasized.
 6. **Solve adoption without corrupting the objective.** An app nobody opens teaches nothing (Khanmigo, an excellent grounded tutor, sees only ~15% of eligible students engage). We use engagement mechanics, but we avoid the pure streak/loss-aversion loop that pushes people to speed-run easy reps.
 7. **Be honest about weak evidence.** Where a design leans on correlational, vendor, adversarial, or simulation-derived data, we say so, and we build the experiment to check it rather than shipping the belief.
 
@@ -60,7 +62,7 @@ The MCAT population is not monolithic. We designed four personas; **Maya is the 
 - **Pain points:** Her Anki review pile has ballooned to 600+ cards a day and she spends more time on cards than on passages. She *knows* the content when she sees a flashcard, then blanks when the same fact is buried in a passage with a graph. She feels busy but her practice scores have plateaued.
 - **Behaviors:** Checks her streak. Feels guilt about "unfinished" decks. Reviews in long blocks by subject.
 - **What success looks like for her:** Fewer, smarter reviews; cards that actually show up as points on AAMC FLs; a clear signal of whether she's on track for 515 by her test date.
-- **Features that serve her:** deadline-aware scheduling (A2), interleaving (A3), application items (B2), error-driven minting (B1), honest readiness dashboard (E1).
+- **Features that serve her:** deadline-aware scheduling (A2), interleaving (A3), application items (B2), error-driven minting (B1), a placement check when she switches in (D3), and an honest scores dashboard showing Memory, Performance, and Readiness (E1, F1–F3).
 
 ### Persona 2 — Devin Okafor, the non-traditional retaker
 
@@ -70,7 +72,7 @@ The MCAT population is not monolithic. We designed four personas; **Maya is the 
 - **Pain points:** Can't afford to review things he already knows. Needs the app to be ruthless about spending his limited hours on his real gaps. Burned out last cycle from grinding.
 - **Behaviors:** Studies in short scattered sessions. Skips content he's confident in (sometimes wrongly).
 - **What success looks like for him:** Maximum score gain per hour; the app protecting him from wasting time; targeted remediation of physics without re-teaching psych.
-- **Features that serve him:** knowledge graph + mastery gating (D1/D2), trickle-down review credit (D2), coverage checker against the AAMC outline (B4), leech repair on his physics confusions (C3), efficiency-first scheduling (A1).
+- **Features that serve him:** knowledge graph + mastery gating (D1/D2), trickle-down review credit (D2), a placement assessment so he skips re-studying psych/soc (D3), coverage checker against the AAMC outline (B4), leech repair on his physics confusions (C3), efficiency-first scheduling (A1).
 
 ### Persona 3 — Priya Nair, the 520+ striver
 
@@ -80,7 +82,7 @@ The MCAT population is not monolithic. We designed four personas; **Maya is the 
 - **Pain points:** Most tools waste her time re-drilling facts she mastered months ago. She needs harder, transfer-level practice and help closing small, specific gaps. Generic decks are beneath her.
 - **Behaviors:** Self-directed, skeptical of gimmicks, will abandon anything that feels like busywork.
 - **What success looks like for her:** The app recognizes mastery and stops making her review it, promotes her to application/passage practice, and surfaces the two or three concepts actually holding her back from 520.
-- **Features that serve her:** card metamorphosis done right (B3), expertise-aware scheduling so mastered recall cards fade to long intervals (A1/B3), application + CARS practice (B2), precise gap surfacing via the tutor (C2).
+- **Features that serve her:** card metamorphosis done right (B3), expertise-aware scheduling so mastered recall cards fade to long intervals (A1/B3), a placement assessment that credits what she already owns (D3), application + CARS practice (B2), precise gap surfacing via the tutor and the Performance score (C2, F2).
 - **Why she matters:** She's the expertise-reversal case. She's the reason we do NOT blindly keep drilling mastered recall, and also the reason we do NOT hard-delete it either (see B3).
 
 ### Persona 4 — Jordan Reyes, the early/exploratory starter (SECONDARY)
@@ -131,21 +133,26 @@ Grouped by epic. Format is the usual "as a [persona], I want [X] so that [Y]," w
 | D-1 | As Devin, I want the app to understand that amino-acid chemistry underlies enzyme kinetics, so it teaches me in the right order and doesn't drop me into hard material I'm not ready for. | Content is mapped to a prerequisite knowledge graph aligned to the AAMC outline; per-concept mastery is tracked. |
 | D-2 | As Devin, when I nail an advanced problem, I want partial review credit to trickle down to its prerequisites, so I'm not redundantly reviewing the basics. | Advanced practice grants discounted implicit credit up the prerequisite chain (FIRe-style). |
 | D-3 | As Priya, I want the two or three specific concepts blocking my next score jump surfaced, not a generic to-do list. | Mastery map + practice data identify the highest-leverage weak concepts. |
+| D-4 | As Devin, when I join after months of studying elsewhere, I want a short placement check that credits what I already know so I don't redo it. | An optional adaptive placement assessment seeds per-concept mastery and skips confirmed material. |
+| D-5 | As Priya, I don't want placement to mark something "known" from one lucky answer and then hide it from me forever. | Mastery credit requires application-level and spaced confirmation, not a single correct response; borderline items get a shortened interval, not retirement. |
 
 ### Epic E — Motivation that rewards the right thing
 
 | # | Story | Done means |
 |---|---|---|
-| E-1 | As Maya, I want my home screen to show mature, test-ready concepts and my projected score, not a card count or a flame, so I'm chasing learning, not activity. | Dashboard leads with concepts mature, next-item correctness, and readiness projection. |
+| E-1 | As Maya, I want my home screen to show mature, test-ready concepts and my projected score, not a card count or a flame, so I'm chasing learning, not activity. | Dashboard leads with the three scores (Memory, Performance, Readiness) and de-emphasizes card counts and streaks. |
 | E-2 | As Maya, I don't want to lose everything because I missed one day during exam crunch. | Streak-freeze/forgiveness exists; adherence mechanics don't punish a single miss. |
 | E-3 | As Devin, I want to be rewarded for tackling my weak areas and recovering lapsed cards, not for speed-running easy ones. | Points/recognition weight difficult successful retrievals and recoveries; easy-rep padding earns little. |
 
-### Epic F — Knowing if I'm ready
+### Epic F — Knowing where I stand (Memory, Performance, Readiness)
 
 | # | Story | Done means |
 |---|---|---|
-| F-1 | As Maya, I want a projected MCAT score with an honest uncertainty range, anchored on AAMC full-lengths, so I can decide whether to sit or reschedule. | Readiness projection anchored on AAMC FLs, shown with a ±band, with reduced confidence flagged at the high end. |
-| F-2 | As Devin, when I enter a third-party practice score, I want it adjusted toward a realistic AAMC-equivalent. | Documented third-party offsets applied with caution and clearly labeled as estimates. |
+| F-1 | As Maya, I want to see how likely I am to recall each concept right now. | A Memory score (FSRS retrievability) shown per concept, per section, and overall. |
+| F-2 | As Priya, I want to know whether I can actually apply a concept to a new exam-style question, not just recall it. | A Performance score estimating success on unseen application items, shown with a wider range than Memory and clearly distinguished from it. |
+| F-3 | As Maya, I want a projected MCAT score with an honest range so I can decide whether to sit or reschedule. | A Readiness projection anchored on AAMC full-lengths, shown with a range, confidence reduced and flagged above ~515. |
+| F-4 | As Devin, when I enter a third-party practice score, I want it adjusted toward a realistic AAMC-equivalent. | Documented third-party offsets applied with caution and clearly labeled as estimates. |
+| F-5 | As Devin, I'd rather see "not enough data yet" than a confident score the app can't back up. | Any score with too little coverage or too wide a range is withheld and shows a clear "keep practicing" state instead. |
 
 ---
 
@@ -171,7 +178,7 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 
 **What it is.** A student enters their exam date. As the date approaches, the scheduler shifts so that recall is highest *on test day*. Concretely, it raises effective retrievability and compresses intervals in the final ~2–3 weeks rather than holding a flat indefinite-retention target.
 
-**The science, stated carefully.** This is a real gap: FSRS optimizes for indefinite retention, not a fixed date. Cepeda et al. (2008) is the anchor, and it must be cited honestly. It tested the optimal gap between *two* study sessions given a single fixed test delay, and found that gap shrinks as the horizon shrinks (roughly 20–40% of a one-week delay, down to 5–10% of a one-year delay). It did *not* test a multi-review SRS curve, and it is not a validated schedule for "compress everything as the deadline nears." So we use it as motivation for the direction (peak the curve at the deadline), not as proof of a specific curve. Critically, the defensible move is to raise retrievability *late*, which is the opposite of the brainlift's original "lower retention early." Lowering early just buys lapses (see A1).
+**The science, stated carefully.** This is a real gap: FSRS optimizes for indefinite retention, not a fixed date. Cepeda et al. (2008) is the anchor, and it must be cited honestly. It tested the optimal gap between *two* study sessions given a single fixed test delay, and found that gap shrinks as the horizon shrinks (roughly 20–40% of a one-week delay, down to 5–10% of a one-year delay). It did *not* test a multi-review SRS curve, and it is not a validated schedule for "compress everything as the deadline nears." So we use it as motivation for the direction (peak the curve at the deadline), not as proof of a specific curve. Critically, the defensible move is to raise retrievability *late*; the opposite move, lowering the retention target early to manufacture difficulty, just buys lapses (see A1).
 
 **Caveat and the reason it's an experiment.** There is no RCT of a deadline-aware retention curve. We ship it behind an A/B test against flat FSRS. **Kill criterion:** if the deadline arm shows higher *total* review load (including relearning) OR lower practice-test scores, we cut it.
 
@@ -197,7 +204,7 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 
 **The science.** This aligns with instructor consensus (Jack Westin: "Practice finds weaknesses. Anki prevents re-forgetting"; tie cards to passage mistakes) and with the transfer literature: retrieval transfers best when the practiced item resembles the tested one (Pan & Rickard's response congruency, d up to 0.58). It also matches Deng et al. (2015), where practice questions bought Step 1 points about as efficiently as flashcards (roughly one point per 445 questions vs one per 1,700 cards), hinting that question-anchored study is potent. Honest note: "questions first, cards downstream" is good practice but it is *not* novel; top scorers already do this by hand. Our contribution is making it frictionless and automatically linked, not inventing the idea.
 
-**Important design choice.** Minting is *additive*, not exclusive. The counter-assessment is right that a pure error-only system has a coverage-gap risk: you never make cards for high-yield topics you happen not to have been tested on yet, and psych/soc in particular is broad enough that this bites. So we pair minting with the coverage tools in B4.
+**Important design choice.** Minting is *additive*, not exclusive. A pure error-only system has a coverage-gap risk: you never make cards for high-yield topics you happen not to have been tested on yet, and psych/soc in particular is broad enough that this bites. So we pair minting with the coverage tools in B4 and the placement seeding in D3.
 
 **How it works on the architecture.** A missed-question event creates a note through the normal path (`Collection::add_note` → `add_note_inner` in `rslib/src/notes/mod.rs`), which already generates cards from the notetype templates. The link back to the source question is stored in the card's `custom_data` JSON (a field the core already exposes on every card for exactly this kind of add-on state) and/or a new `card_lineage` table if we want it queryable. AI drafts the card from the (grounded) explanation text (see C1).
 
@@ -217,7 +224,7 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 
 **What it is.** As a fact is mastered, its bare-recall card fades to long intervals and an application item covering the same concept is introduced. Mastery is judged on the *application* form. But we do NOT hard-delete the recall substrate, and we keep light maintenance retrieval before the exam.
 
-**Why this is the corrected version.** The original brainlift justified "expiring" recall cards with the expertise-reversal effect. That's a misapplication. Expertise reversal (Kalyuga, Sweller) is about *instructional guidance* (worked examples, redundant explanations) becoming unnecessary or harmful for experts. Retrieval practice is not instructional guidance; it's the desirable difficulty itself. Nothing in expertise reversal says stop retrieving mastered facts. Worse, Bjork's New Theory of Disuse says retrieval strength decays without use, so a "mastered" fact whose card you retired will quietly rot, which is dangerous before a fixed-date high-stakes exam. And the claim "the MCAT never asks what X is" is overstated: psych/soc rewards precise discrimination between near-identical terms, and amino acids, hormones, and equations are legitimately recall. So we metamorphose by *adding* application on top and letting FSRS stretch the recall interval naturally (which already makes mastered cards cheap to maintain), rather than by deletion.
+**Why it's built this way.** It would be tempting to *expire* a recall card once the fact is mastered, on the logic of the expertise-reversal effect. That would be a misapplication. Expertise reversal (Kalyuga, Sweller) is about *instructional guidance* (worked examples, redundant explanations) becoming unnecessary or harmful for experts. Retrieval practice is not instructional guidance; it's the desirable difficulty itself, and nothing in expertise reversal says stop retrieving mastered facts. Worse, Bjork's New Theory of Disuse says retrieval strength decays without use, so a "mastered" fact whose card you retired will quietly rot, which is dangerous before a fixed-date high-stakes exam. And "the MCAT never asks what X is" is overstated: psych/soc rewards precise discrimination between near-identical terms, and amino acids, hormones, and equations are legitimately recall. So we metamorphose by *adding* application on top and letting FSRS stretch the recall interval naturally (which already makes mastered cards cheap to maintain), rather than by deletion.
 
 **How it works on the architecture.** FSRS already grows intervals for stable cards, so a mastered recall card costs almost nothing to keep. "Mastery on the application form" is a threshold on the application item's FSRS stability plus accuracy, tracked via the knowledge graph (Group D). Card lineage (recall card → application card for the same concept) lives in `custom_data` or the lineage table. Retirement, if it happens at all, is a suspend (`CardQueue::Suspended`), which is reversible, not a delete, and we schedule occasional maintenance reviews in the pre-exam window via the governor (A2).
 
@@ -227,7 +234,7 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 
 **What it is.** A vetted premade deck is available as an *optional* coverage backbone, and a coverage report maps a student's existing cards against the official AAMC content outline to flag high-yield topics with no card.
 
-**The science / product logic.** This directly answers the counter's strongest critique of "ship no deck to finish." Premade decks are a proven, zero-setup, high-coverage tool. There are real existence proofs of students scoring in the 520s using essentially a premade deck plus practice. Removing that backbone entirely creates a cold-start problem and a coverage-gap risk, especially for novices (Persona Jordan) and for broad sections like psych/soc. Keeping the deck opt-in, while making error-driven minting the *default* path, preserves coverage without making "finish the deck" the goal.
+**The science / product logic.** "Completion" is a vanity metric, but that doesn't mean premade decks are useless. They're a proven, zero-setup, high-coverage tool, and there are real existence proofs of students scoring in the 520s using essentially a premade deck plus practice. Removing that backbone entirely creates a cold-start problem and a coverage-gap risk, especially for novices (Persona Jordan) and for broad sections like psych/soc. Keeping the deck opt-in, while making error-driven minting the *default* path, preserves coverage without making "finish the deck" the goal.
 
 **How it works on the architecture.** A premade deck is just a shared deck (standard Anki import/export, `import_export` proto + `rslib` importers). The coverage checker is a mapping layer: each card is tagged to one or more AAMC content categories (via the knowledge graph, Group D), and we compute which categories are underrepresented. This is a new read-model/query, surfaced in the web UI (a SvelteKit page under `ts/routes/`), reachable over the allow-listed HTTP path.
 
@@ -239,7 +246,7 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 
 **What it is.** AI is sandboxed to source-grounded transformation: summarize *this* AAMC-aligned passage into atomic cards, write distractors from *this* verified answer key, explain *this* correct solution. It never originates facts. Every generated item carries a citation to its grounding source and must pass an automated item-flaw check plus human expert review before it reaches a learner.
 
-**The science, with the numbers put in their correct context.** The hallucination literature looks contradictory until you sort it by task. The scary ~50–82% figure is Omar et al. (2025), an *adversarial* study where each prompt had a fabricated detail deliberately planted; that's a worst-case, not a base rate for generation, and prompting only reduced it to ~44%. The reassuring ~1.47% figure is Asgari et al. (2025), but two caveats the brainlift missed: it's a *summarization* task, and it used direct GPT-4 prompting, *not* RAG, so it isn't evidence that "RAG is safe," it's evidence that constrained summarization is easier. Reference fabrication is real and large (Chelli et al. 2024). And AI-written MCQs, while comparable to human ones on average (Doughty et al. 2024; psychometric parity in npj Digital Medicine 2025), carry higher rates of specific defects: multiple-correct answers and answer-giveaway distractors, roughly 4–5% vs ~1% for humans. Notably, an LLM is a *worse* judge of item quality than a rule-based checker (catching ~79% vs ~91% of item-writing flaws), which is why our quality gate is rule-based first, not "ask another model."
+**The science, with the numbers put in their correct context.** The hallucination literature looks contradictory until you sort it by task. The scary ~50–82% figure is Omar et al. (2025), an *adversarial* study where each prompt had a fabricated detail deliberately planted; that's a worst-case, not a base rate for generation, and prompting only reduced it to ~44%. The reassuring ~1.47% figure is Asgari et al. (2025), but it comes with two easily-missed caveats: it's a *summarization* task, and it used direct GPT-4 prompting, *not* RAG, so it isn't evidence that "RAG is safe," it's evidence that constrained summarization is easier. Reference fabrication is real and large (Chelli et al. 2024). And AI-written MCQs, while comparable to human ones on average (Doughty et al. 2024; psychometric parity in npj Digital Medicine 2025), carry higher rates of specific defects: multiple-correct answers and answer-giveaway distractors, roughly 4–5% vs ~1% for humans. Notably, an LLM is a *worse* judge of item quality than a rule-based checker (catching ~79% vs ~91% of item-writing flaws), which is why our quality gate is rule-based first, not "ask another model."
 
 **Honest cost.** Grounding is a real operational burden: it needs a vetted source pipeline, it's slower, and it covers less than free-form generation. We accept that cost because one confidently-wrong card on a high-stakes exam is worse than a smaller, slower, trustworthy library. Grounding reduces hallucination sharply but never to zero (best clinical RAG configs still sit around 5–6%), so we set an explicit residual-hallucination monitoring target rather than pretending it's solved.
 
@@ -295,17 +302,29 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 
 **Success.** Lower total review load at equal mastery, and higher success rates on newly unlocked application items (evidence the gating picked the right moment).
 
+#### D3. Placement / diagnostic assessment (optional, for students who arrive with prior study)
+
+**What it is.** An optional adaptive assessment a student can take when they join, aimed at anyone who has already done content review or practice elsewhere. It estimates per-concept mastery, then seeds the knowledge graph and FSRS so the student skips confirmed material and starts where their real gaps are. It's short and adaptive, not a 5,000-card slog.
+
+**The science.** The "assess what you know, teach only the gaps" model has the strongest real-world track record in knowledge-space systems like ALEKS: a 2024 evaluation of 116,276 placement assessments reported classification AUROC ≈ 0.89, with topics marked "known" answered correctly ~83% of the time versus ~8% for "unknown," and placement scores correlating 0.75 with an independent initial score. Adaptive testing (IRT-based computerized adaptive testing) is efficient too: it typically reaches equivalent-or-better measurement precision in about half the items of a fixed-length test, using a standard-error stopping rule. Evidence caveat worth stating plainly: much of the ALEKS efficacy data is vendor-authored, and rigorous proof that placement reduces redundant study specifically in high-stakes exam prep is thin, so we treat our own rollout as a chance to generate that evidence (A/B placement-credited vs full-review cohorts).
+
+**The critical design rule: never credit mastery on a single correct answer.** This is where the app's whole thesis bites. Performance in the moment overstates durable learning (Soderstrom & Bjork), and the illusion of competence means a fluent-feeling correct answer is an unreliable signal (Koriat & Bjork). A placement test that marks a concept "known" from one lucky recall would reintroduce exactly the false confidence the app exists to fight. So mastery credit requires (a) an application-level item, not bare recall; (b) at least one spaced/delayed confirmation before a concept is fully skipped; and (c) tolerance for slips (even "known" ALEKS topics miss ~17% of the time from careless error). Anything short of that seeds FSRS with a shortened-but-nonzero interval (partial credit), not full mastery.
+
+**How it works on the architecture.** The item-selection and stopping logic (an IRT ability estimate with a standard-error / predicted-standard-error-reduction stopping rule) sits in a placement service. Because it writes results as per-concept mastery, it targets the same `concepts` / `card_concepts` tables and read-model from D1. Crediting a concept sets the initial FSRS memory state (`memory_state` on the relevant cards) to a partial or confirmed value instead of the default new-card state, so the scheduler just picks up from there: confirmed items get long intervals or a suspend, borderline items get a short seed interval. The flow reuses the existing card and scheduler machinery rather than building a parallel one.
+
+**Success.** Students who take placement reach the same retention on credited concepts as students who studied them in-app (no elevated failure rate on delayed checks), while spending materially less time re-covering known material. **Kill/adjust criterion:** if more than ~10% of credited concepts fail their delayed confirmation, raise the confirmation bar.
+
 ### Group E — Motivation and engagement
 
-#### E1. Learning-aligned metrics dashboard
+#### E1. Learning-aligned dashboard
 
-**What it is.** The home screen leads with mature/test-ready concepts, unaided next-item correctness, and a projected test-day readiness. Card counts, hours studied, and streaks are demoted or hidden.
+**What it is.** The home screen leads with the three scores from Group F (Memory, Performance, Readiness) plus a short "work on this next" list of the highest-leverage weak concepts. Card counts, hours studied, and streaks are demoted or hidden.
 
-**The science.** Percent mature is the most robust Anki correlate of exam performance in the cohort data (though correlational, single-site, non-MCAT, so directional). Soderstrom & Bjork and the broader performance-vs-learning literature show that fluency, confidence, and activity counts are unreliable indices of durable learning and can move opposite to it. Khan's choice to optimize unaided next-item correctness is our template for a metric that actually reflects transfer. So we display the things that track learning and hide the things students optimize by reflex.
+**The science.** Percent mature is the most robust Anki correlate of exam performance in the cohort data (correlational, single-site, non-MCAT, so directional), and the performance-vs-learning literature (Soderstrom & Bjork; Koriat & Bjork) shows fluency, confidence, and activity counts are unreliable indices of durable learning that can move opposite to it. Khan Academy's decision to optimize unaided next-item correctness is our template for a metric that reflects transfer, which is exactly what the Performance score (F2) captures. Learning-analytics reviews are sobering here: dashboards frequently fail to improve outcomes and most never explain their numbers, so we show the drivers behind each score rather than a bare figure. Net: display what tracks learning, explain it, and hide what students optimize by reflex.
 
-**How it works on the architecture.** This is a read-model plus a new dashboard page (`ts/routes/`, rendered in the shared web UI). "Concepts mature" comes from FSRS stability aggregated by concept (Group D). "Next-item correctness" is computed from the revlog by checking accuracy on new items following review of their prerequisites. Readiness projection comes from Group F.
+**How it works on the architecture.** A read-model plus a dashboard page (`ts/routes/`, shared web UI). The three scores come from the Group F analytics; the "work on next" list comes from the mastery map (Group D). No new scheduler logic, just presentation over existing read-models.
 
-**Success.** Users report chasing readiness/mastery over card counts, and behavior shifts accordingly (less easy-rep padding).
+**Success.** Users report chasing the three scores over card counts, and behavior shifts accordingly (less easy-rep padding).
 
 #### E2 / E3. Adoption mechanics that don't backfire (shipped as an experiment)
 
@@ -319,19 +338,51 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 
 **Success.** Adherence at or above a conventional streak baseline *and* less easy-rep padding, in the A/B.
 
-### Group F — Score prediction and readiness
+### Group F — Analytics: the three scores
 
-#### F1. AAMC-anchored readiness projection with an honest uncertainty band
+The app computes three distinct scores, each at three levels of granularity: per concept, per section, and whole-exam. They're deliberately separate numbers because they answer different questions and routinely diverge, and showing that divergence is itself the pedagogical point. A student can have high Memory and low Performance, and hiding that behind one "mastery" number would recreate the illusion of competence the app is built to fight. Scoring at every level also guides the algorithms: section- and exam-level rollups tell the scheduler and the "work on next" list where the leverage is.
 
-**What it is.** A projected MCAT score, anchored on AAMC full-length performance, shown with a ±range, with reduced confidence flagged at the high end (515+). Third-party practice scores are adjusted toward an AAMC-equivalent with documented offsets, clearly labeled as estimates.
+Every score, at every level, ships with the same display contract (F4): a point estimate, a likely range, the percent of relevant content covered so far, a plain-language "how sure" indicator, a last-updated timestamp, the two or three main drivers behind it, and an explicit rule for when it shows nothing at all.
 
-**The science / evidence, which is thin and we say so.** There is exactly one peer-reviewed MCAT-prediction study we could find (Chen & Corridon 2020), n = 19, where the median of a student's practice exams was the best single predictor (r = 0.92) and students tended to underperform their practice *maximum* on test day. That's a tiny, non-representative sample, so we lean on it lightly. The "FL4/FL5 are most representative," "average your last two," and "less reliable above 515" heuristics are prep-community consensus, not AAMC-published or peer-reviewed. Third-party deflation offsets trace to a self-reported Reddit/SDN dataset (Joel Harris), where Kaplan ≈ +10 is the best-corroborated figure and the "Blueprint +2 to +7" number is a vendor repackaging of Harris's original NextStep figures. All third-party numbers are undermined by silent scaling-algorithm changes over time.
+#### F1. Memory — "can you recall this right now?"
 
-**The design consequence.** Because published offsets are weak, the app builds its *own* predicted-vs-actual calibration dataset from users who report real scores, and improves the model over time. We never show a single false-precision number; always a band, with the high end flagged.
+**What it is.** The probability the student can retrieve a fact they've studied, right now. Per concept it's read almost directly off FSRS; per section and whole-exam it's an aggregate across the concepts in scope.
 
-**How it works on the architecture.** A prediction service consumes practice-test entries and FSRS/mastery signals and returns a projection with a confidence interval, surfaced on the dashboard (E1). Practice scores are user-entered (or imported) records; the calibration model is retrained as real MCAT outcomes come in.
+**The science and how it works.** This is the one score that's close to free and close to trustworthy, because FSRS already models retrievability per card (`memory_state`: stability and difficulty give predicted recall at a given elapsed time). Aggregating card-level retrievability up the `concepts` graph gives section- and exam-level Memory. Its range is the narrowest of the three because it's the best-validated quantity we have. The caveat belongs on the dashboard itself: Memory is *recall*, not application, so on its own it overstates exam readiness, which is the entire reason Performance exists as a separate number.
 
-**Success.** Calibration improves measurably as our dataset grows (predicted bands contain actual scores at the stated rate), beating the published third-party offsets on our own users.
+**Success.** Memory tracks actual delayed recall on held-out items within its stated range.
+
+#### F2. Performance — "can you answer a new, exam-style question that uses this?"
+
+**What it is.** The probability the student gets a *novel* application or passage-style item right, including concepts they've never been tested on in application form. This is the score that matches what the MCAT actually grades, and it's the hard one to estimate.
+
+**The science, and why its range is wide.** Recall does not equal transfer. Pan & Rickard put retrieval-practice transfer at d ≈ 0.40 overall, dropping to d ≈ 0.28 when the practiced and tested responses don't overlap, and collapsing toward zero when initial recall is weak. So Performance is estimated as Memory discounted by a transfer factor, where the discount grows when recall is weak, the item format differs from what was practiced, and the task is application rather than near-recall. For concepts with direct application-item history we can also use a knowledge-tracing-style estimate, but the honest ceiling there is about 0.70–0.82 AUC for next-item correctness, and for a concept the student has *never* attempted in application form the cold-start accuracy is near chance unless prerequisite signal helps. That's why Performance always carries a visibly wider range than Memory, and why it leans on the prerequisite graph (Group D) to set priors for untested concepts.
+
+**How it works on the architecture.** A prediction service reads FSRS retrievability, application-item history from the revlog, and prerequisite mastery from the `concepts` graph, and returns a calibrated probability with an interval. We validate calibration (expected calibration error, reliability diagrams) on held-out application items before surfacing it, not just AUC. The "unaided next-item correctness" from the tutor and practice flows is the ground truth we calibrate against.
+
+**Success.** Predicted Performance is calibrated (a stated "70%" means roughly 70% observed) on held-out application items, and the interval widens appropriately for untested concepts.
+
+#### F3. Readiness — "what would you score today, and how sure are we?"
+
+**What it is.** A projected MCAT score on the real 472–528 scale, per section and overall, with a range and a confidence note. This absorbs the earlier readiness projection.
+
+**The science / evidence, which is thin and we say so.** There is one peer-reviewed MCAT-prediction study we found (Chen & Corridon 2020), n = 19, where the median of a student's practice exams was the best single predictor (r = 0.92) and students tended to underperform their practice *maximum* on test day. The "FL4/FL5 are most representative," "average your last two," and "less reliable above 515" points are prep-community consensus, not peer-reviewed. Third-party deflation offsets trace to a self-reported Reddit/SDN dataset (Joel Harris), where Kaplan ≈ +10 is the best-corroborated figure and the "Blueprint +2 to +7" number is a vendor repackaging of Harris's original NextStep figures. The real MCAT also carries a built-in standard error of measurement of about ±2 points, so a single-point projection is false precision by construction. Prediction is worst at the top of the scale, where there are few data points above 515.
+
+**How it works, and where it abstains.** Readiness blends AAMC full-length scores (weighted most heavily), our internal Performance aggregate, and third-party scores adjusted by documented offsets and labeled as estimates. It widens its range toward the extremes and abstains (a hedged "not enough signal yet" rather than a number) above ~515 until at least two or three AAMC-style full-lengths exist. Because published offsets are weak, the app builds its own predicted-vs-actual calibration dataset from users who later report real scores, and improves over time.
+
+**Success.** Calibration improves as the dataset grows (stated ranges contain actual scores at the stated rate) and beats the published third-party offsets on our own users.
+
+#### F4. The shared display contract and the give-up rule
+
+**What it is.** Every score, at every granularity, renders the same seven things: point estimate, likely range, coverage %, a "how sure" chip (Low/Medium/High), last-updated timestamp, the top two or three drivers, and an abstention state. And there's a hard rule: when the data is insufficient, the app shows nothing rather than a shaky number.
+
+**The science.** Two convergent literatures drive this. First, uncertainty communication: verbal probability terms are read inconsistently (Irwin & Mandel found roughly a quarter of experts and over half of non-experts translate "likely/unlikely" incoherently), and non-experts do better with explicit ranges than with point estimates, so we always show a plain-language range ("likely 508–512"), not a lone number or a raw "95% CI." Second, selective prediction / the "reject option" (Chow; El-Yaniv & Wiener; Geifman & El-Yaniv): a model that can decline to answer below a confidence threshold beats one forced to always answer in high-stakes settings, and the assessment analog is the CAT standard-error stopping rule. Showing the drivers (explainability) improves appropriate trust, and prominent ranges counter the complacency a single confident number breeds.
+
+**The give-up rule, concretely.** A score is withheld when any of three conditions fail: coverage is too low (too little of the concept or section has been assessed), the credible interval is too wide, or calibration for that estimate is inadequate. In those cases the app shows an honest "keep practicing, not enough data yet" state naming what's missing, rather than a low-confidence figure. The thresholds (interval width, coverage %) start conservative and get tuned; over-abstaining frustrates users, so the coverage/reliability trade-off is a deliberate dial, not a fixed constant.
+
+**How it works on the architecture.** All three scores are read-models computed in a service layer and surfaced through the shared web UI; the abstention check is a single gate in that service applied uniformly before any score is returned, so the "show nothing" rule can't be bypassed by an individual screen.
+
+**Success.** Users interpret the ranges correctly in testing, and withheld-score states line up with genuinely unreliable predictions (when we do show a score, it's calibrated).
 
 ---
 
@@ -340,9 +391,9 @@ Each feature below gives: what it is, the learning-science basis with evidence a
 **North-star:** projected-and-then-actual MCAT score gain per study hour, for our users, versus their baseline trajectory.
 
 **Primary learning metrics (what we optimize):**
-- Unaided next-item correctness (transfer proxy, Khan-style).
-- Concepts mature and test-ready (FSRS stability aggregated by concept).
-- Accuracy on held-out application/passage items.
+- Calibrated Performance: unaided correctness on novel application items (the transfer proxy that matches what the MCAT grades).
+- Concepts mature and test-ready (the Memory aggregate: FSRS stability by concept).
+- Readiness-vs-actual calibration (do our stated ranges actually contain real scores).
 - Actual AAMC full-length trajectory.
 
 **Guardrail metrics (must not regress):**
@@ -365,10 +416,10 @@ The point of reviewing the Anki architecture was to make sure this is buildable 
 - Per-card state we get for free: FSRS memory state and the `custom_data` JSON field already on every card give us somewhere to hang lineage and mastery flags without a migration for the lightweight cases.
 
 **What lives in a service/app layer (because it needs network and orchestration the core shouldn't do):**
-- The grounded AI pipeline (C1), the tutor (C2), and leech-repair generation (C3). These retrieve from the vetted corpus, draft/transform, run the rule-based flaw checker, route to human review, and write approved content back through the normal `add_note` RPC. Keeping LLM calls out of the Rust core respects the existing design (the core owns data and logic, not external I/O beyond sync).
+- The grounded AI pipeline (C1), the tutor (C2), leech-repair generation (C3), the adaptive placement assessment (D3), and the three-score analytics/prediction (F). These retrieve from the vetted corpus or from read-models, do their orchestration (LLM calls, IRT item selection, calibration), and write results back through normal RPCs (`add_note` for content; per-concept mastery plus FSRS seeding for placement). Keeping this out of the Rust core respects the existing design: the core owns data and scheduling, not external I/O beyond sync.
 
 **What lives in the shared web UI (`ts/`, Svelte 5, rendered in the embedded browser on desktop and via the NanoHTTPD-served pages on Android):**
-- The readiness dashboard (E1/F1), the coverage report (B4), and mastery/graph views. New RPCs that the web needs must be added to the media-server allow-list (`mediasrv.py:exposed_backend_list`), since the web frontend can only reach allow-listed methods.
+- The scores dashboard (E1) and the three-score views (F), the placement flow (D3), the coverage report (B4), and mastery/graph views. New RPCs that the web needs must be added to the media-server allow-list (`mediasrv.py:exposed_backend_list`), since the web frontend can only reach allow-listed methods.
 
 **Cross-cutting note on extension points.** The clean way to add backend behavior is: add the message + RPC to the right `.proto`, run a full build so codegen regenerates all four language bindings and the dispatcher, implement the trait method in the matching `service*.rs`, and (if the web needs it) add it to the allow-list. Service/method indices are positional and shared across languages, so we only ever append RPCs, never reorder them. Mutations run off the UI thread via the operations framework and must return the right `OpChanges` flags to refresh the UI.
 
@@ -385,7 +436,7 @@ Phasing follows the research staging: prove the cheap, well-evidenced wins first
 - Interleaving by default (A3).
 - Application-form item types + error-driven minting (B1, B2).
 - Opt-in premade coverage deck + basic AAMC coverage checker (B4).
-- Learning-aligned dashboard with the honest metrics (E1).
+- Learning-aligned dashboard (E1) leading with the Memory score (F1), which FSRS gives us almost for free.
 - Basic concept tagging (a lightweight precursor to the full graph).
 - *Rationale:* every item here rests on strong or at least directional evidence and requires no unproven parameter. This alone should beat mindless deck-grinding.
 
@@ -395,28 +446,32 @@ Phasing follows the research staging: prove the cheap, well-evidenced wins first
 - Full prerequisite knowledge graph + per-concept mastery (D1).
 - Mastery gating + trickle-down credit (D2).
 - Card metamorphosis, add-then-fade version (B3).
+- Adaptive placement assessment seeding per-concept mastery (D3), once the graph exists.
 
 **Phase 3 — Tutoring, deadline scheduling, and adoption (the experiments).**
 - AI tutor grounded in student state (C2).
 - Test-date governor (A2), behind an A/B with a kill criterion.
 - Adoption mechanics: streak-freeze + reward-the-hard-thing (E2/E3), behind an A/B with an adherence guardrail.
+- Performance score with calibration on application items (F2).
 
 **Phase 4 — Prediction and refinement.**
-- AAMC-anchored readiness projection + proprietary calibration dataset (F1).
+- Readiness projection + proprietary calibration dataset (F3), and the full display and abstention contract across all three scores (F4).
 - Tuning of trickle-down discounts, gating thresholds, and the deadline curve from real outcome data.
 
 ---
 
 ## 10. Risks, open questions, and the experiments that resolve them
 
-The counter-assessment's most useful contribution was insisting we not turn lab effect sizes into shipped parameters. These are the bets we're explicitly testing rather than assuming.
+A recurring discipline in this project is refusing to turn lab effect sizes into shipped parameters. These are the bets we're explicitly testing rather than assuming.
 
 - **Does the deadline governor actually help (A2)?** Unknown; no RCT exists. A/B against flat FSRS; kill if total workload rises or practice scores fall.
 - **Does anti-streak gamification keep people engaged (E2/E3)?** Unknown; it's a hypothesis. A/B against a gentle streak; revert if adherence drops. This is the highest-variance bet in the product because adoption is existential.
 - **Does removing the "finish the deck" backbone hurt cold-start (B1/B4)?** Possible. That's why the premade deck stays opt-in and minting is additive; we watch week-1 retention in a no-deck vs with-deck comparison.
 - **Are trickle-down credit and mastery gating tuned right (D2)?** The FIRe formula is a practitioner heuristic. We tune the discount and thresholds empirically against review load and unlocked-item success.
 - **Can grounded AI actually hold defect/hallucination at or below human levels at scale (C1)?** Grounding reduces but never eliminates hallucination. We set a monitoring target and keep human review in the loop; if residual defects exceed the human baseline, generation stays gated harder.
-- **Does the app beat the *disciplined* top-scorer workflow, not just the lazy one?** This is the real prize and the thing the counter doubts. It's answered only by outcome data (actual AAMC trajectories) once Phases 1–2 are live.
+- **Does the app beat the *disciplined* top-scorer workflow, not just the lazy one?** This is the real prize and it's genuinely uncertain. It's answered only by outcome data (actual AAMC trajectories) once Phases 1–2 are live.
+- **Does placement credit mastery correctly (D3)?** A single correct answer is a weak mastery signal. We require application-level and spaced confirmation before skipping content, and audit credited concepts against delayed checks; if more than ~10% fail, we raise the bar.
+- **Can we estimate Performance for untested concepts honestly (F2)?** Cold-start prediction is near chance and knowledge tracing tops out around 0.70–0.82 AUC. We validate calibration before showing the number, and widen or withhold the range when signal is thin, rather than projecting false confidence.
 
 **Evidence honesty, carried forward:** all Anki→exam correlations are correlational, single-site, and non-MCAT; Khanmigo, Duolingo, and Math Academy figures are company-reported; the MCAT-prediction base is one n=19 study plus self-reported community data; Omar's hallucination rate is adversarial worst-case and Asgari's is a summarization figure from direct prompting, not RAG. We build features to test these, not to trust them.
 
@@ -444,12 +499,16 @@ The counter-assessment's most useful contribution was insisting we not turn lab 
 | B1 Error-driven minting | Jack Westin; Pan & Rickard congruency; Deng 2015 | Good but not novel; make it additive |
 | B2 Application items | Pan & Rickard (0.28→0.58, +0.23); Karpicke & Blunt; Willingham | Strong direction; Blunt magnitude contested (Mayrhofer 2023) |
 | B3 Metamorphosis (add-then-fade) | Expertise reversal (correctly scoped); New Theory of Disuse | Corrects a misapplication; don't delete recall |
-| B4 Coverage deck + checker | Counter's coverage critique; SDN existence proofs | Answers cold-start/coverage risk |
+| B4 Coverage deck + checker | Coverage-gap risk; SDN existence proofs | Answers cold-start/coverage risk |
 | C1 Grounded generation | Omar 2025 (adversarial); Asgari 2025 (summarization, not RAG); Chelli 2024; Doughty 2024 | Numbers correctly contextualized; grounding ≠ zero |
 | C2 State-grounded tutor | Khanmigo +6.1% next-item; +2.7% prerequisites | Company A/B; ~15% adoption ceiling drives design |
 | C3 Leech repair | Anki leech manual; Wozniak (interference); Sweller/cognitive load | Reframes leeches as a teaching trigger |
 | D1 Knowledge graph | Willingham; Bjork prerequisites; Math Academy; Bloom mastery | Direction strong; MA speed claims are marketing |
 | D2 Gating + trickle-down | FIRe; Khanmigo prerequisites; Bjork; Pan & Rickard (transfer≈0 if unready) | Heuristic; tune empirically |
-| E1 Learning-aligned metrics | Wright State (maturity); Soderstrom & Bjork; Khan metric | Maturity correlate is correlational |
+| D3 Placement assessment | ALEKS eval (AUROC 0.89, vendor); IRT/CAT efficiency; Soderstrom & Bjork; Koriat & Bjork | Efficient; never credit mastery on one answer |
+| E1 Learning-aligned dashboard | Wright State (maturity); Soderstrom & Bjork; Khan metric; LAD reviews | Correlational; show drivers, not bare numbers |
 | E2/E3 Adoption mechanics | Duolingo retention (vendor); Shortt 2023; overjustification | Highest-variance bet; A/B with adherence guardrail |
-| F1 Readiness projection | Chen & Corridon 2020 (n=19); Harris offsets (self-report) | Thin evidence; build own calibration dataset |
+| F1 Memory score | FSRS retrievability (per-card) | Best-validated of the three; narrow range |
+| F2 Performance score | Pan & Rickard (transfer d=0.28–0.40); knowledge tracing AUC ~0.70–0.82; cold-start ≈ chance | Hard to estimate; wide range; calibrate before showing |
+| F3 Readiness projection | Chen & Corridon 2020 (n=19); Harris offsets (self-report); ±2 SEM | Thin evidence; abstain above ~515; build own calibration |
+| F4 Display + give-up rule | Uncertainty comms (Irwin & Mandel); selective prediction (Chow; El-Yaniv) | Show range + drivers; withhold when data thin |
