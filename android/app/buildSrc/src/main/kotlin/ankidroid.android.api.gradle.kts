@@ -20,6 +20,8 @@ plugins {
 
 extensions.configure<LibraryExtension> {
     compileSdk = libsVersionFor("compileSdk").toInt()
+    // Pin to the installed build-tools (AGP 9 defaults to 36.0.0, not installed).
+    buildToolsVersion = "36.1.0"
 
     compileOptions {
         // API remains on VERSION_11 for consumer compatibility.

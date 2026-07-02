@@ -65,6 +65,9 @@ android {
     namespace = "com.ichi2.anki"
 
     compileSdk = libs.versions.compileSdk.get().toInteger()
+    // Pin to the build-tools version available in the SDK (AGP 9 would otherwise
+    // default to 36.0.0, which isn't installed).
+    buildToolsVersion = "36.1.0"
 
     buildFeatures {
         buildConfig = true
