@@ -45,7 +45,7 @@ qtpoint = _version.microVersion()
 qtfullversion = _version.segments()
 
 if qtmajor == 6 and qtminor < 2:
-    raise Exception("Anki does not support your Qt version.")
+    raise Exception("Synapse does not support your Qt version.")
 
 
 def qconnect(signal: Callable | pyqtSignal | pyqtBoundSignal, func: Callable) -> None:

@@ -862,7 +862,7 @@ class CardLayout(QDialog):
 
         t = self.current_template()
         d = QDialog(self)
-        d.setWindowTitle("Anki")
+        d.setWindowTitle("Synapse")
         disable_help_button(d)
         d.setMinimumWidth(400)
         l = QVBoxLayout()
@@ -991,7 +991,7 @@ class SelectStockNotetype(QDialog):
         QDialog.__init__(self, parent, Qt.WindowType.Window)
         self.dialog = aqt.forms.addmodel.Ui_Dialog()
         self.dialog.setupUi(self)
-        self.setWindowTitle("Anki")
+        self.setWindowTitle("Synapse")
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         disable_help_button(self)
         stock_types = stdmodels.get_stock_notetypes(mw.col)

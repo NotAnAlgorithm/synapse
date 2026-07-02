@@ -879,11 +879,11 @@ class AddonsDialog(QDialog):
         min = addon.min_version
         if min is not None and min > _current_version:
             ver = int_version_to_str(min)
-            return f"Anki >= {ver}"
+            return f"Synapse (Anki) >= {ver}"
         else:
             max = abs(addon.max_version)
             ver = int_version_to_str(max)
-            return f"Anki <= {ver}"
+            return f"Synapse (Anki) <= {ver}"
 
     def should_grey(self, addon: AddonMeta) -> bool:
         return not addon.enabled or not addon.compatible()
@@ -1283,7 +1283,7 @@ class DownloaderInstaller(QObject):
 
 
 def show_log_to_user(
-    parent: QWidget, log: list[DownloadLogEntry], title: str = "Anki"
+    parent: QWidget, log: list[DownloadLogEntry], title: str = "Synapse"
 ) -> None:
     have_problem = download_encountered_problem(log)
 

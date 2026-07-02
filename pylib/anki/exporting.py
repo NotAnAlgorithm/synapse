@@ -394,7 +394,7 @@ class AnkiPackageExporter(AnkiExporter):
         path = namedtmp("dummy.anki2")
         c = Collection(path)
         n = c.newNote()
-        n.fields[0] = "This file requires a newer version of Anki."
+        n.fields[0] = "This file requires a newer version of Synapse (Anki)."
         c.addNote(n)
         c.close(downgrade=True)
 

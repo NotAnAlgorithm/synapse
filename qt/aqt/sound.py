@@ -782,7 +782,7 @@ class RecordDialog(QDialog):
         self._setup_dialog()
 
     def _setup_dialog(self) -> None:
-        self.setWindowTitle("Anki")
+        self.setWindowTitle("Synapse")
         icon = QLabel()
         qicon = theme_manager.icon_from_resources("icons:media-record.svg")
         icon.setPixmap(qicon.pixmap(60, 60))

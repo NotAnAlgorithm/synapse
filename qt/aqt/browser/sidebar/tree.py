@@ -1040,7 +1040,7 @@ class SidebarTreeView(QTreeView):
             )
 
     def _on_rename_with_parents(self, item: SidebarItem) -> None:
-        title = "Anki"
+        title = "Synapse"
         if item.item_type is SidebarItemType.TAG:
             title = tr.actions_rename_tag()
         elif item.item_type is SidebarItemType.DECK:

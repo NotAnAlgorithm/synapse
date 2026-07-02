@@ -394,7 +394,7 @@ def importFile(mw: AnkiQt, file: str) -> None:
                 showWarning(invalidZipMsg())
             except MediaMapInvalid:
                 showWarning(
-                    "Unable to read file. It probably requires a newer version of Anki to import."
+                    "Unable to read file. It probably requires a newer version of Synapse to import."
                 )
             except V2ImportIntoV1:
                 showWarning(

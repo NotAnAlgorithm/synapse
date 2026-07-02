@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Synapse">
+  <defs>
+    <linearGradient id="spark" x1="108" y1="256" x2="486" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6D5AE6"/>
+      <stop offset="0.33" stop-color="#6D5AE6"/>
+      <stop offset="0.72" stop-color="#3FB4C6"/>
+      <stop offset="1" stop-color="#2DD4BF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="220" cy="258" r="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6D5AE6" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#6D5AE6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- app-icon ground -->
+  <rect x="0" y="0" width="512" height="512" rx="116" fill="#0F1226"/>
+  <circle cx="220" cy="258" r="210" fill="url(#glow)"/>
+
+  <!-- neuron: dendrites, soma and axon share the violet->teal gradient -->
+  <g fill="none" stroke="url(#spark)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- primary dendrites + axon trunk -->
+    <path stroke-width="13" d="M196 232 C168 205 150 175 120 150 M178 250 C150 250 120 252 92 262 M196 286 C172 312 152 336 128 362 M214 216 C214 184 220 150 228 120 M232 296 C246 326 256 352 262 384 M262 250 C300 244 330 240 360 236"/>
+    <!-- secondary dendrite branches -->
+    <path stroke-width="7" d="M152 192 C138 196 118 200 96 206 M120 254 C112 270 108 288 100 306 M160 330 C168 346 176 362 182 384 M222 168 C238 156 256 148 276 142 M250 342 C236 356 220 366 204 374"/>
+    <!-- second axon collateral -->
+    <path stroke-width="10" d="M330 240 C344 262 356 284 368 306"/>
+  </g>
+
+  <!-- soma (cell body) -->
+  <circle cx="220" cy="258" r="44" fill="url(#spark)"/>
+
+  <!-- dendritic spines / incoming synapses -->
+  <g fill="url(#spark)">
+    <circle cx="120" cy="150" r="6"/>
+    <circle cx="96"  cy="206" r="6"/>
+    <circle cx="92"  cy="262" r="6"/>
+    <circle cx="100" cy="306" r="6"/>
+    <circle cx="128" cy="362" r="6"/>
+    <circle cx="182" cy="384" r="6"/>
+    <circle cx="228" cy="120" r="6"/>
+    <circle cx="276" cy="142" r="6"/>
+    <circle cx="262" cy="384" r="6"/>
+    <circle cx="204" cy="374" r="6"/>
+    <!-- little incoming-synapse clusters -->
+    <circle cx="108" cy="138" r="3.5"/>
+    <circle cx="100" cy="150" r="3"/>
+    <circle cx="238" cy="108" r="3.5"/>
+    <circle cx="252" cy="120" r="3"/>
+  </g>
+
+  <!-- axon terminal 1 firing across the cleft to a post-synaptic node -->
+  <circle cx="372" cy="234" r="16" fill="url(#spark)"/>
+  <circle cx="398" cy="232" r="6" fill="url(#spark)"/>
+  <circle cx="414" cy="231" r="5" fill="url(#spark)"/>
+  <circle cx="430" cy="230" r="4" fill="url(#spark)"/>
+  <circle cx="452" cy="229" r="20" fill="url(#spark)"/>
+
+  <!-- axon terminal 2 firing to a second post-synaptic node -->
+  <circle cx="376" cy="314" r="11" fill="url(#spark)"/>
+  <circle cx="392" cy="320" r="5" fill="url(#spark)"/>
+  <circle cx="406" cy="326" r="4" fill="url(#spark)"/>
+  <circle cx="418" cy="331" r="3.5" fill="url(#spark)"/>
+  <circle cx="432" cy="338" r="15" fill="url(#spark)"/>
+</svg>

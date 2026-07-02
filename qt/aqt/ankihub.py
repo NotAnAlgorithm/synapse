@@ -92,7 +92,7 @@ def get_id_and_pass_from_user(
     password: str = "",
 ) -> None:
     diag = QDialog(mw)
-    diag.setWindowTitle("Anki")
+    diag.setWindowTitle("Synapse")
     disable_help_button(diag)
     diag.setWindowModality(Qt.WindowModality.WindowModal)
     diag.setMinimumWidth(600)

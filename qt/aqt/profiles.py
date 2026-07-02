@@ -369,16 +369,16 @@ class ProfileManager:
         if is_win:
             from aqt.winpaths import get_appdata
 
-            return os.path.join(get_appdata(), "Anki2")
+            return os.path.join(get_appdata(), "Synapse")
         elif is_mac:
-            return os.path.expanduser("~/Library/Application Support/Anki2")
+            return os.path.expanduser("~/Library/Application Support/Synapse")
         else:
             dataDir = os.environ.get(
                 "XDG_DATA_HOME", os.path.expanduser("~/.local/share")
             )
             if not os.path.exists(dataDir):
                 os.makedirs(dataDir)
-            return os.path.join(dataDir, "Anki2")
+            return os.path.join(dataDir, "Synapse")
 
     def _loadMeta(self, retrying: bool = False) -> LoadMetaResult:
         result = LoadMetaResult()
@@ -487,7 +487,7 @@ create table if not exists profiles
         name = obj[0]
         r = QMessageBox.question(
             None,
-            "Anki",
+            "Synapse",
             tr.profiles_confirm_lang_choice(lang=name),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,  # type: ignore

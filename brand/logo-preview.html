@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synapse — brand preview</title>
+<style>
+  :root { --violet:#6D5AE6; --violet-lt:#A78BFA; --teal:#2DD4BF; --teal-d:#14B8A6; --ground:#0F1226; }
+  body { margin:0; font-family: Inter, "Segoe UI", Helvetica, Arial, sans-serif; color:#1a1a1a; background:#f4f5fb; }
+  header { padding:28px 32px; background:var(--ground); color:#EDEFFF; }
+  header h1 { margin:0 0 4px; font-size:20px; font-weight:700; letter-spacing:-.3px; }
+  header p { margin:0; opacity:.7; font-size:13px; }
+  section { padding:28px 32px; border-bottom:1px solid #e6e8f0; }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:1.2px; color:#6b7280; margin:0 0 18px; }
+  .row { display:flex; align-items:center; gap:40px; flex-wrap:wrap; }
+  .tile-dark  { background:var(--ground); border-radius:16px; padding:26px 34px; display:inline-flex; align-items:center; gap:24px; }
+  .tile-light { background:#ffffff; border:1px solid #e6e8f0; border-radius:16px; padding:26px 34px; display:inline-flex; align-items:center; gap:24px; }
+  .icons { display:flex; align-items:flex-end; gap:34px; }
+  .icons figure { margin:0; text-align:center; }
+  .icons figcaption { margin-top:10px; font-size:12px; color:#6b7280; }
+  .swatch { display:inline-flex; flex-direction:column; align-items:center; margin-right:22px; }
+  .chip { width:96px; height:64px; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+  .swatch code { font-size:12px; color:#4b5563; margin-top:8px; }
+  .title-strip { display:flex; align-items:center; gap:12px; background:var(--ground); color:#EDEFFF; padding:8px 14px; border-radius:8px; font-size:14px; width:max-content; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Synapse — logo &amp; palette preview</h1>
+  <p>Concept: “Synaptic Gap”. Palette: violet → teal gradient. Open this file in a browser to review. Nothing has been wired into the app yet.</p>
+</header>
+
+<section>
+  <h2>Wordmark</h2>
+  <div class="row">
+    <div class="tile-dark"><img src="./synapse-logo.svg" alt="Synapse wordmark" height="120"></div>
+  </div>
+  <p style="color:#6b7280;font-size:13px;">The wordmark ships on its own deep-indigo panel, so it looks consistent regardless of the surrounding page background (used in the About box).</p>
+</section>
+
+<section>
+  <h2>App icon — legibility across sizes</h2>
+  <div class="icons">
+    <figure><img src="./synapse-icon.svg" width="128" height="128"><figcaption>128 px</figcaption></figure>
+    <figure><img src="./synapse-icon.svg" width="64" height="64"><figcaption>64 px</figcaption></figure>
+    <figure><img src="./synapse-icon.svg" width="32" height="32"><figcaption>32 px (taskbar)</figcaption></figure>
+    <figure><img src="./synapse-icon.svg" width="16" height="16"><figcaption>16 px (favicon)</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <h2>16 px favicon — full vs. simplified</h2>
+  <div class="icons">
+    <figure><img src="./synapse-icon.svg" width="16" height="16"><figcaption>full mark @16</figcaption></figure>
+    <figure><img src="./synapse-favicon.svg" width="16" height="16"><figcaption>simplified @16</figcaption></figure>
+    <figure><img src="./synapse-favicon.svg" width="32" height="32"><figcaption>simplified @32</figcaption></figure>
+    <figure><img src="./synapse-favicon.svg" width="64" height="64"><figcaption>simplified @64</figcaption></figure>
+  </div>
+  <p style="color:#6b7280;font-size:13px;">The full neuron stays on the app/taskbar icon (32 px+); the simplified mark is only for the tiny favicon.</p>
+</section>
+
+<section>
+  <h2>In context — title bar mock</h2>
+  <div class="title-strip">
+    <img src="./synapse-icon.svg" width="18" height="18">
+    <span>User 1 - Synapse</span>
+  </div>
+</section>
+
+<section>
+  <h2>Palette</h2>
+  <div class="row">
+    <div class="swatch"><div class="chip" style="background:#6D5AE6"></div><code>#6D5AE6 violet</code></div>
+    <div class="swatch"><div class="chip" style="background:#A78BFA"></div><code>#A78BFA violet-lt</code></div>
+    <div class="swatch"><div class="chip" style="background:#2DD4BF"></div><code>#2DD4BF teal</code></div>
+    <div class="swatch"><div class="chip" style="background:#14B8A6"></div><code>#14B8A6 teal-d</code></div>
+    <div class="swatch"><div class="chip" style="background:#0F1226"></div><code>#0F1226 ground</code></div>
+    <div class="swatch"><div class="chip" style="background:linear-gradient(90deg,#6D5AE6,#2DD4BF)"></div><code>gradient</code></div>
+  </div>
+</section>
+</body>
+</html>

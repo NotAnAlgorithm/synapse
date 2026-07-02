@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Synapse">
+  <defs>
+    <linearGradient id="sparkf" x1="120" y1="256" x2="470" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6D5AE6"/>
+      <stop offset="0.4" stop-color="#6D5AE6"/>
+      <stop offset="1" stop-color="#2DD4BF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- app-icon ground -->
+  <rect x="0" y="0" width="512" height="512" rx="116" fill="#0F1226"/>
+
+  <!-- three bold dendrites + one axon -->
+  <g fill="none" stroke="url(#sparkf)" stroke-linecap="round" stroke-linejoin="round" stroke-width="30">
+    <path d="M176 208 C140 168 116 138 96 108"/>
+    <path d="M150 256 C112 256 92 258 70 262"/>
+    <path d="M176 304 C140 344 116 374 96 404"/>
+    <path d="M264 256 C312 250 348 246 380 244"/>
+  </g>
+
+  <!-- dendritic tips -->
+  <g fill="url(#sparkf)">
+    <circle cx="96" cy="108" r="20"/>
+    <circle cx="70" cy="262" r="20"/>
+    <circle cx="96" cy="404" r="20"/>
+  </g>
+
+  <!-- soma -->
+  <circle cx="200" cy="256" r="86" fill="url(#sparkf)"/>
+
+  <!-- single synapse firing to a post-synaptic node -->
+  <circle cx="392" cy="242" r="30" fill="url(#sparkf)"/>
+  <circle cx="428" cy="240" r="14" fill="url(#sparkf)"/>
+  <circle cx="462" cy="238" r="38" fill="url(#sparkf)"/>
+</svg>

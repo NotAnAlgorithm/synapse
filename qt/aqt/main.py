@@ -484,7 +484,7 @@ class AnkiQt(QMainWindow):
             self.progress.finish()
             problems = future.result()
             if not problems:
-                showInfo("Profiles can now be opened with an older version of Anki.")
+                showInfo("Profiles can now be opened with an older version of Synapse.")
             else:
                 showWarning(
                     "The following profiles could not be downgraded: {}".format(
@@ -506,7 +506,7 @@ class AnkiQt(QMainWindow):
         restoreGeom(self, "mainWindow")
         restoreState(self, "mainWindow")
         # titlebar
-        self.setWindowTitle(f"{self.pm.name} - Anki")
+        self.setWindowTitle(f"{self.pm.name} - Synapse")
         # show and raise window for osx
         self.show()
         self.activateWindow()
@@ -639,7 +639,7 @@ class AnkiQt(QMainWindow):
         except Exception as e:
             if "FileTooNew" in str(e):
                 showWarning(
-                    "This profile requires a newer version of Anki to open. Did you forget to use the Downgrade button prior to switching Anki versions?"
+                    "This profile requires a newer version of Synapse to open. Did you forget to use the Downgrade button prior to switching Synapse versions?"
                 )
             else:
                 showWarning(
@@ -1466,7 +1466,7 @@ title="{}" {}>{}</button>""".format(
         m.actionFullScreen.setShortcutContext(Qt.ShortcutContext.ApplicationShortcut)
 
     def updateTitleBar(self) -> None:
-        self.setWindowTitle("Anki")
+        self.setWindowTitle("Synapse")
 
     # View
     ##########################################################################

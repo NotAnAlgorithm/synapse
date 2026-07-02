@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Anki
+Name=Synapse
 Comment=An intelligent spaced-repetition memory training program
 GenericName=Flashcards
 Exec=anki %f

@@ -98,7 +98,7 @@ class TaskManager(QObject):
         label: str | None = None,
         immediate: bool = False,
         uses_collection=True,
-        title: str = "Anki",
+        title: str = "Synapse",
     ) -> None:
         "Use QueryOp()/CollectionOp() in new code."
         self.mw.progress.start(

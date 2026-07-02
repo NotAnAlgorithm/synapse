@@ -190,7 +190,7 @@ def _init_message_box(
     global _mbox
 
     _mbox = QMessageBox(parent=parent)
-    _mbox.setWindowTitle("Anki")
+    _mbox.setWindowTitle("Synapse")
     _mbox.setText(user_text)
     _mbox.setIcon(QMessageBox.Icon.Warning)
     _mbox.setTextFormat(text_format)
@@ -300,7 +300,7 @@ class ErrorHandler(QObject):
             self.fatal_error_encountered = True
             # ensure no collection-related timers like backup fire
             self.mw.col = None
-            user_text = "A fatal error occurred, and Anki must close. Please report this message on the forums."
+            user_text = "A fatal error occurred, and Synapse must close. Please report this message on the forums."
         else:
             user_text = tr.errors_standard_popup2()
             if self.mw.addonManager.dirty:

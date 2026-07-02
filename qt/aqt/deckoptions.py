@@ -101,7 +101,7 @@ def confirm_deck_then_display_options(active_card: Card | None = None) -> None:
 
 def _deck_prompt_dialog(decks: list[DeckDict]) -> None:
     diag = QDialog(aqt.mw.app.activeWindow())
-    diag.setWindowTitle("Anki")
+    diag.setWindowTitle("Synapse")
     box = QVBoxLayout()
     box.addWidget(QLabel(tr.deck_config_which_deck()))
     for deck in decks:
