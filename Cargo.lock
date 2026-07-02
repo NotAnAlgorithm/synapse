@@ -4134,6 +4134,7 @@ dependencies = [
  "embed-resource",
  "globset",
  "hex",
+ "ignore",
  "itertools 0.14.0",
  "maplit",
  "num_cpus",
@@ -4141,7 +4142,6 @@ dependencies = [
  "reqwest 0.12.23",
  "serde_json",
  "sha2 0.11.0",
- "walkdir",
  "which",
 ]
 

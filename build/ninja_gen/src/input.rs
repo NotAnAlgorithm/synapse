@@ -124,25 +124,45 @@ static CACHED_FILES: LazyLock<Vec<Utf8PathBuf>> = LazyLock::new(cache_files);
 
 /// Walking the source tree once instead of for each glob yields ~4x speed
 /// improvements.
+///
+/// Uses the `ignore` crate so `.gitignore` is respected: build outputs (`out/`,
+/// `node_modules/`, the Android subtree's generated `build/` dirs, git
+/// worktrees, ...) are skipped automatically. A short explicit list covers
+/// non-source dirs git does NOT ignore: `.agents` (agent-tooling docs) and
+/// `reference/` (untracked reference clones, e.g. Anki-Android). Symlinks and
+/// directories are dropped; only regular files are returned.
 fn cache_files() -> Vec<Utf8PathBuf> {
-    walkdir::WalkDir::new(".")
-        // ensure the output order is predictable
-        .sort_by_file_name()
-        .into_iter()
-        .filter_entry(move |e| {
-            // don't walk into symlinks, or the top-level out/, or .git
-            !(e.path_is_symlink()
-                || (e.depth() == 1 && (e.file_name() == "out" || e.file_name() == ".git")))
-        })
-        .filter_map(move |e| {
-            let path = e.as_ref().unwrap().path().strip_prefix("./").unwrap();
-            if !path.is_dir() {
-                Some(Utf8PathBuf::from_path_buf(path.to_owned()).unwrap())
-            } else {
-                None
+    fn is_excluded(entry: &ignore::DirEntry) -> bool {
+        // matched at any depth (e.g. also android/app/.agents); none of these
+        // names are ever real project source.
+        matches!(
+            entry.file_name().to_str(),
+            Some(".git" | ".claude" | ".agents" | "reference")
+        )
+    }
+
+    let mut files: Vec<Utf8PathBuf> = ignore::WalkBuilder::new(".")
+        // keep tracked dotfiles (.dprint.json, .github, .rustfmt.toml, ...);
+        // git-ignored ones are still dropped by the gitignore filter below.
+        .hidden(false)
+        // reproducible regardless of the user's global/parent gitignores.
+        .git_global(false)
+        .parents(false)
+        .filter_entry(|e| !is_excluded(e))
+        .build()
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            // regular files only (skips directories and symlinks)
+            if !entry.file_type()?.is_file() {
+                return None;
             }
+            let path = entry.path().strip_prefix("./").unwrap_or(entry.path());
+            Utf8PathBuf::from_path_buf(path.to_owned()).ok()
         })
-        .collect()
+        .collect();
+    // deterministic ordering for reproducible build.ninja output
+    files.sort();
+    files
 }
 
 impl Glob {

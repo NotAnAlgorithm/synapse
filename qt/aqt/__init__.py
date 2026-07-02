@@ -457,7 +457,10 @@ def parseArgs(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
     parser.add_argument("-p", "--profile", help="profile name to load", default="")
     parser.add_argument("-l", "--lang", help="interface language (en, de, etc)")
     parser.add_argument(
-        "-v", "--version", help="print the Synapse version and exit", action="store_true"
+        "-v",
+        "--version",
+        help="print the Synapse version and exit",
+        action="store_true",
     )
     parser.add_argument(
         "--safemode", help="disable add-ons and automatic syncing", action="store_true"

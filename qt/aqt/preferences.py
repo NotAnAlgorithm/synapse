@@ -368,7 +368,9 @@ class Preferences(QDialog):
         self.form.theme.setCurrentIndex(self.mw.pm.theme().value)
         qconnect(self.form.theme.currentIndexChanged, self.on_theme_changed)
 
-        self.form.styleComboBox.addItems(["Synapse"] + (["Native"] if not is_win else []))
+        self.form.styleComboBox.addItems(
+            ["Synapse"] + (["Native"] if not is_win else [])
+        )
         self.form.styleComboBox.setCurrentIndex(self.mw.pm.get_widget_style())
         qconnect(
             self.form.styleComboBox.currentIndexChanged,
