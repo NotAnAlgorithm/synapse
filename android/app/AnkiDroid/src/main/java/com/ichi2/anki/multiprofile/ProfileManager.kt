@@ -398,7 +398,7 @@ class ProfileManager private constructor(
     private fun defaultCollectionDirFor(profileId: ProfileId): File? {
         val externalFilesDir = profileContext.getExternalFilesDir(null) ?: return null
         return if (profileId.isDefault()) {
-            File(externalFilesDir, "AnkiDroid")
+            File(externalFilesDir, "Synapse")
         } else {
             File(externalFilesDir, profileId.value)
         }

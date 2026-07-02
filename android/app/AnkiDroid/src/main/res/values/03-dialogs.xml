@@ -27,12 +27,12 @@
     </plurals>
 
     <string name="answering_error_title">Database error</string>
-    <string name="answering_error_message">Writing to the collection failed. The database could be corrupt or there may not to be enough empty space on disk.\n\nIf this happens more often, try checking the database, repairing the collection or restoring it from a backup. Touch “options” for that.\n\Or it could be an AnkiDroid bug as well; please report the error so that we can check this.</string>
+    <string name="answering_error_message">Writing to the collection failed. The database could be corrupt or there may not to be enough empty space on disk.\n\nIf this happens more often, try checking the database, repairing the collection or restoring it from a backup. Touch “options” for that.\n\Or it could be a Synapse bug as well; please report the error so that we can check this.</string>
     <string name="answering_error_report">Report error</string>
-   <string name="storage_full_message">There is not enough free storage space to open AnkiDroid. Free up some space to continue.</string>
+   <string name="storage_full_message">There is not enough free storage space to open Synapse. Free up some space to continue.</string>
     <string name="repair_deck_dialog">Do you really want to try to repair the database?\n\nBefore starting the attempt, a copy will be created in subfolder “%s”.</string>
     <string name="intent_aedict_empty">Category “default” is empty</string>
-    <string name="intent_aedict_category">To add cards to AnkiDroid remove all Notepad categories or add one named “default”</string>
+    <string name="intent_aedict_category">To add cards to Synapse remove all Notepad categories or add one named “default”</string>
     <string name="custom_study_new_extend">Increase/decrease (“-3”) today’s new card limit by</string>
     <string name="custom_study_rev_extend">Increase/decrease (“-3”) today’s review limit by</string>
     <string name="custom_study_forgotten">Review cards forgotten in last x days:</string>
@@ -43,7 +43,7 @@
     <string name="storage_full_title">Storage full</string>
     <string name="storage_almost_full_title">Storage almost full</string>
     <string name="no_space_to_downgrade_title" tools:ignore="UnusedResources">No space</string>
-    <string name="no_space_to_downgrade_content" tools:ignore="UnusedResources">AnkiDroid needs %s free storage space to continue. Please clear some space</string>
+    <string name="no_space_to_downgrade_content" tools:ignore="UnusedResources">Synapse needs %s free storage space to continue. Please clear some space</string>
 
     <string name="restore_backup_title">Restore backup?</string>
     <string name="restore_backup">Your collection will be replaced with an older copy. Any unsaved progress will be lost.</string>
@@ -117,11 +117,11 @@
 
     <!-- Database Errors-->
     <string name="database_locked_title">Database Locked</string>
-    <string name="database_locked_summary">The AnkiDroid database is in use by another application. Please close the other application then reopen AnkiDroid.</string>
+    <string name="database_locked_summary">The Synapse database is in use by another application. Please close the other application then reopen Synapse.</string>
 
 
     <string name="incompatible_database_version_title">Incompatible Database Version</string>
-    <string name="incompatible_database_version_summary">The database is a more advanced version than this version of AnkiDroid can work with. Upgrade AnkiDroid or downgrade the database to open it\n\nSupported version: %1$d\nDatabase version: %2$d\n\nThe following restore options will overwrite your current collection, possibly with a compatible database version:</string>
+    <string name="incompatible_database_version_summary">The database is a more advanced version than this version of Synapse can work with. Upgrade Synapse or downgrade the database to open it\n\nSupported version: %1$d\nDatabase version: %2$d\n\nThe following restore options will overwrite your current collection, possibly with a compatible database version:</string>
 
     <!-- Deck Picker Background-->
     <string name="background_image_applied">Background image applied</string>
@@ -147,17 +147,17 @@
     <string name="locale_selection_dialog_summary">Some multilingual keyboards, such as GBoard support changing language when editing text\n\nPlease request the “setImeHintLocales” feature from your keyboard manufacturer if your keyboard does not change language.</string>
 
     <!-- Help Dialog -->
-    <string name="help_title_using_ankidroid">Using AnkiDroid</string>
-    <string name="help_item_ankidroid_manual">AnkiDroid manual</string>
-    <string name="help_item_anki_manual">Anki manual</string>
-    <string name="help_item_ankidroid_faq">AnkiDroid FAQ</string>
+    <string name="help_title_using_ankidroid">Using Synapse</string>
+    <string name="help_item_ankidroid_manual">Synapse manual</string>
+    <string name="help_item_anki_manual">Synapse (Anki) manual</string>
+    <string name="help_item_ankidroid_faq">Synapse FAQ</string>
 
     <string name="help_title_get_help">Get help</string>
     <string name="help_item_mailing_list">Mailing list</string>
     <string name="help_item_reddit">Reddit</string>
     <string name="help_item_report_bug">Report a bug</string>
 
-    <string name="help_title_support_ankidroid" maxLength="28">Support AnkiDroid</string>
+    <string name="help_title_support_ankidroid" maxLength="28">Support Synapse</string>
     <string name="help_item_support_opencollective_donate">Donate</string>
     <string name="help_item_support_develop_ankidroid">Develop</string>
     <string name="help_item_support_rate_ankidroid">Rate</string>
@@ -165,13 +165,13 @@
     <string name="multimedia_editor_trans_translate">Translate</string>
 
     <string name="help_title_community">Community</string>
-    <string name="help_item_anki_forums">Anki forums</string>
+    <string name="help_item_anki_forums">Synapse (Anki) forums</string>
     <string name="help_item_discord">Discord</string>
     <string name="help_item_facebook">Facebook</string>
     <string name="help_item_twitter">Twitter</string>
 
     <string name="help_title_privacy">Privacy</string>
-    <string name="help_item_ankidroid_privacy_policy">AnkiDroid privacy policy</string>
+    <string name="help_item_ankidroid_privacy_policy">Synapse privacy policy</string>
     <string name="help_item_ankiweb_privacy_policy">AnkiWeb privacy policy</string>
     <string name="help_item_ankiweb_terms_and_conditions">AnkiWeb terms and conditions</string>
 

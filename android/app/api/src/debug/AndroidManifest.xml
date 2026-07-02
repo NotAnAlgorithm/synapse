@@ -9,7 +9,7 @@
     This caused a problem with integration test builds (androidTest)
     These run under '.debug', but require a working API where we can test permissions
 
-    We need <uses-permission> to grant 'com.ichi2.anki.debug.permission.READ_WRITE_DATABASE'
+    We need <uses-permission> to grant 'net.ankiweb.synapse.debug.permission.READ_WRITE_DATABASE'
 
     The permission should not be in a 'release' build.
     We can't define an 'androidTest' only manifest:
@@ -17,5 +17,5 @@
 
     So this exists in a 'debug' manifest, which is used by androidTest
     -->
-    <uses-permission android:name="com.ichi2.anki.debug.permission.READ_WRITE_DATABASE"/>
+    <uses-permission android:name="net.ankiweb.synapse.debug.permission.READ_WRITE_DATABASE"/>
 </manifest>

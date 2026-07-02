@@ -100,7 +100,7 @@ object CollectionHelper {
      * Get the absolute path to a directory that is suitable to be the default starting location
      * for the AnkiDroid directory.
      *
-     * Currently, this is a directory named "AnkiDroid" at the top level of the non-app-specific external storage directory.
+     * Currently, this is a directory named "Synapse" at the top level of the non-app-specific external storage directory.
      *
      * When targeting API > 29, AnkiDroid will have to use Scoped Storage on any device of any API level.
      * Scoped Storage only allows access to App-Specific directories (without permissions).
@@ -160,7 +160,7 @@ object CollectionHelper {
      * very different things as explained above.
      *
      * @param directoryName  The leaf folder name to use at the end of the returned path.
-     *                       Defaults to `"AnkiDroid"` (the historical default-profile folder name).
+     *                       Defaults to `"Synapse"` (the default-profile folder name).
      *                       Callers wanting a profile-specific layout can pass e.g. the profile id.
      * @return Absolute Path to the default location starting location for the AnkiDroid directory
      *
@@ -170,7 +170,7 @@ object CollectionHelper {
     @CheckResult
     fun getDefaultAnkiDroidDirectory(
         context: Context,
-        directoryName: String = "AnkiDroid",
+        directoryName: String = "Synapse",
     ): File {
         val legacyStorage = selectAnkiDroidFolder(context) != AnkiDroidFolder.APP_PRIVATE
         return if (legacyStorage) {
@@ -185,11 +185,11 @@ object CollectionHelper {
      * This directory may be in emulated external storage, or can be an SD Card directory.
      *
      * @param directoryName  The folder name to use at the end of the returned path. Defaults to
-     *                       `"AnkiDroid"`. Non-default profiles can pass `ProfileId` here to get a
+     *                       `"Synapse"`. Non-default profiles can pass `ProfileId` here to get a
      *                       profile-specific layout.
      * @return Absolute path to the AnkiDroid directory in primary shared/external storage
      */
-    private fun legacyAnkiDroidDirectory(directoryName: String = "AnkiDroid"): File =
+    private fun legacyAnkiDroidDirectory(directoryName: String = "Synapse"): File =
         File(Environment.getExternalStorageDirectory(), directoryName)
 
     /**

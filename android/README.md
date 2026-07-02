@@ -1,8 +1,9 @@
-# Android support (consolidated into the main Anki repo)
+# Android support (consolidated into the main Synapse repo)
 
-This directory brings **AnkiDroid** (the Kotlin/Android app) and its Rust JNI
-backend (**rsdroid**) into the main Anki monorepo, so Android is developed
-against the in-tree Rust core instead of a pinned `anki` git submodule.
+This directory brings the **Synapse** Android app (the Kotlin/Android app,
+derived from AnkiDroid) and its Rust JNI backend (**rsdroid**) into the main
+Synapse monorepo, so Android is developed against the in-tree Rust core instead
+of a pinned `anki` git submodule.
 
 It is a faithful import of two upstream repos:
 
@@ -27,9 +28,10 @@ desktop build. The backend bridge depends on it directly by path.
 
 `android/backend` and `android/app` are **separate Gradle builds** (each with its
 own `gradlew`, `settings.gradle.kts`, and version catalog). The app consumes the
-backend as a locally-built `.aar` + `.jar` via the `local_backend` flag. This is
-the least-invasive first step; collapsing them into a single Gradle build (so
-`:AnkiDroid` depends on `project(":rsdroid")` directly) is a planned follow-up.
+backend as the locally-built `.aar` + `.jar` **by default** (opt out to the published
+library with `local_backend=false`). This is the least-invasive first step; collapsing
+them into a single Gradle build (so `:AnkiDroid` depends on `project(":rsdroid")`
+directly) is a planned follow-up that would remove the manual backend-build step.
 
 ## Prerequisites
 
@@ -38,20 +40,59 @@ the least-invasive first step; collapsing them into a single Gradle build (so
 - JDK (17/21/25) for Gradle
 - Node/Yarn (used by the desktop web build)
 
-## Build flow
+## Building an APK
 
-1. **Desktop build must run first.** The bridge consumes artifacts produced by the
-   repo's own ninja build — `out/rslib/proto/descriptors.bin`, `out/strings.json`,
-   `out/extracted/protoc/…`, and the web assets (reviewer.js, sveltekit pages,
-   mathjax). `android/backend/build_rust` invokes the repo-root `./ninja` for these.
-2. **Build the backend:** from `android/backend/`, run `./build.sh` (or
-   `RELEASE=1 ./build.sh`). This: runs the desktop web/proto build, generates
-   `GeneratedBackend.kt` + `GeneratedTranslations.kt`, cross-compiles the bridge
-   with `cargo-ndk` into `.so`s (+ a host lib for Robolectric), and assembles
-   `rsdroid/build/outputs/aar/rsdroid-release.aar` and
-   `rsdroid-testing/build/libs/rsdroid-testing.jar`.
-3. **Build the app:** create `android/app/local.properties` with `local_backend=true`,
-   then `./gradlew :AnkiDroid:assembleFullDebug` from `android/app/`.
+The app builds against the **in-tree** Rust backend (the whole point of the monorepo).
+The published `anki-android-backend` in the version catalog is pinned to an *older* Anki
+release and will not match the in-tree core — e.g. it lacks newer proto enum values such
+as `anki.decks.Deck.Filtered.SearchTerm.Order.RELATIVE_OVERDUENESS` — so the app now
+**defaults to the locally-built backend**. Because of this, **you must build the backend
+before the app.**
+
+### 1. Build the backend (produces the rsdroid AAR + testing JAR)
+
+```
+cd android/backend
+./build.sh                 # or: RELEASE=1 ./build.sh
+```
+
+`build.sh` first runs the repo-root `./ninja` (desktop web/proto build, producing
+`out/rslib/proto/descriptors.bin`, `out/strings.json`, `out/extracted/protoc/…`, and the
+web assets), then generates the protobuf Kotlin/Java + `GeneratedBackend.kt` /
+`GeneratedTranslations.kt` from the in-tree `proto/anki/*.proto`, cross-compiles the JNI
+bridge with `cargo-ndk` (+ a host lib for Robolectric), and assembles:
+
+- `android/backend/rsdroid/build/outputs/aar/rsdroid-release.aar`
+- `android/backend/rsdroid-testing/build/libs/rsdroid-testing.jar`
+
+Re-run this whenever `proto/`, `ftl/`, or `rslib/` change, otherwise the app compiles
+against stale generated code.
+
+### 2. Build the app
+
+```
+cd android/app
+./gradlew :AnkiDroid:assembleFullDebug
+```
+
+The debug APK lands under
+`android/app/AnkiDroid/build/outputs/apk/full/debug/`.
+
+Notes:
+- There are three product flavors — `full` (FOSS), `play`, `amazon`. Use the
+  flavor-specific task (`assembleFullDebug`, `assemblePlayDebug`, …). Plain
+  `./gradlew assembleDebug` builds **all** flavors and is much slower.
+- No `local.properties` entry is required — the in-tree backend is the default. To build
+  against the published backend instead (rarely wanted here), set `local_backend=false`
+  in `android/app/local.properties`.
+
+### Troubleshooting
+
+`Unresolved reference 'RELATIVE_OVERDUENESS'` (or any unresolved `anki.*` symbol) while
+compiling `:libanki` / `:AnkiDroid` means the app is being compiled against a **stale or
+published** backend that is older than the in-tree core. Fix: (re)run step 1 so the
+in-tree `rsdroid-release.aar` exists and is current, then rebuild the app. Ensure
+`local_backend=false` is **not** set in `android/app/local.properties`.
 
 ## What changed vs. the upstream repos
 
@@ -66,7 +107,9 @@ Only build wiring — no app/bridge logic was modified:
   (and `current_dir("anki")` → `current_dir("../..")`) so it drives the repo-root ninja.
 - `android/backend/rslib-bridge/proto.rs` protoc include/glob repointed to `../../../proto`.
 - `android/app` backend dependency repointed from `../Anki-Android-Backend/…` →
-  `../backend/…` (in `AnkiDroid/build.gradle` and `buildSrc/.../BackendDependencies.kt`).
+  `../backend/…` (in `AnkiDroid/build.gradle` and `buildSrc/.../BackendDependencies.kt`),
+  and the default flipped to the in-tree backend (the published catalog library, pinned to
+  an older Anki release, is used only when `local_backend=false`).
 - The main workspace `Cargo.toml` excludes `android/backend` (it is a self-contained
   Cargo workspace with its own lock + Android-only deps).
 
@@ -74,8 +117,13 @@ Only build wiring — no app/bridge logic was modified:
 
 - ✅ Cargo graph resolves; the `anki` dependency resolves to the in-tree
   `rslib/Cargo.toml` (submodule fully severed).
-- ⏳ Not yet verified in this environment (needs NDK + JDK): `cargo ndk` cross-compile,
-  Kotlin/protoc codegen, AAR/JAR assembly, APK build, Robolectric tests.
+- ✅ Root cause of the initial `:libanki` build failure identified and fixed: the app was
+  compiling against the **published** backend (Anki 25.09.2), which is older than the
+  in-tree core (26.05) and lacks `Order.RELATIVE_OVERDUENESS`. The app now defaults to the
+  in-tree backend, so the documented flow (build backend → assemble app) compiles the
+  correct generated code.
+- ⏳ Still to be re-confirmed on a machine with NDK + JDK: `cargo ndk` cross-compile,
+  Kotlin/protoc codegen, AAR/JAR assembly, full APK build, Robolectric tests.
 
 ## Follow-ups
 

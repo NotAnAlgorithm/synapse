@@ -173,13 +173,13 @@ public object FlashCardsContract {
      * --------------------------------------------------------------------------------------------------------------------
      * long   | _ID    | read-only  | Row ID. This is the ID of the note. It is the same as the note ID in Anki. This
      *        |        |            | ID can be used for accessing the data of a note using the URI
-     *        |        |            | "content://com.ichi2.anki.flashcards/notes/<_ID>/data
+     *        |        |            | "content://net.ankiweb.synapse.flashcards/notes/<_ID>/data
      * --------------------------------------------------------------------------------------------------------------------
      * long   | GUID   | read-only  | See more at https://github.com/ankidroid/Anki-Android/wiki/Database-Structure
      * --------------------------------------------------------------------------------------------------------------------
      * long   | MID    | read-only  | This is the ID of the note type that is used for rendering the cards. This ID can be used for
      *        |        |            | accessing the data of the note type using the URI
-     *        |        |            | "content://com.ichi2.anki.flashcards/model/<ID>
+     *        |        |            | "content://net.ankiweb.synapse.flashcards/model/<ID>
      * --------------------------------------------------------------------------------------------------------------------
      * long   | MOD    | read-only  | See more at https://github.com/ankidroid/Anki-Android/wiki/Database-Structure
      * --------------------------------------------------------------------------------------------------------------------
@@ -233,7 +233,7 @@ public object FlashCardsContract {
         /**
          * This is the ID of the note. It is the same as the note ID in Anki. This ID can be
          * used for accessing the data of a note using the URI
-         * "content://com.ichi2.anki.flashcards/notes/<ID>/data
+         * "content://net.ankiweb.synapse.flashcards/notes/<ID>/data
          */
         @Suppress("ConstPropertyName", "ktlint:standard:backing-property-naming")
         public const val _ID: String = "_id"
@@ -372,7 +372,7 @@ public object FlashCardsContract {
         /**
          * This is the ID of the note type. It is the same as the note ID in Anki. This ID can be
          * used for accessing the data of the note type using the URI
-         * `content://com.ichi2.anki.flashcards/models/<ID>`
+         * `content://net.ankiweb.synapse.flashcards/models/<ID>`
          */
         @Suppress("ConstPropertyName", "ktlint:standard:backing-property-naming")
         public const val _ID: String = "_id"

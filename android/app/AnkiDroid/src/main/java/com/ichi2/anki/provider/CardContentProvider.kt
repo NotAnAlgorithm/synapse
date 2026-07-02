@@ -790,7 +790,7 @@ class CardContentProvider : ContentProvider() {
     /**
      * This can be used to insert multiple notes into a single deck. The deck is specified as a query parameter.
      *
-     * For example: content://com.ichi2.anki.flashcards/notes?deckId=1234567890123
+     * For example: content://net.ankiweb.synapse.flashcards/notes?deckId=1234567890123
      *
      * @param uri content Uri
      * @param values for notes uri, it is acceptable for values to contain null items. Such items will be skipped

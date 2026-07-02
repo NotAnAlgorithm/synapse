@@ -24,18 +24,18 @@ configure<LibraryExtension> {
         buildConfigField(
             "String",
             "READ_WRITE_PERMISSION",
-            "\"com.ichi2.anki.permission.READ_WRITE_DATABASE\"",
+            "\"net.ankiweb.synapse.permission.READ_WRITE_DATABASE\"",
         )
-        buildConfigField("String", "AUTHORITY", "\"com.ichi2.anki.flashcards\"")
+        buildConfigField("String", "AUTHORITY", "\"net.ankiweb.synapse.flashcards\"")
     }
     buildTypes {
         debug {
             buildConfigField(
                 "String",
                 "READ_WRITE_PERMISSION",
-                "\"com.ichi2.anki.debug.permission.READ_WRITE_DATABASE\"",
+                "\"net.ankiweb.synapse.debug.permission.READ_WRITE_DATABASE\"",
             )
-            buildConfigField("String", "AUTHORITY", "\"com.ichi2.anki.debug.flashcards\"")
+            buildConfigField("String", "AUTHORITY", "\"net.ankiweb.synapse.debug.flashcards\"")
         }
         release {
             isMinifyEnabled = false

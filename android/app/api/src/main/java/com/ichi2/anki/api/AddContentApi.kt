@@ -131,7 +131,7 @@ public class AddContentApi(
      * then set FLAG_GRANT_READ_URI_PERMISSION using something like:
      *
      * ```
-     *     getContext().grantUriPermission("com.ichi2.anki", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+     *     getContext().grantUriPermission("net.ankiweb.synapse", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
      *     // Then when file is added, remove the permission
      *     // add File ...
      * getContext().revokePermission(uri, Intent.FLAG_GRAN_READ_URI_PERMISSION)

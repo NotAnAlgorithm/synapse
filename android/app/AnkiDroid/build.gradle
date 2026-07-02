@@ -84,14 +84,14 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.ichi2.anki"
+        applicationId = "net.ankiweb.synapse"
         buildConfigField "Boolean", "CI", (System.getenv("CI") == "true").toString()
         buildConfigField "String", "ACRA_URL", '"https://ankidroid.org/acra/report"'
         buildConfigField "String", "BACKEND_VERSION", "\"${libs.versions.ankiBackend.get()}\""
         buildConfigField "Boolean", "ENABLE_LEAK_CANARY", "false"
         buildConfigField "String", "GIT_COMMIT_HASH", "\"${gitCommitHash.get()}\""
         buildConfigField "long", "BUILD_TIME", buildTimeMillis.get()
-        resValue "string", "app_name", "AnkiDroid"
+        resValue "string", "app_name", "Synapse"
 
         // The version number is of the form:
         // <major>.<minor>.<maintenance>[dev|alpha<build>|beta<build>|]
@@ -121,7 +121,7 @@ android {
 
         // After #13695: change .tests_emulator.yml
         targetSdk = libs.versions.targetSdk.get().toInteger()
-        testApplicationId = "com.ichi2.anki.tests"
+        testApplicationId = "net.ankiweb.synapse.tests"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = 'com.ichi2.testutils.NewCollectionPathTestRunner'
 
@@ -507,11 +507,16 @@ dependencies {
     implementation libs.protobuf.kotlin.lite // This is required when loading from a file
 
     // TODO: migrate to `addAnkiBackendDependencies(...)` when this is a gradle.kts file
+    // In this monorepo the app builds against the in-tree Rust backend (android/backend),
+    // which is versioned in lock-step with the in-tree core. The published backend is pinned
+    // to an older Anki release and will not match (e.g. it lacks newer proto enum values),
+    // so it is used only if explicitly opted in with `local_backend=false` in local.properties.
+    // Build the backend first: `cd android/backend && ./build.sh`.
     Properties localProperties = new Properties()
     if (project.rootProject.file('local.properties').exists()) {
         localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
     }
-    if (localProperties['local_backend'] == "true") {
+    if (localProperties['local_backend'] != "false") {
         implementation(files(rootProject.file("../backend/rsdroid/build/outputs/aar/rsdroid-release.aar")))
         testImplementation(files(rootProject.file("../backend/rsdroid-testing/build/libs/rsdroid-testing.jar")))
     } else {

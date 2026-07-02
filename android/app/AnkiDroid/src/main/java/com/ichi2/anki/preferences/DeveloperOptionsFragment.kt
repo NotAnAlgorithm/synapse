@@ -99,11 +99,11 @@ class DeveloperOptionsFragment : SettingsFragment() {
                         "It will be very difficult to recover your data.",
                 )
                 setPositiveButton(R.string.dialog_ok) { _, _ ->
-                    Timber.w("Setting collection path to /storage/emulated/0/AnkiDroid")
+                    Timber.w("Setting collection path to /storage/emulated/0/Synapse")
                     AnkiDroidApp.sharedPrefs().edit {
                         putString(
                             CollectionHelper.PREF_COLLECTION_PATH,
-                            "/storage/emulated/0/AnkiDroid",
+                            "/storage/emulated/0/Synapse",
                         )
                     }
                 }

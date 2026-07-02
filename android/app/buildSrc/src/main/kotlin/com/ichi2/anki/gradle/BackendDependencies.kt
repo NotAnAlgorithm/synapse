@@ -7,11 +7,12 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 import java.io.File
 import java.util.Properties
 
-// The Anki backend (rsdroid) is consumed either as a locally-built artifact in
-// ../Anki-Android-Backend (when `local_backend=true` in local.properties) or as
-// the published library from the version catalog.
+// The Anki backend (rsdroid) is consumed as the in-tree, locally-built artifact in
+// android/backend by default (this is a monorepo built against the in-tree core).
+// The published library from the version catalog is pinned to an older Anki release
+// and is only used if explicitly opted in with `local_backend=false` in local.properties.
 
-// Paths within the `Anki-Android-Backend` checkout, which sits beside the repo root.
+// Paths within the in-tree `android/backend` build.
 private const val RSDROID_AAR =
     "rsdroid/build/outputs/aar/rsdroid-release.aar"
 private const val RSDROID_TESTING_JAR =
@@ -47,10 +48,12 @@ private val Project.hasTestFixtures: Boolean
     get() = configurations.findByName("testFixturesImplementation") != null
 
 private fun Project.localBackendEnabled(): Boolean {
+    // Default to the in-tree backend; only fall back to the published library when a
+    // developer explicitly sets `local_backend=false` in local.properties.
     val localProperties = rootProject.layout.projectDirectory.file("local.properties")
-    val content = providers.fileContents(localProperties).asText.orNull ?: return false
+    val content = providers.fileContents(localProperties).asText.orNull ?: return true
     val properties = Properties().apply { content.reader().use { load(it) } }
-    return properties["local_backend"] == "true"
+    return properties["local_backend"] != "false"
 }
 
 private fun Project.addBackendArtifact(

@@ -11,7 +11,11 @@ runKtlint () {
     # * changing the path of the diff file (to ensure in case of failure that we don't overwrite the file)
     ######## KTLINT-GRADLE HOOK START ########
 
-    CHANGED_FILES="$(git --no-pager diff --name-status --no-color --cached | awk '$1 != "D" && $NF ~ /\.kts?$/ { print $NF }')"
+    # Monorepo: git runs this hook from the repo root, but the Gradle build (and ktlint)
+    # live in android/app. Keep only staged Kotlin files under android/app/ and make their
+    # paths relative to it, so the ktlint filter matches — as it does in upstream AnkiDroid,
+    # where the git root and the Gradle root are the same directory.
+    CHANGED_FILES="$(git --no-pager diff --name-status --no-color --cached | awk '$1 != "D" && $NF ~ /\.kts?$/ { print $NF }' | sed -n 's#^android/app/##p')"
 
     if [ -z "$CHANGED_FILES" ]; then
         echo "No Kotlin staged files."
@@ -28,14 +32,14 @@ runKtlint () {
       git apply -R $diff_path
     fi
 
-    ./gradlew --quiet ktlintFormat -PinternalKtlintGitFilter="$CHANGED_FILES"
+    (cd android/app && ./gradlew --quiet ktlintFormat -PinternalKtlintGitFilter="$CHANGED_FILES")
     gradle_command_exit_code=$?
 
     echo "Completed ktlint run."
 
     echo "$CHANGED_FILES" | while read -r file; do
-        if [ -f $file ]; then
-            git add $file
+        if [ -f "android/app/$file" ]; then
+            git add "android/app/$file"
         fi
     done
 

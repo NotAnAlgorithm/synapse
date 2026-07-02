@@ -1,11 +1,13 @@
-# AnkiDroid-Backend
+# Synapse Android backend
 
-An interface for accessing Anki Desktop's Rust backend inside AnkiDroid. This
-allows AnkiDroid to re-use the computer version's business logic and webpages,
+Synapse's Android backend (derived from Anki-Android-Backend / rsdroid). An
+interface for accessing the desktop Rust backend inside the Synapse Android app.
+This allows Synapse to re-use the computer version's business logic and webpages,
 instead of having to reimplement them.
 
-This is a separate repo that gets published to a library that AnkiDroid consumes,
-so that AnkiDroid development is possible without a Rust toolchain installed.
+Historically this was a separate repo that got published to a library that the
+app consumes, so that app development is possible without a Rust toolchain
+installed.
 
 ## Prerequisites
 

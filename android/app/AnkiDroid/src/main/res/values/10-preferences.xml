@@ -50,7 +50,7 @@
     <string name="card_browser_font_size" maxLength="41">Card browser font scaling</string>
     <string name="card_browser_hide_media" maxLength="41">Display filenames in card browser</string>
     <string name="card_browser_hide_media_summary">Display audio filenames in the card browser question/answer fields</string>
-    <string name="col_path" maxLength="41">AnkiDroid directory</string>
+    <string name="col_path" maxLength="41">Synapse directory</string>
     <string name="fullscreen_review" maxLength="41">Fullscreen mode</string>
     <string name="full_screen_off">Off</string>
     <string name="full_screen_system">Hide the system bars</string>
@@ -155,8 +155,8 @@
     </plurals>
     <string name="pref_keep_screen_on" maxLength="41">Keep screen on</string>
     <string name="pref_keep_screen_on_summ">Disable screen timeout</string>
-    <string name="enable_api_title" maxLength="41">Enable AnkiDroid API</string>
-    <string name="enable_api_summary">Let other apps connect to AnkiDroid and read / write data without your intervention</string>
+    <string name="enable_api_title" maxLength="41">Enable Synapse API</string>
+    <string name="enable_api_summary">Let other apps connect to Synapse and read / write data without your intervention</string>
     <string name="custom_buttons" maxLength="41">App bar buttons</string>
     <string name="custom_buttons_summary">Customize which actions appear in the app bar</string>
     <string name="custom_buttons_setting_always_show">Always show</string>
@@ -166,7 +166,7 @@
     <string name="reset_settings_to_default">Reset settings to default</string>
     <string name="reset">Reset</string>
     <string name="thirdparty_apps_title" maxLength="41">Third-party API apps</string>
-    <string name="thirdparty_apps_summary">See a list of applications which make use of the AnkiDroid API such as dictionaries, utilities.</string>
+    <string name="thirdparty_apps_summary">See a list of applications which make use of the Synapse API such as dictionaries, utilities.</string>
     <string name="pref_controls_reviews_tab" maxLength="41" comment="Name of the tab to configure controls for the reviews screen"
         >Reviews</string>
     <string name="pref_controls_previews_tab" maxLength="41" comment="Name of the tab to configure controls for the previews screen"
@@ -219,9 +219,9 @@
     <string name="deck_conf_cram_search" maxLength="41" comment = "Label of a text field that contains a search query.">Search</string>
 
     <!-- analytics options -->
-    <string name="analytics_dialog_title">Help make AnkiDroid better!</string>
+    <string name="analytics_dialog_title">Help make Synapse better!</string>
     <string name="analytics_title" maxLength="41">Share feature usage</string>
-    <string name="analytics_summ">You can contribute to AnkiDroid by helping the development team see which features people use</string>
+    <string name="analytics_summ">You can contribute to Synapse by helping the development team see which features people use</string>
 
 
     <string name="note_editor_replace_newlines" maxLength="41">Replace newlines with HTML</string>
@@ -234,11 +234,11 @@
     <string name="open_changelog">Open changelog</string>
     <string name="pref_cat_about_title" maxLength="41">About</string>
     <string name="contributors_title">Contributors</string>
-    <string name="about_contributors_description"><![CDATA[These are our awesome <a href=\"%1$s\">contributors</a>. You can help AnkiDroid too by programming, translating, donating and <a href=\"%2$s\">more</a>!]]></string>
+    <string name="about_contributors_description"><![CDATA[These are our awesome <a href=\"%1$s\">contributors</a>. You can help Synapse too by programming, translating, donating and <a href=\"%2$s\">more</a>!]]></string>
     <string name="license">License</string>
-    <string name="license_description"><![CDATA[AnkiDroid is released under the <a href=\"%1$s\">GPL-3.0</a> and <a href=\"%2$s\">AGPL-3.0</a> licenses, with the source code available <a href=\"%3$s\">on GitHub</a>]]></string>
-    <string name="other_licenses"><![CDATA[AnkiDroid also uses third-party libraries and icons, which are licensed under various open source <a href=\"%1$s\">licenses</a>]]></string>
-    <string name="donate_description"><![CDATA[You can support AnkiDroid\'s development by <a href=\"%1$s\">donating</a>. Any amount is deeply appreciated.]]></string>
+    <string name="license_description"><![CDATA[Synapse is released under the <a href=\"%1$s\">GPL-3.0</a> and <a href=\"%2$s\">AGPL-3.0</a> licenses, with the source code available <a href=\"%3$s\">on GitHub</a>]]></string>
+    <string name="other_licenses"><![CDATA[Synapse also uses third-party libraries and icons, which are licensed under various open source <a href=\"%1$s\">licenses</a>]]></string>
+    <string name="donate_description"><![CDATA[You can support Synapse\'s development by <a href=\"%1$s\">donating</a>. Any amount is deeply appreciated.]]></string>
 
     <!-- Controls -->
     <string name="binding_add_gesture">Add gesture</string>
@@ -280,7 +280,7 @@ this formatter is used if the bind only applies to the answer">A: %s</string>
 
     <!-- Advanced -->
     <string name="pref_cat_experimental" maxLength="41" tools:ignore="UnusedResources">Experimental</string>
-    <string name="readtext_deprecation_warn">AnkiDroid has introduced a better TTS mechanism which is compatible with other Anki clients and includes more voices and improvements to language playback!\n\nPlease upgrade as soon as possible, as this setting will be removed soon</string>
+    <string name="readtext_deprecation_warn">Synapse has introduced a better TTS mechanism which is compatible with other Synapse (Anki) clients and includes more voices and improvements to language playback!\n\nPlease upgrade as soon as possible, as this setting will be removed soon</string>
     <string name="readtext_reviewer_warn" tools:ignore="UnusedResources">Please upgrade to the new text to speech format</string>
     <string name="pref_fixed_port_title" maxLength="41">localStorage in Study Screen</string>
     <string name="pref_fixed_port_summary"
@@ -296,9 +296,9 @@ this formatter is used if the bind only applies to the answer">A: %s</string>
          #################################### Backup options ###################################
          ####################################################################################### -->
     <string name="pref__backups_help__summary"><![CDATA[
-        AnkiDroid periodically backs up your collection.
+        Synapse periodically backs up your collection.
         After backups are more than two days old,
-        AnkiDroid will start removing some of them to free up disk space.
+        Synapse will start removing some of them to free up disk space.
         <br><br>
         Note that media files are not backed up.
         To be safe, please periodically synchronize your collection, or back up exports of it.
@@ -361,8 +361,8 @@ this formatter is used if the bind only applies to the answer">A: %s</string>
         comment="“Close the window” here refers to the activity that the user is currently seeing.
        When the collection is deleted, we exit the process, which closes the activity without animation.
         On some devices the entire settings app may be closed.
-        User might not realize that this activity comes directly from AnkiDroid,
-        so it might be wise to avoid words such as “AnkiDroid or “app”."
+        User might not realize that this activity comes directly from Synapse,
+        so it might be wise to avoid words such as “Synapse or “app”."
         >Are you sure you want to delete your collection, media, and backups?\n\nNote: this action will close the window.</string>
     <string name="progress__deleting_collection"
         >Deleting collection…</string>
@@ -376,10 +376,10 @@ this formatter is used if the bind only applies to the answer">A: %s</string>
         >Delete everything</string>
     <string name="dialog__delete_everything__message"
         comment="“Close the window” here refers to the activity that the user is currently seeing.
-        Deleting app data forcibly closes AnkiDroid, which closes the activity without animation.
+        Deleting app data forcibly closes Synapse, which closes the activity without animation.
         On some devices the entire settings app may be closed.
-        User might not realize that this activity comes directly from AnkiDroid,
-        so it might be wise to avoid words such as “AnkiDroid or “app”."
+        User might not realize that this activity comes directly from Synapse,
+        so it might be wise to avoid words such as “Synapse or “app”."
         >Are you sure you want to delete all data? This includes your collection, media, backups and preferences.\n\nNote: this action will close the window.</string>
 
     <!-- Delete app data -->
@@ -391,10 +391,10 @@ this formatter is used if the bind only applies to the answer">A: %s</string>
         >Delete app data</string>
     <string name="dialog__delete_app_data__message"
         comment="“Close the window” here refers to the activity that the user is currently seeing.
-        Deleting app data forcibly closes AnkiDroid, which closes the activity without animation.
+        Deleting app data forcibly closes Synapse, which closes the activity without animation.
         On some devices the entire settings app may be closed.
-        User might not realize that this activity comes directly from AnkiDroid,
-        so it might be wise to avoid words such as “AnkiDroid or “app”."
+        User might not realize that this activity comes directly from Synapse,
+        so it might be wise to avoid words such as “Synapse or “app”."
         >Are you sure you want to delete app data? This includes settings and other app data.\n\nNote: this action will close the window.</string>
 
     <!-- #######################################################################################
