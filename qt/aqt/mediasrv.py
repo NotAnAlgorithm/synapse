@@ -750,6 +750,7 @@ exposed_backend_list = [
     "set_graph_preferences",
     "concept_memory",
     "concept_coverage",
+    "adoption_stats",
     # TagsService
     "complete_tag",
     # ImageOcclusionService
