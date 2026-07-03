@@ -384,10 +384,21 @@ impl Collection {
         note.set_modified(ctx.usn);
         self.add_note_only_undoable(note)?;
         let count = self.generate_cards_for_new_note(&ctx, note, did)?;
+        // Keep the Synapse concept projection consistent with the note's tags,
+        // now that its cards exist. (decision #1: tags are the source of truth)
+        self.refresh_note_concepts(note)?;
         self.set_last_deck_for_notetype(note.notetype_id, did)?;
         self.set_last_notetype_for_deck(did, note.notetype_id)?;
         self.set_current_notetype_id(note.notetype_id)?;
         Ok(count)
+    }
+
+    /// Upsert the note's `concept::` tags into the `concepts` table and refresh
+    /// its cards' `card_concepts` rows. Cheap no-op for notes without concept
+    /// tags. See [`crate::storage`] concept module for the projection details.
+    fn refresh_note_concepts(&mut self, note: &Note) -> Result<()> {
+        self.storage
+            .refresh_card_concepts_for_note(note.id, &note.tags)
     }
 
     pub fn update_note(&mut self, note: &mut Note) -> Result<OpOutput<()>> {
@@ -461,7 +472,11 @@ impl Collection {
             normalize_text,
             update_tags,
         })?;
-        self.generate_cards_for_existing_note(ctx, note)
+        self.generate_cards_for_existing_note(ctx, note)?;
+        // Card generation may have added/removed cards, so refresh the concept
+        // projection once more now that the card set is settled. Idempotent with
+        // the refresh already performed in update_note_inner_without_cards.
+        self.refresh_note_concepts(note)
     }
 
     #[inline]
@@ -489,7 +504,11 @@ impl Collection {
                 note.set_modified(usn);
             }
         }
-        self.update_note_undoable(note, original)
+        self.update_note_undoable(note, original)?;
+        // Refresh the Synapse concept projection for this note's cards whenever
+        // its tags are persisted. This is the universal update choke point; the
+        // card-generating path re-runs it after card generation.
+        self.refresh_note_concepts(note)
     }
 
     pub(crate) fn update_note_inner_without_cards(
