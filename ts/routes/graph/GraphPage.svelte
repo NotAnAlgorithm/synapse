@@ -373,7 +373,6 @@ libraries (strict CSP).
             </div>
 
             <div class="canvas-wrap">
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <svg
                     bind:this={svgEl}
                     class="graph"
@@ -430,7 +429,6 @@ libraries (strict CSP).
                         <g class="nodes">
                             {#each nodes as node (node.id)}
                                 {@const dimmed = isDimmed(node.id, highlight, links)}
-                                <!-- svelte-ignore a11y_click_events_have_key_events -->
                                 <g
                                     class="node"
                                     class:selected={selectedId === node.id}

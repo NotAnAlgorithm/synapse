@@ -652,6 +652,11 @@ def provision(col: anki.collection.Collection) -> dict[str, Any]:
     notes_added = seed_notes(col, notetype_id, deck_id)
     item_notes_added = seed_item_notes(col, item_notetype_ids, deck_id)
 
+    # M3-E: turn on the adoption "Effort" panel for Synapse (points + streak;
+    # generic collection config read by stats::adoption). The test-date governor
+    # stays OFF here — it's opt-in via Tools > "Synapse: Set Exam Date...".
+    col.set_config("synapse:adoption_enabled", True)
+
     return {
         "notetype_id": int(notetype_id),
         "item_notetype_ids": {
