@@ -273,7 +273,7 @@ mod test {
     fn concept_ids_are_stable_and_append_only() -> Result<()> {
         let mut col = Collection::new();
         // ver should be at the latest schema, with the concept tables present.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 20);
+        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 21);
 
         let nt = col.get_notetype_by_name("Basic")?.unwrap();
         let mut note = nt.new_note();
@@ -406,9 +406,9 @@ mod test {
         let col = CollectionBuilder::default()
             .set_collection_path(tempfile.path())
             .build()?;
-        // ...and reopening runs the schema 19 + 20 migrations, which reconstruct
-        // it from the surviving `concept::` note tags.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 20);
+        // ...and reopening runs the schema 19 + 20 + 21 migrations, which
+        // reconstruct it from the surviving `concept::` note tags.
+        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 21);
         let after = col.storage.all_card_concepts_sorted()?;
         assert_eq!(after.len(), 1);
         assert_eq!(after[0].0, cid);

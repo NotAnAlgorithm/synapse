@@ -90,6 +90,7 @@ const DEFAULT_DECK_CONFIG_INNER: DeckConfigInner = DeckConfigInner {
     // the Synapse preset.
     mastery_gating: false,
     trickle_down_credit: false,
+    metamorphosis: false,
 };
 
 impl Default for DeckConfig {

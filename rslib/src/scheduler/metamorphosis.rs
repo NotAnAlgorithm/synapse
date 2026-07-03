@@ -119,7 +119,7 @@ impl Collection {
         })
     }
 
-    fn apply_metamorphosis_after_answer_inner(
+    pub(crate) fn apply_metamorphosis_after_answer_inner(
         &mut self,
         card_id: CardId,
     ) -> Result<MetamorphosisOutcome> {

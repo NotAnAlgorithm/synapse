@@ -212,6 +212,11 @@ message DeckConfig {
     // Defaults off.
     bool trickle_down_credit = 49;
 
+    // Synapse: when enabled, mastering an application-type card's concept fades
+    // (suspends, reversibly) that concept's recall cards — "card metamorphosis"
+    // (add-then-fade). The recall substrate is never deleted. Defaults off.
+    bool metamorphosis = 50;
+
     bytes other = 255;
   }
 

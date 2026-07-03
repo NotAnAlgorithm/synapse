@@ -105,6 +105,7 @@ impl SqliteStorage {
 
     /// The dependents of `concept` — the concepts that require it (rows where
     /// `concept` is the prerequisite `from`). Ordered by id for determinism.
+    #[allow(dead_code)] // symmetric graph API (dependents); for M2+ graph views
     pub(crate) fn get_dependents(&self, concept: ConceptId) -> Result<Vec<ConceptId>> {
         self.db
             .prepare_cached(
@@ -118,6 +119,7 @@ impl SqliteStorage {
     /// All edges in the graph, ordered by (from, to). Used by tests and repair
     /// tooling.
     #[allow(dead_code)]
+    #[allow(dead_code)] // full edge enumeration; for M2+ graph views / export
     pub(crate) fn all_concept_edges(&self) -> Result<Vec<ConceptEdge>> {
         self.db
             .prepare_cached(

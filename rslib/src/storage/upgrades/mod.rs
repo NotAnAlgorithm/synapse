@@ -87,9 +87,10 @@ impl SqliteStorage {
 
     /// Bring the DB back to the wire/on-disk schema 18 used by sync upload and
     /// colpkg export. The Synapse concept projection, prerequisite graph and
-    /// card-lineage table are LOCAL, DERIVED (never synced), so they are dropped
-    /// here; a subsequent open reconstructs them from the `concept::` note tags,
-    /// the authored seed, and each card's custom_data via the 19/20/21 upgrades.
+    /// card-lineage table are LOCAL, DERIVED (never synced), so they are
+    /// dropped here; a subsequent open reconstructs them from the
+    /// `concept::` note tags, the authored seed, and each card's
+    /// custom_data via the 19/20/21 upgrades.
     fn downgrade_to_schema_18(&self) -> Result<()> {
         self.begin_trx()?;
         self.drop_local_synapse_tables()?;
@@ -98,7 +99,8 @@ impl SqliteStorage {
     }
 
     /// Drop every LOCAL, DERIVED Synapse table so none appear in the schema-18
-    /// wire/on-disk format; ends at `ver = 18`. Rebuilt from source on next open.
+    /// wire/on-disk format; ends at `ver = 18`. Rebuilt from source on next
+    /// open.
     fn drop_local_synapse_tables(&self) -> Result<()> {
         // card_lineage (21) -> concept_edges (20) -> concepts + card_concepts
         // (19). schema19_downgrade runs last and leaves ver = 18.

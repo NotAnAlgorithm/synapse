@@ -443,6 +443,14 @@ def _apply_synapse_config(config: DeckConfig.Config) -> None:
     # across concepts/sections and recall-vs-application). Default is OFF
     # globally; Synapse turns it on.
     config.interleave_by_concept = True
+    # M2: graph-driven adaptive scheduling + card metamorphosis, all default OFF
+    # globally; Synapse turns them on. mastery_gating withholds application cards
+    # with unmastered prerequisites; trickle_down_credit reinforces prerequisites
+    # on advanced success; metamorphosis fades a concept's recall cards once its
+    # application form is mastered.
+    config.mastery_gating = True
+    config.trickle_down_credit = True
+    config.metamorphosis = True
 
 
 def _find_config_by_name(fu: Any, name: str) -> DeckConfig | None:

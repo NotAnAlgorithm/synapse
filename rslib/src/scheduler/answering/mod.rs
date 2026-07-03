@@ -339,9 +339,10 @@ impl Collection {
         self.maybe_bury_siblings(&original, &updater.config)?;
         let timing = updater.timing;
         let deckconfig_id = updater.original_deck.config_id();
-        // Synapse: capture the trickle-down toggle before the updater is
-        // consumed below.
+        // Synapse: capture the trickle-down + metamorphosis toggles before the
+        // updater is consumed below.
         let trickle_down_credit = updater.config.inner.trickle_down_credit;
+        let metamorphosis = updater.config.inner.metamorphosis;
         let mut card = updater.into_card();
         if !matches!(
             answer.current_state,
@@ -365,6 +366,16 @@ impl Collection {
         // otherwise. An integrator may add a metamorphosis call near here — this
         // helper is independent of it.
         self.maybe_apply_trickle_down_credit(&card, trickle_down_credit, answer.rating)?;
+
+        // Synapse: card metamorphosis (add-then-fade) — once a concept's
+        // application form is mastered, fade its recall cards (suspend,
+        // reversible; never deleted). Gated behind the `metamorphosis`
+        // deck-config flag (default off); the inner is a no-op unless the
+        // just-answered card is a mastered application card. Runs inside the
+        // answer transaction (B's transacting wrapper is not used here).
+        if metamorphosis {
+            self.apply_metamorphosis_after_answer_inner(card.id)?;
+        }
 
         if card.queue == CardQueue::Review {
             if let Some(load_balancer) = self

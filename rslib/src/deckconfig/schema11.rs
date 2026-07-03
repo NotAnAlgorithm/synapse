@@ -401,6 +401,7 @@ impl From<DeckConfSchema11> for DeckConfig {
                 interleave_by_concept: false,
                 mastery_gating: false,
                 trickle_down_credit: false,
+                metamorphosis: false,
                 other: other_bytes,
             },
         }
