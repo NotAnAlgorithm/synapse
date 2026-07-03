@@ -396,6 +396,9 @@ impl From<DeckConfSchema11> for DeckConfig {
                 desired_retention: c.desired_retention,
                 historical_retention: c.sm2_retention,
                 param_search: c.param_search,
+                // Synapse: not represented in the legacy schema11 form; defaults
+                // off. The integrator enables it on the Synapse preset.
+                interleave_by_concept: false,
                 other: other_bytes,
             },
         }

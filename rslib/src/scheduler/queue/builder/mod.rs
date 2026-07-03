@@ -3,6 +3,7 @@
 
 mod burying;
 mod gathering;
+mod interleave;
 pub(crate) mod intersperser;
 pub(crate) mod sized_chain;
 mod sorting;
@@ -10,6 +11,8 @@ mod sorting;
 use std::collections::HashMap;
 use std::collections::VecDeque;
 
+use interleave::interleave_entries;
+use interleave::InterleaveKey;
 use intersperser::Intersperser;
 use sized_chain::SizedChain;
 
@@ -100,6 +103,9 @@ pub(super) struct QueueSortOptions {
     pub(super) review_order: ReviewCardOrder,
     pub(super) day_learn_mix: ReviewMix,
     pub(super) new_review_mix: ReviewMix,
+    /// Synapse: reorder the assembled main queue to alternate concept/section
+    /// and question-type. Off by default (stock behaviour unchanged).
+    pub(super) interleave_by_concept: bool,
 }
 
 #[derive(Debug)]
@@ -111,6 +117,9 @@ pub(super) struct QueueBuilder {
     limits: LimitTreeMap,
     load_balancer: Option<LoadBalancer>,
     context: Context,
+    /// Synapse: card_id -> interleaving key, populated only when
+    /// `interleave_by_concept` is on. Empty otherwise.
+    interleave_keys: HashMap<CardId, InterleaveKey>,
 }
 
 /// Data container and helper for building queues.
@@ -180,6 +189,7 @@ impl QueueBuilder {
                 deck_map,
                 fsrs: col.get_config_bool(BoolKey::Fsrs),
             },
+            interleave_keys: HashMap::new(),
         })
     }
 
@@ -207,13 +217,22 @@ impl QueueBuilder {
             self.context.sort_options.new_review_mix,
         );
 
+        let mut main: Vec<MainQueueEntry> = main_iter.collect();
+        // Synapse: pure reordering pass. Only runs when the toggle populated the
+        // key map; otherwise `main` is left exactly as the stock builder
+        // assembled it.
+        if self.context.sort_options.interleave_by_concept {
+            let keys = &self.interleave_keys;
+            interleave_entries(&mut main, |entry| keys.get(&entry.id).copied());
+        }
+
         CardQueues {
             counts: Counts {
                 new: new_count,
                 review: review_count,
                 learning: learn_count,
             },
-            main: main_iter.collect(),
+            main: main.into(),
             intraday_learning,
             learn_ahead_secs,
             current_day: self.context.timing.days_elapsed,
@@ -233,6 +252,7 @@ fn sort_options(deck: &Deck, config_map: &HashMap<DeckConfigId, DeckConfig>) -> 
             review_order: config.inner.review_order(),
             day_learn_mix: config.inner.interday_learning_mix(),
             new_review_mix: config.inner.new_mix(),
+            interleave_by_concept: config.inner.interleave_by_concept,
         })
         .unwrap_or_else(|| {
             // filtered decks do not space siblings
@@ -286,6 +306,13 @@ impl Collection {
             .update_active_decks(&queues.context.root_deck)?;
 
         queues.gather_cards(self)?;
+
+        // Synapse: classify gathered cards for the interleaving pass. Only runs
+        // when the deck-config toggle is on; a no-op (and zero extra queries)
+        // otherwise.
+        if queues.context.sort_options.interleave_by_concept {
+            queues.classify_for_interleave(self)?;
+        }
 
         let queues = queues.build(self.learn_ahead_secs() as i64);
 
@@ -542,5 +569,120 @@ mod test {
         CardAdder::new().deck(child.id).add(&mut col);
         col.set_current_deck(child.id).unwrap();
         assert_eq!(col.card_queue_len(), 0);
+    }
+
+    // --- Synapse concept + question-type interleaving ---
+
+    use crate::notetype::all_stock_notetypes;
+
+    impl Collection {
+        /// Add a stock-Basic-derived notetype under the given name (so it can
+        /// be classified as recall or, via a "MCAT " prefix,
+        /// application).
+        fn add_named_notetype(&mut self, name: &str) -> Notetype {
+            let mut nt = all_stock_notetypes(&self.tr).remove(0);
+            nt.name = name.into();
+            self.add_notetype(&mut nt, false).unwrap();
+            nt
+        }
+
+        /// Add one new card whose note carries `tag` and uses `nt`, in `deck`.
+        fn add_tagged_note(&mut self, nt: &Notetype, tag: &str, deck: DeckId) {
+            let mut note = nt.new_note();
+            note.set_field(0, "q").unwrap();
+            note.tags = vec![tag.to_string()];
+            self.add_note(&mut note, deck).unwrap();
+        }
+
+        /// Build the queue for `deck` and return, in presentation order, each
+        /// card's concept section (2nd `::` segment) and whether its notetype
+        /// is application-style ("MCAT " prefix).
+        fn queue_as_section_and_is_app(&mut self, deck: DeckId) -> Vec<(String, bool)> {
+            self.build_queues(deck)
+                .unwrap()
+                .iter()
+                .map(|entry| {
+                    let card = self.storage.get_card(entry.card_id()).unwrap().unwrap();
+                    let note = self.storage.get_note(card.note_id).unwrap().unwrap();
+                    let section = note
+                        .tags
+                        .iter()
+                        .find_map(|t| t.strip_prefix("concept::"))
+                        .and_then(|rest| rest.split("::").next())
+                        .unwrap_or("")
+                        .to_string();
+                    let nt = self
+                        .storage
+                        .get_notetype(note.notetype_id)
+                        .unwrap()
+                        .unwrap();
+                    (section, nt.name.starts_with("MCAT "))
+                })
+                .collect()
+        }
+
+        /// Set up a deck (with an optional interleave toggle) plus 3 biochem
+        /// recall cards and 3 physics application cards, all new.
+        fn setup_interleave_deck(&mut self, interleave: bool) -> DeckId {
+            let deck = DeckAdder::new("Synapse")
+                .with_config(move |c| {
+                    // Gather/sort in insertion order so, absent interleaving, the
+                    // queue is the two blocks back-to-back.
+                    c.inner.new_card_gather_priority = NewCardGatherPriority::LowestPosition as i32;
+                    c.inner.new_card_sort_order = NewCardSortOrder::NoSort as i32;
+                    c.inner.interleave_by_concept = interleave;
+                })
+                .add(self);
+
+            let recall = self.add_named_notetype("Basic Recall");
+            let application = self.add_named_notetype("MCAT Application");
+            for _ in 0..3 {
+                self.add_tagged_note(&recall, "concept::biochem::amino_acid", deck.id);
+            }
+            for _ in 0..3 {
+                self.add_tagged_note(&application, "concept::physics::optics", deck.id);
+            }
+            deck.id
+        }
+    }
+
+    #[test]
+    fn interleave_off_leaves_order_unchanged() {
+        let mut col = Collection::new();
+        let deck = col.setup_interleave_deck(false);
+        // Blocks stay back-to-back: three biochem recall, then three physics app.
+        assert_eq!(
+            col.queue_as_section_and_is_app(deck),
+            vec![
+                ("biochem".to_string(), false),
+                ("biochem".to_string(), false),
+                ("biochem".to_string(), false),
+                ("physics".to_string(), true),
+                ("physics".to_string(), true),
+                ("physics".to_string(), true),
+            ]
+        );
+    }
+
+    #[test]
+    fn interleave_on_alternates_concept_and_type() {
+        let mut col = Collection::new();
+        let deck = col.setup_interleave_deck(true);
+        let queue = col.queue_as_section_and_is_app(deck);
+
+        // Nothing dropped or duplicated: still 3 of each block.
+        assert_eq!(queue.len(), 6);
+        assert_eq!(queue.iter().filter(|(s, _)| s == "biochem").count(), 3);
+        assert_eq!(queue.iter().filter(|(_, app)| *app).count(), 3);
+
+        // Consecutive cards differ in both section and question-type (with a
+        // clean 3/3 split, perfect alternation is achievable).
+        for pair in queue.windows(2) {
+            assert_ne!(pair[0].0, pair[1].0, "sections should alternate: {queue:?}");
+            assert_ne!(
+                pair[0].1, pair[1].1,
+                "question-types should alternate: {queue:?}"
+            );
+        }
     }
 }
