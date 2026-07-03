@@ -8,6 +8,7 @@ mod dbcheck;
 mod deck;
 mod deckconfig;
 mod graves;
+pub(crate) mod lineage;
 mod note;
 mod notetype;
 mod revlog;
