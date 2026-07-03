@@ -7,6 +7,7 @@ mod concepts;
 mod coverage;
 mod graph;
 mod graphs;
+mod performance;
 mod service;
 mod today;
 

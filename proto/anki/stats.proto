@@ -20,6 +20,8 @@ service StatsService {
   rpc ConceptCoverage(ConceptCoverageRequest) returns (ConceptCoverageResponse);
   rpc AdoptionStats(AdoptionStatsRequest) returns (AdoptionStatsResponse);
   rpc ConceptGraph(ConceptGraphRequest) returns (ConceptGraphResponse);
+  rpc ConceptPerformance(ConceptPerformanceRequest)
+      returns (ConceptPerformanceResponse);
 }
 
 // Implicitly includes any of the above methods that are not listed in the
@@ -409,4 +411,51 @@ message ConceptGraphResponse {
   }
   repeated Node nodes = 1;
   repeated Edge edges = 2;
+}
+
+message ConceptPerformanceRequest {
+  // scope filter, e.g. "deck:Synapse"; empty = whole collection
+  string search = 1;
+}
+
+// PROVISIONAL, UNCALIBRATED Performance read-model (PRD F2). Where Memory (F1)
+// asks "can you RECALL this concept", Performance asks "can you APPLY it to a
+// novel, exam-style item". It is therefore driven by the learner's answer
+// history on APPLICATION-form cards (the "MCAT Application" family of
+// notetypes) rather than plain recall cards.
+//
+// The score here is deliberately labelled provisional: there is no held-out
+// AAMC data to calibrate against yet, so this is a transparent blend of the
+// signals PRD F2 names (application accuracy, current retrievability, and
+// prerequisite mastery), NOT a calibrated probability. Real calibration
+// (ECE/reliability against application items) is a later service concern; the
+// UI must present these numbers as preliminary. `sufficient_data` still
+// exposes the F4 abstention threshold so thin data can be flagged honestly,
+// even though (per the owner decision) the provisional score is always
+// returned.
+message ConceptPerformanceResponse {
+  message ConceptScore {
+    // full tag, e.g. concept::biochem::amino_acid_charge
+    string concept = 1;
+    // 2nd tag segment, e.g. biochem ("" if absent)
+    string section = 2;
+    // provisional, uncalibrated Performance 0..100 (see module docs for the
+    // exact blend). Not a calibrated probability.
+    float performance = 3;
+    // fraction 0..1 of application reviews that were NOT "Again" (recency
+    // weighted); 0 when no application reviews
+    float application_accuracy = 4;
+    // number of application-form reviews that fed `application_accuracy`
+    uint32 applied_count = 5;
+    // mean FSRS current retrievability 0..1 over the concept's application
+    // cards (0 when none are scored)
+    float retrievability = 6;
+    // mean F1 Memory 0..1 of this concept's prerequisites (1.0 when it has
+    // none — no penalty); weak prerequisites cap the score
+    float prereq_mastery = 7;
+    // applied_count >= 3 (abstention threshold). The score is still returned
+    // when false, but the UI labels the thin data.
+    bool sufficient_data = 8;
+  }
+  repeated ConceptScore concepts = 1;
 }

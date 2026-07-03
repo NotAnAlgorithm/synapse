@@ -64,6 +64,13 @@ impl crate::services::StatsService for Collection {
     ) -> error::Result<anki_proto::stats::ConceptGraphResponse> {
         self.concept_graph(&input.search)
     }
+
+    fn concept_performance(
+        &mut self,
+        input: anki_proto::stats::ConceptPerformanceRequest,
+    ) -> error::Result<anki_proto::stats::ConceptPerformanceResponse> {
+        self.concept_performance(&input.search)
+    }
 }
 
 impl From<RevlogReviewKind> for i32 {

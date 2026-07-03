@@ -28,6 +28,7 @@ Pure presentation over the `conceptMemory` RPC; no other backend calls.
     import TitledContainer from "$lib/components/TitledContainer.svelte";
 
     import AdoptionSection from "./AdoptionSection.svelte";
+    import PerformanceSection from "./PerformanceSection.svelte";
     import WithConceptMemory from "./WithConceptMemory.svelte";
     import {
         conceptLabel,
@@ -125,6 +126,12 @@ Pure presentation over the `conceptMemory` RPC; no other backend calls.
                         </div>
                     {/if}
                 </TitledContainer>
+
+                <!-- Performance: provisional "can you apply it" score (F2).
+                     Sits alongside Memory as one of the dashboard's lead scores
+                     (E1); clearly labelled preliminary/uncalibrated. Self-shows
+                     an honest empty state when there's no application history. -->
+                <PerformanceSection {search} />
 
                 <!-- Adoption: effort points + streak (E2/E3). Self-hides when
                      the default-off backend flag is disabled. -->
