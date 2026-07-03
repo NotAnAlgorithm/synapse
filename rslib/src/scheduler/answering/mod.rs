@@ -339,6 +339,9 @@ impl Collection {
         self.maybe_bury_siblings(&original, &updater.config)?;
         let timing = updater.timing;
         let deckconfig_id = updater.original_deck.config_id();
+        // Synapse: capture the trickle-down toggle before the updater is
+        // consumed below.
+        let trickle_down_credit = updater.config.inner.trickle_down_credit;
         let mut card = updater.into_card();
         if !matches!(
             answer.current_state,
@@ -355,6 +358,13 @@ impl Collection {
         if answer.new_state.leeched() {
             self.add_leech_tag(card.note_id)?;
         }
+
+        // Synapse: on a successful application answer, trickle discounted credit
+        // down to prerequisite concepts' cards. Self-contained and gated behind
+        // the `trickle_down_credit` deck-config flag (default off); a no-op
+        // otherwise. An integrator may add a metamorphosis call near here — this
+        // helper is independent of it.
+        self.maybe_apply_trickle_down_credit(&card, trickle_down_credit, answer.rating)?;
 
         if card.queue == CardQueue::Review {
             if let Some(load_balancer) = self
@@ -385,6 +395,48 @@ impl Collection {
         }
 
         Ok(())
+    }
+
+    /// Synapse trickle-down entry point: when enabled, a *successful* answer on
+    /// an *application*-type card grants discounted reinforcement to its
+    /// concept's prerequisites (see [`Collection::apply_trickle_down_credit`]).
+    ///
+    /// "Successful" = Good or Easy (Again/Hard don't reinforce prerequisites).
+    /// The application-type check reuses the M1 provisioning heuristic
+    /// (notetype name begins with `MCAT `), matching the
+    /// interleaving/gating passes; it is replicated as a one-liner here to
+    /// keep those modules untouched. Cheap early-outs first so the
+    /// disabled/non-application path costs nothing.
+    fn maybe_apply_trickle_down_credit(
+        &mut self,
+        card: &Card,
+        trickle_down_credit: bool,
+        rating: Rating,
+    ) -> Result<()> {
+        if !trickle_down_credit {
+            return Ok(());
+        }
+        if !matches!(rating, Rating::Good | Rating::Easy) {
+            return Ok(());
+        }
+        if !self.card_is_application(card.note_id)? {
+            return Ok(());
+        }
+        self.apply_trickle_down_credit(card.id)
+    }
+
+    /// Whether the note's notetype name marks it as an application-style item
+    /// (`MCAT ` prefix). Same heuristic as the interleaving/gating passes.
+    fn card_is_application(&mut self, note_id: NoteId) -> Result<bool> {
+        let Some(note) = self.storage.get_note_without_fields(note_id)? else {
+            return Ok(false);
+        };
+        let name = self
+            .storage
+            .get_notetype(note.notetype_id)?
+            .map(|nt| nt.name)
+            .unwrap_or_default();
+        Ok(name.starts_with("MCAT "))
     }
 
     fn maybe_bury_siblings(&mut self, card: &Card, config: &DeckConfig) -> Result<()> {
