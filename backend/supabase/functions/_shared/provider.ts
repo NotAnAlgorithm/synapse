@@ -56,7 +56,7 @@ export interface Embedder {
 // ---------------------------------------------------------------------------
 
 export interface ProviderConfig {
-  provider: string; // logical provider name, e.g. "stub" | "<owner-provider>"
+  provider: string; // logical provider name, e.g. "stub" | "openai"
   generatorModel: string;
   embedderModel: string;
   embeddingDimension: number;
@@ -112,14 +112,144 @@ class StubEmbedder implements Embedder {
   }
 }
 
+// ---------------------------------------------------------------------------
+// OpenAI adapter. Calls the Chat Completions + Embeddings REST endpoints via
+// fetch (available in the Deno Edge runtime) — no SDK dependency. Model ids come
+// from config (SYNAPSE_GENERATOR_MODEL / SYNAPSE_EMBEDDER_MODEL) so switching
+// models is env-only. Set SYNAPSE_PROVIDER_BASE_URL to target an
+// OpenAI-compatible endpoint (Azure, a gateway/proxy); it defaults to the public
+// API. Grounding is still enforced by the CALLER (generate/index.ts) — this is
+// only transport.
+// ---------------------------------------------------------------------------
+
+const DEFAULT_OPENAI_BASE_URL = "https://api.openai.com/v1";
+
+function openAiBaseUrl(): string {
+  return (env("SYNAPSE_PROVIDER_BASE_URL") ?? DEFAULT_OPENAI_BASE_URL).replace(/\/+$/, "");
+}
+
+function requireApiKey(cfg: ProviderConfig): void {
+  if (!cfg.apiKey) {
+    throw new Error(
+      "SYNAPSE_PROVIDER_API_KEY is required for the OpenAI provider (set it in " +
+        ".env for local scripts, or as a Supabase function secret in deployment).",
+    );
+  }
+}
+
+interface OpenAiChatResponse {
+  choices?: Array<{
+    message?: {
+      content?: string | null;
+      tool_calls?: Array<{ function?: { name?: string; arguments?: string } }>;
+    };
+  }>;
+}
+
+interface OpenAiEmbeddingResponse {
+  data?: Array<{ index: number; embedding: number[] }>;
+}
+
+function parseToolArguments(raw: string | undefined): Record<string, unknown> {
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw) as Record<string, unknown>;
+  } catch {
+    return {};
+  }
+}
+
+class OpenAiGenerator implements Generator {
+  constructor(private readonly cfg: ProviderConfig) {
+    requireApiKey(cfg);
+  }
+
+  async complete(messages: Message[], tools?: ToolSpec[]): Promise<CompletionResult> {
+    const body: Record<string, unknown> = {
+      model: this.cfg.generatorModel,
+      messages: messages.map((m) => ({ role: m.role, content: m.content })),
+    };
+    if (tools && tools.length > 0) {
+      body.tools = tools.map((t) => ({
+        type: "function",
+        function: { name: t.name, description: t.description, parameters: t.parameters },
+      }));
+    }
+
+    const res = await fetch(`${openAiBaseUrl()}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${this.cfg.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      throw new Error(`OpenAI chat/completions failed (${res.status}): ${await res.text()}`);
+    }
+
+    const data = (await res.json()) as OpenAiChatResponse;
+    const message = data.choices?.[0]?.message ?? {};
+    const toolCalls: ToolCall[] = (message.tool_calls ?? []).map((tc) => ({
+      name: tc.function?.name ?? "",
+      arguments: parseToolArguments(tc.function?.arguments),
+    }));
+    return { text: message.content ?? "", toolCalls };
+  }
+}
+
+class OpenAiEmbedder implements Embedder {
+  readonly dimension: number;
+
+  constructor(private readonly cfg: ProviderConfig) {
+    requireApiKey(cfg);
+    this.dimension = cfg.embeddingDimension;
+  }
+
+  async embed(texts: string[]): Promise<number[][]> {
+    if (texts.length === 0) return [];
+
+    const body: Record<string, unknown> = {
+      model: this.cfg.embedderModel,
+      input: texts,
+    };
+    // text-embedding-3-* honour `dimensions`; pin it so returned vectors match
+    // the pgvector column width (SYNAPSE_EMBEDDING_DIM / the migration).
+    if (this.dimension > 0) body.dimensions = this.dimension;
+
+    const res = await fetch(`${openAiBaseUrl()}/embeddings`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${this.cfg.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      throw new Error(`OpenAI embeddings failed (${res.status}): ${await res.text()}`);
+    }
+
+    const data = (await res.json()) as OpenAiEmbeddingResponse;
+    // Sort by index so output order matches input order.
+    const rows = (data.data ?? []).slice().sort((a, b) => a.index - b.index);
+    const vectors = rows.map((row) => row.embedding);
+    if (vectors.length !== texts.length) {
+      throw new Error(
+        `OpenAI embeddings returned ${vectors.length} vectors for ${texts.length} inputs`,
+      );
+    }
+    return vectors;
+  }
+}
+
 /**
- * Factory: return the configured Generator. Add a `case "<owner-provider>"` here
- * that constructs the real adapter from `cfg` when the provider is chosen.
+ * Factory: return the configured Generator. `openai` is implemented (Chat
+ * Completions); add another `case` to support a different provider.
  */
 export function makeGenerator(cfg: ProviderConfig = loadProviderConfig()): Generator {
   switch (cfg.provider) {
-    // case "<owner-provider>":
-    //   return new OwnerProviderGenerator(cfg);
+    case "openai":
+      return new OpenAiGenerator(cfg);
     case "stub":
     default:
       return new StubGenerator();
@@ -129,8 +259,8 @@ export function makeGenerator(cfg: ProviderConfig = loadProviderConfig()): Gener
 /** Factory: return the configured Embedder (dimension must match the DB). */
 export function makeEmbedder(cfg: ProviderConfig = loadProviderConfig()): Embedder {
   switch (cfg.provider) {
-    // case "<owner-provider>":
-    //   return new OwnerProviderEmbedder(cfg);
+    case "openai":
+      return new OpenAiEmbedder(cfg);
     case "stub":
     default:
       return new StubEmbedder(cfg.embeddingDimension);

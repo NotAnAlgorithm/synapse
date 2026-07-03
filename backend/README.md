@@ -131,10 +131,14 @@ Nothing below has been run. In order:
 3. **Apply migrations:** `supabase db reset` (local) or `supabase db push`
    (linked). This enables pgvector and creates `corpus_chunks`, the indexes, the
    per-user tables (RLS enabled, deny-by-default), and `match_corpus_chunks`.
-4. **Wire the provider:** implement the real `Generator`/`Embedder` adapters in
-   `supabase/functions/_shared/provider.ts` (add a `case` in `makeGenerator` /
-   `makeEmbedder`), set `SYNAPSE_PROVIDER` + model names, and set the API key as a
-   function secret: `supabase secrets set SYNAPSE_PROVIDER_API_KEY=...`.
+4. **Configure the provider:** the **OpenAI** adapter is implemented in
+   `supabase/functions/_shared/provider.ts` (Chat Completions + Embeddings via
+   `fetch`, no SDK). Set `SYNAPSE_PROVIDER=openai` + `SYNAPSE_GENERATOR_MODEL` /
+   `SYNAPSE_EMBEDDER_MODEL`, and provide the key as a function secret
+   (`supabase secrets set SYNAPSE_PROVIDER_API_KEY=...`) — or in `.env` for the
+   local ingest script. Optionally set `SYNAPSE_PROVIDER_BASE_URL` for an
+   OpenAI-compatible endpoint (Azure / gateway). Add another provider by
+   implementing a `case` in `makeGenerator` / `makeEmbedder`.
 5. **Validate + ingest the corpus:**
    `python3 scripts/validate_corpus.py corpus/seed.jsonl`, then
    `deno run --allow-env --allow-read --allow-net scripts/ingest.ts corpus/seed.jsonl`
