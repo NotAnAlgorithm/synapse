@@ -424,6 +424,7 @@ def is_sveltekit_page(path: str) -> bool:
         "image-occlusion",
         "synapse",
         "coverage",
+        "graph",
     ]
 
 
@@ -750,6 +751,7 @@ exposed_backend_list = [
     "set_graph_preferences",
     "concept_memory",
     "concept_coverage",
+    "concept_graph",
     # TagsService
     "complete_tag",
     # ImageOcclusionService

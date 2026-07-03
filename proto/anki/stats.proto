@@ -18,6 +18,7 @@ service StatsService {
   rpc SetGraphPreferences(GraphPreferences) returns (generic.Empty);
   rpc ConceptMemory(ConceptMemoryRequest) returns (ConceptMemoryResponse);
   rpc ConceptCoverage(ConceptCoverageRequest) returns (ConceptCoverageResponse);
+  rpc ConceptGraph(ConceptGraphRequest) returns (ConceptGraphResponse);
 }
 
 // Implicitly includes any of the above methods that are not listed in the
@@ -322,4 +323,43 @@ message ConceptCoverageResponse {
   uint32 expected_count = 4;
   // covered_count / expected_count * 100 (0 when expected_count == 0)
   float coverage = 5;
+}
+
+message ConceptGraphRequest {
+  // scope filter for the concept NODES, e.g. "deck:Synapse"; empty = whole
+  // collection. Edges come from the (unscoped) prerequisite graph; an edge is
+  // included only when both of its endpoints are among the returned nodes.
+  string search = 1;
+}
+
+// The Synapse prerequisite knowledge graph, ready to draw as a node-link
+// diagram (PRD D1 / W3): concept nodes coloured by their Memory mastery and
+// directed prerequisite edges. Nodes reuse the concept-memory read-model;
+// edges come from the derived `concept_edges` table.
+message ConceptGraphResponse {
+  // One concept node: its identity plus the mastery signal used to colour it.
+  message Node {
+    // full concept tag, e.g. concept::biochem::amino_acid_charge
+    string concept = 1;
+    // 2nd tag segment, e.g. biochem ("" if absent)
+    string section = 2;
+    // mean retrievability 0..100 over scored cards (0 when none scored)
+    float memory = 3;
+    // total cards mapped to this concept (coverage)
+    uint32 card_count = 4;
+    // cards with memory_state contributing to `memory`
+    uint32 scored_card_count = 5;
+    // scored_card_count >= 3; when false the node is drawn "abstain"/grey
+    bool sufficient_data = 6;
+  }
+  // One directed prerequisite edge: `from` is a prerequisite of `to` (master
+  // `from` before `to`). Both endpoints are always present in `nodes`.
+  message Edge {
+    // full concept tag of the prerequisite
+    string from_concept = 1;
+    // full concept tag of the dependent
+    string to_concept = 2;
+  }
+  repeated Node nodes = 1;
+  repeated Edge edges = 2;
 }
