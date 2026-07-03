@@ -3,6 +3,7 @@
 
 pub(crate) mod card;
 mod collection_timestamps;
+mod concept;
 mod config;
 mod dbcheck;
 mod deck;

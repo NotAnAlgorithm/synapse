@@ -83,6 +83,9 @@ const DEFAULT_DECK_CONFIG_INNER: DeckConfigInner = DeckConfigInner {
     param_search: String::new(),
     ignore_revlogs_before_date: String::new(),
     easy_days_percentages: Vec::new(),
+    // Synapse concept/question-type interleaving is opt-in; the integrator
+    // enables it on the Synapse preset.
+    interleave_by_concept: false,
 };
 
 impl Default for DeckConfig {

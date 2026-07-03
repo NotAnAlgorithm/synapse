@@ -17,6 +17,7 @@ service StatsService {
   rpc GetGraphPreferences(generic.Empty) returns (GraphPreferences);
   rpc SetGraphPreferences(GraphPreferences) returns (generic.Empty);
   rpc ConceptMemory(ConceptMemoryRequest) returns (ConceptMemoryResponse);
+  rpc ConceptCoverage(ConceptCoverageRequest) returns (ConceptCoverageResponse);
 }
 
 // Implicitly includes any of the above methods that are not listed in the
@@ -265,4 +266,60 @@ message ConceptMemoryResponse {
     bool sufficient_data = 6;
   }
   repeated ConceptScore concepts = 1;
+}
+
+message ConceptCoverageRequest {
+  // scope filter, e.g. "deck:Synapse"; empty = whole collection
+  string search = 1;
+}
+
+// Coverage of the user's cards against a hand-made AAMC-style content outline
+// (PRD B4). For each outline category we report how many of its expected
+// concepts the user has at least one card for, and list the concepts with no
+// card yet ("gaps"). Section- and collection-level rollups aggregate the
+// categories.
+message ConceptCoverageResponse {
+  // One expected concept from the seed outline, with whether the user has a
+  // card mapped to it.
+  message ExpectedConcept {
+    // full concept tag, e.g. concept::biochem::amino_acid_charge
+    string concept = 1;
+    // human-readable concept name from the outline
+    string name = 2;
+    // true if the user has >= 1 card tagged with this concept
+    bool covered = 3;
+    // number of cards mapped to this concept (0 when a gap)
+    uint32 card_count = 4;
+  }
+  message Category {
+    // outline section, e.g. biochem
+    string section = 1;
+    // stable outline category id, e.g. biochem::amino_acids
+    string id = 2;
+    // human-readable category name
+    string name = 3;
+    // expected concepts under this category (covered + gaps)
+    repeated ExpectedConcept concepts = 4;
+    // count of expected concepts the user has a card for
+    uint32 covered_count = 5;
+    // total expected concepts in this category
+    uint32 expected_count = 6;
+    // covered_count / expected_count * 100 (0 when expected_count == 0)
+    float coverage = 7;
+  }
+  message Section {
+    // outline section, e.g. biochem
+    string section = 1;
+    uint32 covered_count = 2;
+    uint32 expected_count = 3;
+    float coverage = 4;
+  }
+  repeated Category categories = 1;
+  repeated Section sections = 2;
+  // total expected concepts the user has a card for, across the outline
+  uint32 covered_count = 3;
+  // total expected concepts in the outline
+  uint32 expected_count = 4;
+  // covered_count / expected_count * 100 (0 when expected_count == 0)
+  float coverage = 5;
 }

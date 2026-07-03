@@ -44,6 +44,10 @@ def init(mw: aqt.main.AnkiQt) -> None:
     qconnect(dashboard_action.triggered, lambda: dashboard.show_dashboard(mw))
     menu.addAction(dashboard_action)
 
+    coverage_action = QAction("Synapse Coverage", mw)
+    qconnect(coverage_action.triggered, lambda: dashboard.show_coverage(mw))
+    menu.addAction(coverage_action)
+
     # --- Mint hooks -----------------------------------------------------------
     mint.install_hooks()
 
