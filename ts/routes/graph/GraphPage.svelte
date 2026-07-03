@@ -35,6 +35,7 @@ libraries (strict CSP).
     import { select } from "d3";
     import { zoom as d3zoom, zoomIdentity } from "d3";
     import type { ZoomTransform } from "d3";
+    import { untrack } from "svelte";
 
     import Container from "$lib/components/Container.svelte";
     import TitledContainer from "$lib/components/TitledContainer.svelte";
@@ -160,11 +161,14 @@ libraries (strict CSP).
             });
     }
 
-    // Rebuild the simulation whenever the loaded data changes.
+    // Rebuild the simulation whenever the loaded data changes. `sourceData` is
+    // the *only* intended dependency; the rebuild writes `nodes`/`links`/
+    // `layoutVersion`/`selectedId` (and reads some of them), so it must run
+    // untracked — otherwise the effect would depend on state it mutates and
+    // re-trigger itself forever (Svelte `effect_update_depth_exceeded`).
     $effect(() => {
-        // read `sourceData` so this effect re-runs on each new response
         const data = sourceData;
-        buildSimulation(data);
+        untrack(() => buildSimulation(data));
         return () => stopSimulation();
     });
 
@@ -225,10 +229,16 @@ libraries (strict CSP).
                 d.fx = null;
                 d.fy = null;
             });
-        select(svgEl)
-            .selectAll<SVGGElement, GraphNode>("g.node")
-            .data(nodes, (d) => d.id)
-            .call(dragBehavior);
+        // Read `nodes` untracked: the node *set* only changes with
+        // `layoutVersion` (our trigger above); per-tick position updates also
+        // reassign `nodes`, and tracking them here would re-bind drag handlers
+        // ~60×/s for no benefit.
+        untrack(() =>
+            select(svgNode)
+                .selectAll<SVGGElement, GraphNode>("g.node")
+                .data(nodes, (d) => d.id)
+                .call(dragBehavior),
+        );
     });
 
     function resetView(): void {
