@@ -3,6 +3,7 @@
 
 mod card;
 mod concepts;
+mod coverage;
 mod graphs;
 mod service;
 mod today;

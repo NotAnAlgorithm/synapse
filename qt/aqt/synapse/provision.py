@@ -47,6 +47,13 @@ SYNAPSE_PRESET_NAME = "Synapse"
 SYNAPSE_DECK_NAME = "Synapse"
 MCAT_NOTETYPE_NAME = "MCAT Application"
 
+# Additional M1 application-item notetypes (decision #4: richer items are new
+# notetypes + templates only; no AI grading). See ITEM_NOTETYPES below for their
+# fields/templates.
+WHICH_PRINCIPLE_NOTETYPE_NAME = "MCAT Which-Principle"
+DATA_SNIPPET_NOTETYPE_NAME = "MCAT Data-Snippet"
+EXPLAIN_WHY_NOTETYPE_NAME = "MCAT Explain-Why"
+
 # Do NOT lower this; 0.9 is the intended default retention for the demo.
 SYNAPSE_DESIRED_RETENTION = 0.9
 
@@ -66,6 +73,90 @@ MCAT_AFMT = """\
 <hr id="answer">
 <div class="answer">{{Answer}}</div>
 <div class="explanation">{{Explanation}}</div>"""
+
+
+# --- M1 application-item notetypes -------------------------------------------
+# Three richer application notetypes (decision #4). Each is described purely by
+# data here — a display name, its ordered fields, the field to sort on, and its
+# single card's front/back templates — and built generically by
+# :func:`create_item_notetype`. This mirrors the "MCAT Application" notetype
+# above (which keeps its own bespoke constants for backwards compatibility).
+#
+# Template conventions match the MCAT Application notetype:
+#   * `{{type:<Field>}}` renders a typed-answer comparison box where a short,
+#     checkable answer fits (Which-Principle, Data-Snippet). Explain-Why has no
+#     single correct short answer, so it uses a self-graded reveal instead.
+#   * The back always begins with `{{FrontSide}}`, an `<hr id="answer">`, then
+#     the reveal.
+
+
+class ItemNotetypeSpec:
+    """Declarative description of an application-item notetype."""
+
+    def __init__(
+        self,
+        name: str,
+        fields: list[str],
+        sort_field: str,
+        qfmt: str,
+        afmt: str,
+    ) -> None:
+        self.name = name
+        self.fields = fields
+        self.sort_field = sort_field
+        self.qfmt = qfmt
+        self.afmt = afmt
+
+
+ITEM_NOTETYPES: list[ItemNotetypeSpec] = [
+    # "Which principle/concept applies?" — a stem plus an options-style prompt,
+    # answered with the name of the governing principle.
+    ItemNotetypeSpec(
+        name=WHICH_PRINCIPLE_NOTETYPE_NAME,
+        fields=["Stem", "Options", "Answer", "Explanation", "Concept"],
+        sort_field="Stem",
+        qfmt="""\
+<div class="stem">{{Stem}}</div>
+<div class="options">{{Options}}</div>
+<div class="prompt">Which principle applies?</div>
+{{type:Answer}}""",
+        afmt="""\
+{{FrontSide}}
+<hr id="answer">
+<div class="answer">{{Answer}}</div>
+<div class="explanation">{{Explanation}}</div>""",
+    ),
+    # A small data table / figure description followed by a question about it.
+    ItemNotetypeSpec(
+        name=DATA_SNIPPET_NOTETYPE_NAME,
+        fields=["Data", "Question", "Answer", "Explanation", "Concept"],
+        sort_field="Question",
+        qfmt="""\
+<div class="data">{{Data}}</div>
+<hr class="data-divider">
+<div class="question">{{Question}}</div>
+{{type:Answer}}""",
+        afmt="""\
+{{FrontSide}}
+<hr id="answer">
+<div class="answer">{{Answer}}</div>
+<div class="explanation">{{Explanation}}</div>""",
+    ),
+    # An open "explain why" prompt whose back reveals a model explanation. No
+    # typed-answer box: the learner self-grades against the model answer.
+    ItemNotetypeSpec(
+        name=EXPLAIN_WHY_NOTETYPE_NAME,
+        fields=["Prompt", "ModelAnswer", "Concept"],
+        sort_field="Prompt",
+        qfmt="""\
+<div class="prompt">{{Prompt}}</div>
+<div class="hint">Explain your reasoning, then reveal the model answer.</div>""",
+        afmt="""\
+{{FrontSide}}
+<hr id="answer">
+<div class="model-answer">{{ModelAnswer}}</div>""",
+    ),
+]
 
 
 # --- Seed data ---------------------------------------------------------------
@@ -183,6 +274,93 @@ SEED_NOTES: list[dict[str, str]] = [
         "behavior is negative punishment.",
     },
 ]
+
+
+# Demo notes for the M1 item notetypes, keyed by notetype display name. Each
+# entry's ``fields`` dict maps field name -> value for that notetype's exact
+# field set (see ITEM_NOTETYPES), and ``tag`` is the single concept tag.
+# Seeded idempotently by :func:`seed_item_notes`; a couple per type is enough to
+# demo the templates without bloating the deck.
+ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
+    WHICH_PRINCIPLE_NOTETYPE_NAME: [
+        {
+            "tag": "concept::biochem::enzyme_kinetics",
+            "fields": {
+                "Stem": "Doubling [substrate] far below Km roughly doubles the "
+                "initial reaction rate.",
+                "Options": "First-order kinetics; Zero-order kinetics; "
+                "Competitive inhibition; Cooperativity",
+                "Answer": "First-order kinetics",
+                "Explanation": "Well below Km the rate is approximately "
+                "proportional to [S], i.e. first-order in substrate.",
+                "Concept": "Enzyme kinetics",
+            },
+        },
+        {
+            "tag": "concept::physics::circuits_ohms_law",
+            "fields": {
+                "Stem": "A wire's current rises linearly as the voltage across it "
+                "increases, at constant temperature.",
+                "Options": "Ohm's law; Kirchhoff's current law; Faraday's law; "
+                "Coulomb's law",
+                "Answer": "Ohm's law",
+                "Explanation": "A linear V-I relationship at fixed temperature is "
+                "the defining behavior of an ohmic resistor (V = IR).",
+                "Concept": "Ohm's law",
+            },
+        },
+    ],
+    DATA_SNIPPET_NOTETYPE_NAME: [
+        {
+            "tag": "concept::biochem::enzyme_kinetics",
+            "fields": {
+                "Data": "Assay | Vmax | Km<br>Control | 100 | 5<br>+Drug X | 100 | 15",
+                "Question": "What kind of inhibitor is Drug X?",
+                "Answer": "Competitive",
+                "Explanation": "Km rises while Vmax is unchanged, the signature of "
+                "a competitive inhibitor.",
+                "Concept": "Enzyme kinetics",
+            },
+        },
+        {
+            "tag": "concept::physics::circuits_ohms_law",
+            "fields": {
+                "Data": "V (V) | I (A)<br>2 | 0.5<br>4 | 1.0<br>6 | 1.5",
+                "Question": "What is the resistance of this component?",
+                "Answer": "4 ohms",
+                "Explanation": "The V-I ratio is constant at 4 (e.g. 4 V / 1.0 A), "
+                "so R = 4 ohms.",
+                "Concept": "Ohm's law",
+            },
+        },
+    ],
+    EXPLAIN_WHY_NOTETYPE_NAME: [
+        {
+            "tag": "concept::biochem::amino_acid_charge",
+            "fields": {
+                "Prompt": "Explain why glycine has no net charge at its pI but "
+                "lysine's pI is well above 7.",
+                "ModelAnswer": "At the pI the net charge is zero. Glycine has only "
+                "its alpha-amino and alpha-carboxyl groups, so its pI sits near "
+                "neutral pH. Lysine adds a basic side chain (pKa ~10.5) that must "
+                "also be deprotonated to reach net zero, pushing its pI higher.",
+                "Concept": "Amino acid charge",
+            },
+        },
+        {
+            "tag": "concept::psych::operant_conditioning",
+            "fields": {
+                "Prompt": "Explain why a variable-ratio schedule produces behavior "
+                "that is especially resistant to extinction.",
+                "ModelAnswer": "Because reinforcement arrives after an "
+                "unpredictable number of responses, the learner cannot tell a "
+                "temporary run of non-reward from true extinction, so responding "
+                "persists far longer than under predictable schedules.",
+                "Concept": "Operant conditioning",
+            },
+        },
+    ],
+}
 
 
 # --- Small utilities ---------------------------------------------------------
@@ -309,6 +487,43 @@ def create_mcat_notetype(col: anki.collection.Collection) -> NotetypeId:
     return NotetypeId(out.id)
 
 
+def create_item_notetype(
+    col: anki.collection.Collection, spec: ItemNotetypeSpec
+) -> NotetypeId:
+    """Create (or reuse) an application-item notetype from its spec.
+
+    Idempotent: if a notetype with the spec's name already exists we return its
+    id untouched (we never mutate an existing notetype's fields/templates, which
+    would be a destructive schema change for any notes already using it).
+    """
+    existing = col.models.by_name(spec.name)
+    if existing is not None:
+        return NotetypeId(existing["id"])
+
+    nt = col.models.new(spec.name)
+    for field_name in spec.fields:
+        col.models.add_field(nt, col.models.new_field(field_name))
+
+    # Sort on the human-facing prompt field.
+    if spec.sort_field in spec.fields:
+        col.models.set_sort_index(nt, spec.fields.index(spec.sort_field))
+
+    template = col.models.new_template("Card 1")
+    template["qfmt"] = spec.qfmt
+    template["afmt"] = spec.afmt
+    col.models.add_template(nt, template)
+
+    out = col.models.add_dict(nt)
+    return NotetypeId(out.id)
+
+
+def create_item_notetypes(
+    col: anki.collection.Collection,
+) -> dict[str, NotetypeId]:
+    """Create (or reuse) all M1 item notetypes. Returns name -> id."""
+    return {spec.name: create_item_notetype(col, spec) for spec in ITEM_NOTETYPES}
+
+
 # --- Step 3: Synapse deck ----------------------------------------------------
 
 
@@ -364,6 +579,44 @@ def seed_notes(
     return added
 
 
+def seed_item_notes(
+    col: anki.collection.Collection,
+    notetype_ids: dict[str, NotetypeId],
+    deck_id: DeckId,
+) -> int:
+    """Seed demo notes for the M1 item notetypes. Idempotent. Returns count.
+
+    Per notetype: skip seeding if the Synapse deck already holds any note of
+    that notetype (so re-provisioning never duplicates). Each seed spec's
+    ``fields`` dict must cover exactly that notetype's fields.
+    """
+    added = 0
+    for name, specs in ITEM_SEED_NOTES.items():
+        notetype_id = notetype_ids.get(name)
+        if notetype_id is None:
+            continue
+        # Per-notetype guard so a partially-seeded deck still fills the rest.
+        if col.find_notes(f'deck:{SYNAPSE_DECK_NAME} note:"{name}"'):
+            continue
+
+        notetype = col.models.get(notetype_id)
+        assert notetype is not None
+        # Field set to write into (the notetype's declared fields).
+        field_names = {fld["name"] for fld in notetype["flds"]}
+
+        for spec in specs:
+            note = col.new_note(notetype)
+            for field_name, value in spec["fields"].items():
+                if field_name in field_names:
+                    note[field_name] = value
+            # Exactly one concept tag per note; underscore-joined + space-free
+            # so Anki treats it as a single tag.
+            note.tags = [spec["tag"]]
+            col.add_note(note, deck_id)
+            added += 1
+    return added
+
+
 def is_provisioned(col: anki.collection.Collection) -> bool:
     """True once the Synapse environment exists (gates auto-provision).
 
@@ -382,13 +635,19 @@ def provision(col: anki.collection.Collection) -> dict[str, Any]:
     """
     config_id = enable_fsrs_and_preset(col)
     notetype_id = create_mcat_notetype(col)
+    item_notetype_ids = create_item_notetypes(col)
     deck_id = create_synapse_deck(col, config_id)
     notes_added = seed_notes(col, notetype_id, deck_id)
+    item_notes_added = seed_item_notes(col, item_notetype_ids, deck_id)
 
     return {
         "notetype_id": int(notetype_id),
+        "item_notetype_ids": {
+            name: int(nid) for name, nid in item_notetype_ids.items()
+        },
         "deck_id": int(deck_id),
         "config_id": int(config_id),
         "notes_added": notes_added,
+        "item_notes_added": item_notes_added,
         "fsrs": True,
     }
