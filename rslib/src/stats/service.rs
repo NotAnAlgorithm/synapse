@@ -43,6 +43,13 @@ impl crate::services::StatsService for Collection {
     ) -> error::Result<anki_proto::stats::ConceptMemoryResponse> {
         self.concept_memory(&input.search)
     }
+
+    fn concept_coverage(
+        &mut self,
+        input: anki_proto::stats::ConceptCoverageRequest,
+    ) -> error::Result<anki_proto::stats::ConceptCoverageResponse> {
+        self.concept_coverage(&input.search)
+    }
 }
 
 impl From<RevlogReviewKind> for i32 {
