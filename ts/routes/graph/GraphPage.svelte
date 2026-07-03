@@ -102,11 +102,17 @@ libraries (strict CSP).
         loadData(search);
     });
 
-    // Layout state, mirrored from the simulation on each tick. Reassigned (not
-    // mutated in place) so Svelte's reactivity picks the change up.
-    let nodes = $state<GraphNode[]>([]);
-    let links = $state<GraphLink[]>([]);
-    let transform = $state<ZoomTransform>(zoomIdentity);
+    // Layout state, mirrored from the simulation on each tick. These use
+    // `$state.raw` deliberately: d3-force OWNS these objects and mutates
+    // `node.x/y/vx/vy` (and the ZoomTransform) in place ~60×/s. A plain `$state`
+    // would deep-proxy them, so every physics tick would fire a storm of
+    // per-property reactive writes that stalls rendering (nodes freeze at their
+    // initial near-origin positions) and breaks pan/drag. With `.raw`, only the
+    // explicit reassignments below (in the tick handler / zoom handler) are
+    // reactive — exactly the granularity we want.
+    let nodes = $state.raw<GraphNode[]>([]);
+    let links = $state.raw<GraphLink[]>([]);
+    let transform = $state.raw<ZoomTransform>(zoomIdentity);
     let selectedId = $state<string | null>(null);
     let hoverId = $state<string | null>(null);
 
