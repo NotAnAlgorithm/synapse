@@ -439,6 +439,10 @@ def _apply_synapse_config(config: DeckConfig.Config) -> None:
     )
     config.review_order = _Config.ReviewCardOrder.REVIEW_CARD_ORDER_RANDOM
     config.desired_retention = SYNAPSE_DESIRED_RETENTION
+    # M1-B: concept + question-type interleaving (spreads consecutive cards
+    # across concepts/sections and recall-vs-application). Default is OFF
+    # globally; Synapse turns it on.
+    config.interleave_by_concept = True
 
 
 def _find_config_by_name(fu: Any, name: str) -> DeckConfig | None:

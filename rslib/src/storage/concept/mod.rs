@@ -29,6 +29,10 @@ crate::define_newtype!(ConceptId, i64);
 pub(crate) const CONCEPT_TAG_PREFIX: &str = "concept::";
 
 /// A row of the `concepts` table.
+///
+/// `Concept` + [`SqliteStorage::all_concepts`] are the concept-enumeration API
+/// for M2's knowledge graph (edges/mastery); exercised by tests for now.
+#[allow(dead_code)]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(crate) struct Concept {
     pub id: ConceptId,
@@ -86,6 +90,7 @@ impl SqliteStorage {
     }
 
     /// All concepts in the collection, ordered by tag.
+    #[allow(dead_code)] // M2 knowledge-graph API; exercised by tests for now
     pub(crate) fn all_concepts(&self) -> Result<Vec<Concept>> {
         self.db
             .prepare_cached("SELECT id, tag, section FROM concepts ORDER BY tag")?
