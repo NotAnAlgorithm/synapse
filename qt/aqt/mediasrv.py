@@ -754,6 +754,8 @@ exposed_backend_list = [
     "adoption_stats",
     "concept_graph",
     "concept_performance",
+    "concept_mastery",
+    "experiment_metrics",
     # TagsService
     "complete_tag",
     # ImageOcclusionService

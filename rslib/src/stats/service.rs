@@ -71,6 +71,20 @@ impl crate::services::StatsService for Collection {
     ) -> error::Result<anki_proto::stats::ConceptPerformanceResponse> {
         self.concept_performance(&input.search)
     }
+
+    fn concept_mastery(
+        &mut self,
+        input: anki_proto::stats::ConceptMasteryBundleRequest,
+    ) -> error::Result<anki_proto::stats::ConceptMasteryBundleResponse> {
+        self.concept_mastery_bundle(&input.concepts, &input.search)
+    }
+
+    fn experiment_metrics(
+        &mut self,
+        input: anki_proto::stats::ExperimentMetricsRequest,
+    ) -> error::Result<anki_proto::stats::ExperimentMetricsResponse> {
+        self.experiment_metrics(&input.experiment, input.window_days, &input.search)
+    }
 }
 
 impl From<RevlogReviewKind> for i32 {
