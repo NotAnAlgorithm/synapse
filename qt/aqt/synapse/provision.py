@@ -30,6 +30,7 @@ Non-obvious backend behaviours worth calling out:
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from typing import Any
 
 import anki.collection
@@ -380,10 +381,15 @@ def section_of(concept_tag: str) -> str:
 # --- Step 1: FSRS + Synapse preset ------------------------------------------
 
 
-def enable_fsrs_and_preset(col: anki.collection.Collection) -> DeckConfigId:
-    """Enable collection-global FSRS and ensure the "Synapse" preset exists.
+def enable_fsrs_and_preset(
+    col: anki.collection.Collection,
+    opts: SynapseOptions | None = None,
+) -> DeckConfigId:
+    """Ensure the "Synapse" preset exists, optionally enabling collection FSRS.
 
-    Returns the config id of the "Synapse" preset.
+    Returns the config id of the "Synapse" preset. ``opts`` selects which
+    scheduling features to write onto the preset and whether FSRS is turned on;
+    ``None`` means the default (recommended) Synapse behaviour.
 
     FSRS is only persisted through the deck-options update flow, so we route
     everything through ``update_deck_configs``. In that flow the *target deck*
@@ -393,6 +399,9 @@ def enable_fsrs_and_preset(col: anki.collection.Collection) -> DeckConfigId:
     bound to the preset separately in :func:`create_synapse_deck`, which keeps
     the two concerns independent and each idempotent.
     """
+    if opts is None:
+        opts = SynapseOptions()
+
     did = col.decks.get_current_id()
     fu = col.decks.get_deck_configs_for_update(did)
 
@@ -406,7 +415,12 @@ def enable_fsrs_and_preset(col: anki.collection.Collection) -> DeckConfigId:
         preset.id = 0
         preset.name = SYNAPSE_PRESET_NAME
         preset.config.CopyFrom(fu.defaults.config)
-    _apply_synapse_config(preset.config)
+    _apply_synapse_config(preset.config, opts)
+
+    # FSRS is collection-global. When re-running with FSRS unchecked we must not
+    # clobber an already-on collection: OR the request in with the current state
+    # so provisioning never turns FSRS *off*.
+    fsrs = opts.enable_fsrs or fu.fsrs
 
     # Configs list: send only what we touch. Keep the preset last so, per the
     # backend contract, the target deck ends up on it (harmless here).
@@ -416,7 +430,7 @@ def enable_fsrs_and_preset(col: anki.collection.Collection) -> DeckConfigId:
         removed_config_ids=[],
         card_state_customizer=fu.card_state_customizer,
         new_cards_ignore_review_limit=fu.new_cards_ignore_review_limit,
-        fsrs=True,  # collection-global; only takes effect via this flow
+        fsrs=fsrs,  # collection-global; only takes effect via this flow
         apply_all_parent_limits=fu.apply_all_parent_limits,
         fsrs_reschedule=False,
         fsrs_health_check=False,
@@ -427,8 +441,13 @@ def enable_fsrs_and_preset(col: anki.collection.Collection) -> DeckConfigId:
     return _preset_id(col)
 
 
-def _apply_synapse_config(config: DeckConfig.Config) -> None:
-    """Set the Synapse-specific ordering + retention on an inner Config."""
+def _apply_synapse_config(config: DeckConfig.Config, opts: SynapseOptions) -> None:
+    """Set the Synapse-specific ordering + retention on an inner Config.
+
+    Each feature flag is written explicitly from ``opts`` (rather than only
+    switched on) so that re-provisioning with a feature *unchecked* actually
+    turns it back off on the preset.
+    """
     # RANDOM gather/sort/review ordering avoids subject-blocking so mixed
     # concepts interleave. Verify enum names against proto/anki/deck_config.proto.
     config.new_card_gather_priority = (
@@ -442,15 +461,15 @@ def _apply_synapse_config(config: DeckConfig.Config) -> None:
     # M1-B: concept + question-type interleaving (spreads consecutive cards
     # across concepts/sections and recall-vs-application). Default is OFF
     # globally; Synapse turns it on.
-    config.interleave_by_concept = True
+    config.interleave_by_concept = opts.interleave_by_concept
     # M2: graph-driven adaptive scheduling + card metamorphosis, all default OFF
     # globally; Synapse turns them on. mastery_gating withholds application cards
     # with unmastered prerequisites; trickle_down_credit reinforces prerequisites
     # on advanced success; metamorphosis fades a concept's recall cards once its
     # application form is mastered.
-    config.mastery_gating = True
-    config.trickle_down_credit = True
-    config.metamorphosis = True
+    config.mastery_gating = opts.mastery_gating
+    config.trickle_down_credit = opts.trickle_down_credit
+    config.metamorphosis = opts.metamorphosis
 
 
 def _find_config_by_name(fu: Any, name: str) -> DeckConfig | None:
@@ -637,25 +656,109 @@ def is_provisioned(col: anki.collection.Collection) -> bool:
     return col.models.by_name(MCAT_NOTETYPE_NAME) is not None
 
 
+# --- Options -----------------------------------------------------------------
+
+
+def _default_item_notetypes() -> set[str]:
+    """All M1 item-notetype names — the default set installed by provisioning."""
+    return {spec.name for spec in ITEM_NOTETYPES}
+
+
+@dataclass
+class SynapseOptions:
+    """Which Synapse features to enable when provisioning.
+
+    Every default here reproduces the historical :func:`provision` behaviour, so
+    ``provision_with_options(col, SynapseOptions())`` is identical to the old
+    ``provision(col)``. The setup wizard passes an instance built from its
+    checkboxes; each field gates exactly one effect.
+
+    * ``enable_fsrs`` — turn on collection-global FSRS via the deck-options flow.
+      (Provisioning never turns FSRS *off*; unchecking simply won't enable it.)
+    * ``interleave_by_concept`` / ``mastery_gating`` / ``trickle_down_credit`` /
+      ``metamorphosis`` — the per-preset scheduling flags applied in
+      :func:`_apply_synapse_config`.
+    * ``adoption_enabled`` — the ``synapse:adoption_enabled`` generic config that
+      drives the adoption ("Effort") stats panel.
+    * ``governor_enabled`` + ``test_date`` — the ``synapse:governor_enabled`` /
+      ``synapse:test_date`` config that drives the exam-date retention governor.
+      ``test_date`` is an ISO ``"YYYY-MM-DD"`` string (or ``None``). The governor
+      keys are only written when ``governor_enabled`` is True.
+    * ``install_seed_content`` — whether to seed the demo notes (both the MCAT
+      Application notes and the item-notetype notes).
+    * ``item_notetypes`` — the set of item-notetype display names to create
+      (a subset of :data:`ITEM_NOTETYPES`' names).
+    """
+
+    enable_fsrs: bool = True
+    interleave_by_concept: bool = True
+    mastery_gating: bool = True
+    trickle_down_credit: bool = True
+    metamorphosis: bool = True
+    adoption_enabled: bool = True
+    governor_enabled: bool = False
+    test_date: str | None = None
+    install_seed_content: bool = True
+    item_notetypes: set[str] = field(default_factory=_default_item_notetypes)
+
+
 # --- Orchestration -----------------------------------------------------------
 
 
 def provision(col: anki.collection.Collection) -> dict[str, Any]:
     """Provision the full Synapse demo environment. Idempotent.
 
+    Backward-compatible entry point: delegates to
+    :func:`provision_with_options` with the default (recommended) options, so
+    auto-provision and the headless tests keep the exact behaviour they had.
+
     Returns a summary dict with the created/looked-up ids and counts.
     """
-    config_id = enable_fsrs_and_preset(col)
-    notetype_id = create_mcat_notetype(col)
-    item_notetype_ids = create_item_notetypes(col)
-    deck_id = create_synapse_deck(col, config_id)
-    notes_added = seed_notes(col, notetype_id, deck_id)
-    item_notes_added = seed_item_notes(col, item_notetype_ids, deck_id)
+    return provision_with_options(col, SynapseOptions())
 
-    # M3-E: turn on the adoption "Effort" panel for Synapse (points + streak;
-    # generic collection config read by stats::adoption). The test-date governor
-    # stays OFF here — it's opt-in via Tools > "Synapse: Set Exam Date...".
-    col.set_config("synapse:adoption_enabled", True)
+
+def provision_with_options(
+    col: anki.collection.Collection, opts: SynapseOptions
+) -> dict[str, Any]:
+    """Provision the Synapse environment according to ``opts``. Idempotent.
+
+    Each flag on ``opts`` gates exactly one effect (see :class:`SynapseOptions`).
+    Returns a summary dict with the created/looked-up ids and counts.
+    """
+    config_id = enable_fsrs_and_preset(col, opts)
+    notetype_id = create_mcat_notetype(col)
+
+    # Only build the item notetypes the caller asked for (default: all).
+    item_specs = [spec for spec in ITEM_NOTETYPES if spec.name in opts.item_notetypes]
+    item_notetype_ids = {
+        spec.name: create_item_notetype(col, spec) for spec in item_specs
+    }
+
+    deck_id = create_synapse_deck(col, config_id)
+
+    # Seed demo content only when requested. Seeding is itself idempotent, so
+    # skipping it never leaves a half-populated deck.
+    if opts.install_seed_content:
+        notes_added = seed_notes(col, notetype_id, deck_id)
+        item_notes_added = seed_item_notes(col, item_notetype_ids, deck_id)
+    else:
+        notes_added = 0
+        item_notes_added = 0
+
+    # M3-E: the adoption "Effort" panel (points + streak; generic collection
+    # config read by stats::adoption).
+    col.set_config("synapse:adoption_enabled", opts.adoption_enabled)
+
+    # A2: the test-date retention governor. Only written when enabled, so a
+    # default provision leaves the governor untouched (opt-in). A blank/absent
+    # date leaves the switch off, matching the "Set Exam Date..." action.
+    if opts.governor_enabled and opts.test_date:
+        col.set_config("synapse:governor_enabled", True)
+        col.set_config("synapse:test_date", opts.test_date)
+    elif opts.governor_enabled:
+        # Enabled but no date supplied: nothing to schedule against, so keep the
+        # governor off rather than write a switch with no date.
+        col.set_config("synapse:governor_enabled", False)
 
     return {
         "notetype_id": int(notetype_id),
@@ -666,5 +769,5 @@ def provision(col: anki.collection.Collection) -> dict[str, Any]:
         "config_id": int(config_id),
         "notes_added": notes_added,
         "item_notes_added": item_notes_added,
-        "fsrs": True,
+        "fsrs": opts.enable_fsrs,
     }

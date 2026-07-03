@@ -13,7 +13,7 @@ submodules lazily so that ``import aqt.synapse`` stays Qt-free.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import anki.collection
 
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 def init(mw: aqt.main.AnkiQt) -> None:
     """Wire the Synapse desktop UX into a running main window.
 
-    Adds a Tools-menu group ("Synapse: Set up", "Synapse Dashboard",
+    Adds a Tools-menu group ("Synapse: Set up...", "Synapse Dashboard",
     "Synapse Coverage" and "Synapse Graph") and installs the error-driven
     card-minting hooks. All submodules are imported lazily so that a bare
     ``import aqt.synapse`` never pulls in Qt.
@@ -37,8 +37,8 @@ def init(mw: aqt.main.AnkiQt) -> None:
     menu = mw.form.menuTools
     menu.addSeparator()
 
-    setup_action = QAction("Synapse: Set up", mw)
-    qconnect(setup_action.triggered, lambda: _run_provision(mw))
+    setup_action = QAction("Synapse: Set up...", mw)
+    qconnect(setup_action.triggered, lambda: _show_setup(mw))
     menu.addAction(setup_action)
 
     dashboard_action = QAction("Synapse Dashboard", mw)
@@ -60,34 +60,22 @@ def init(mw: aqt.main.AnkiQt) -> None:
     # --- Mint hooks -----------------------------------------------------------
     mint.install_hooks()
 
-    # --- Auto-provision on first collection load ------------------------------
-    # First run sets up the Synapse environment automatically (idempotent), so
-    # users get the deck / notetype / FSRS / demo cards without hunting for the
-    # "Set up" action. Gated on is_provisioned so it writes only once.
+    # --- First-run setup wizard -----------------------------------------------
+    # The first time an unprovisioned profile loads we open the setup wizard so
+    # the user can choose which features to enable, instead of silently
+    # provisioning behind their back. Gated on is_provisioned so it triggers
+    # only once; if no GUI can be shown it falls back to silent default
+    # provisioning (see _first_run_setup).
     from aqt import gui_hooks
 
-    gui_hooks.collection_did_load.append(_auto_provision)
+    gui_hooks.collection_did_load.append(_first_run_setup)
 
 
-def _run_provision(mw: aqt.main.AnkiQt) -> None:
-    """Run provisioning off the UI thread and tooltip a summary."""
-    from aqt.operations import QueryOp
-    from aqt.utils import tooltip
+def _show_setup(mw: aqt.main.AnkiQt) -> None:
+    """Open the Synapse setup wizard (re-openable from the Tools menu)."""
+    from . import setup
 
-    from . import provision
-
-    def on_success(summary: dict[str, Any]) -> None:
-        added = summary.get("notes_added", 0)
-        tooltip(
-            f"Synapse ready - FSRS on, deck + notetype provisioned, "
-            f"{added} demo note(s) added"
-        )
-
-    QueryOp(
-        parent=mw,
-        op=lambda col: provision.provision(col),
-        success=on_success,
-    ).with_progress("Setting up Synapse...").run_in_background()
+    setup.show_setup(mw)
 
 
 def _set_exam_date(mw: aqt.main.AnkiQt) -> None:
@@ -135,17 +123,54 @@ def _set_exam_date(mw: aqt.main.AnkiQt) -> None:
     QueryOp(parent=mw, op=op, success=on_success).run_in_background()
 
 
-def _auto_provision(col: anki.collection.Collection) -> None:
-    """Provision the Synapse environment on first collection load.
+def _first_run_setup(col: anki.collection.Collection) -> None:
+    """Open the setup wizard on first collection load, once per profile.
 
     Idempotent and defensive: skips if already provisioned, and never lets a
-    failure break startup (the manual "Synapse: Set up" action remains).
+    failure break startup (the manual "Synapse: Set up..." action remains).
+
+    Preferred path is the interactive wizard so the user chooses their features.
+    If a GUI cannot be shown (no visible main window — e.g. a headless / import
+    context), we fall back to silent default provisioning so the environment is
+    still set up. The is_provisioned gate keeps this to a single run.
     """
     from . import provision
 
     try:
         if provision.is_provisioned(col):
             return
+    except Exception as exc:  # noqa: BLE001 - must not break app startup
+        print(f"Synapse: first-run check failed: {exc}")
+        return
+
+    from aqt import mw
+
+    # No usable main window -> can't show a dialog; provision silently instead.
+    if mw is None or not mw.isVisible():
+        _silent_default_provision(col)
+        return
+
+    # Bind to a non-optional local so the closure below keeps a narrowed type.
+    main = mw
+
+    # Defer opening the wizard until the collection load settles, then show it.
+    # If anything goes wrong showing the GUI, fall back to silent provisioning.
+    def open_wizard() -> None:
+        try:
+            _show_setup(main)
+        except Exception as exc:  # noqa: BLE001 - must not break app startup
+            print(f"Synapse: could not show setup wizard: {exc}")
+            if main.col is not None:
+                _silent_default_provision(main.col)
+
+    main.progress.single_shot(0, open_wizard)
+
+
+def _silent_default_provision(col: anki.collection.Collection) -> None:
+    """Provision with default options without any UI. Never raises."""
+    from . import provision
+
+    try:
         provision.provision(col)
     except Exception as exc:  # noqa: BLE001 - must not break app startup
         print(f"Synapse: auto-provision failed: {exc}")

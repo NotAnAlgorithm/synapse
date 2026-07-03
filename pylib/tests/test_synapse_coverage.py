@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import sys
 from types import ModuleType
 
 from tests.shared import getEmptyCol
@@ -34,6 +35,9 @@ def _load_provision() -> ModuleType:
     spec = importlib.util.spec_from_file_location("synapse_provision", path)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
+    # Register before exec: dataclasses (and other introspection) look the module
+    # up in sys.modules via cls.__module__, which fails for a standalone load.
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
