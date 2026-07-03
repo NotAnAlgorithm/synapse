@@ -1,0 +1,15 @@
+# Supabase project config (standard layout). Project id is a local slug; set the
+# real linked project ref with `supabase link` — no secrets belong in this file.
+project_id = "synapse-service"
+
+[db]
+# Postgres major version Supabase provisions; pgvector is enabled in migrations.
+major_version = 15
+
+[functions.retrieve]
+# Concept-scoped hybrid retrieval spike (M2 design §7, step 1).
+verify_jwt = false
+
+[functions.generate]
+# C1 grounded-generation pipeline (grounding + rule-based flaw + human gate).
+verify_jwt = false

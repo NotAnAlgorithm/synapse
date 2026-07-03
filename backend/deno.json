@@ -1,0 +1,13 @@
+{
+  "//": "Deno config for the Supabase Edge Functions (Deno runtime) and scripts.",
+  "lint": {
+    "include": ["supabase/functions/", "scripts/"]
+  },
+  "fmt": {
+    "include": ["supabase/functions/", "scripts/"],
+    "lineWidth": 100
+  },
+  "imports": {
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2"
+  }
+}

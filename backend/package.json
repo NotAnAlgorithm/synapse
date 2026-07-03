@@ -1,0 +1,19 @@
+{
+  "name": "synapse-service",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Synapse hosted grounded-AI service layer (Supabase + Edge Functions). Corpus, retrieval, and the C1 grounded-generation pipeline.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "validate:corpus": "python3 scripts/validate_corpus.py corpus/seed.jsonl",
+    "ingest": "deno run --allow-env --allow-read --allow-net scripts/ingest.ts corpus/seed.jsonl",
+    "db:reset": "supabase db reset",
+    "functions:serve": "supabase functions serve",
+    "deploy:retrieve": "supabase functions deploy retrieve",
+    "deploy:generate": "supabase functions deploy generate"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

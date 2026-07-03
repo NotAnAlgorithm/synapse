@@ -16,6 +16,7 @@
         "android/**",
         "reference/**",
         "notes/**",
+        "backend/**",
         "**/*-lock.json",
         "qt/aqt/data/web/js/vendor/*.js",
         "ftl/qt-repo",
