@@ -199,11 +199,11 @@ message DeckConfig {
     // already-selected cards; defaults off, preserving stock behaviour.
     bool interleave_by_concept = 47;
 
-    // Synapse: when enabled, the v3 queue builder withholds NEW application-type
-    // cards whose concept has an unmastered prerequisite (per the concept
-    // prerequisite graph). Only new application cards are ever held back; recall
-    // and already-started cards always flow through. Withheld cards reappear
-    // once their prerequisites are mastered. Defaults off.
+    // Synapse: when enabled, the v3 queue builder withholds NEW
+    // application-type cards whose concept has an unmastered prerequisite (per
+    // the concept prerequisite graph). Only new application cards are ever held
+    // back; recall and already-started cards always flow through. Withheld
+    // cards reappear once their prerequisites are mastered. Defaults off.
     bool mastery_gating = 48;
 
     // Synapse: when enabled, successfully answering an application-type card
