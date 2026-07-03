@@ -9,9 +9,10 @@ Each dialog opens a Synapse SvelteKit page (served by mediasrv, see
 SvelteKit page: a ``QDialog`` owns an ``AnkiWebView`` and calls
 ``web.load_sveltekit_page(...)`` to render it.
 
-Two read-only pages live here: the Memory dashboard (``synapse``) and the
-AAMC coverage checker (``coverage``, PRD B4). Both share a small base dialog
-so their windowing/cleanup behaviour stays identical.
+Three read-only pages live here: the Memory dashboard (``synapse``), the AAMC
+coverage checker (``coverage``, PRD B4) and the concept-graph visualization
+(``graph``, PRD D1 / W3). All share a small base dialog so their
+windowing/cleanup behaviour stays identical.
 """
 
 from __future__ import annotations
@@ -24,6 +25,7 @@ from aqt.webview import AnkiWebView, AnkiWebViewKind
 
 DASHBOARD_PAGE = "synapse"
 COVERAGE_PAGE = "coverage"
+GRAPH_PAGE = "graph"
 
 
 class _SynapsePageDialog(QDialog):
@@ -93,6 +95,14 @@ class SynapseCoverage(_SynapsePageDialog):
     window_title = "Synapse Coverage"
 
 
+class SynapseGraph(_SynapsePageDialog):
+    """A dialog hosting the Synapse concept-graph visualization SvelteKit page."""
+
+    page = GRAPH_PAGE
+    geom_key = "synapseGraph"
+    window_title = "Synapse Graph"
+
+
 def show_dashboard(mw: aqt.main.AnkiQt) -> SynapseDashboard:
     """Open (and return) the Synapse Memory dashboard."""
     return SynapseDashboard(mw)
@@ -101,3 +111,8 @@ def show_dashboard(mw: aqt.main.AnkiQt) -> SynapseDashboard:
 def show_coverage(mw: aqt.main.AnkiQt) -> SynapseCoverage:
     """Open (and return) the Synapse AAMC coverage checker."""
     return SynapseCoverage(mw)
+
+
+def show_graph(mw: aqt.main.AnkiQt) -> SynapseGraph:
+    """Open (and return) the Synapse concept-graph visualization."""
+    return SynapseGraph(mw)

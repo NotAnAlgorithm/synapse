@@ -24,9 +24,10 @@ if TYPE_CHECKING:
 def init(mw: aqt.main.AnkiQt) -> None:
     """Wire the Synapse desktop UX into a running main window.
 
-    Adds a Tools-menu group ("Synapse: Set up" and "Synapse Dashboard") and
-    installs the error-driven card-minting hooks. All submodules are imported
-    lazily so that a bare ``import aqt.synapse`` never pulls in Qt.
+    Adds a Tools-menu group ("Synapse: Set up", "Synapse Dashboard",
+    "Synapse Coverage" and "Synapse Graph") and installs the error-driven
+    card-minting hooks. All submodules are imported lazily so that a bare
+    ``import aqt.synapse`` never pulls in Qt.
     """
     from aqt.qt import QAction, qconnect
 
@@ -47,6 +48,10 @@ def init(mw: aqt.main.AnkiQt) -> None:
     coverage_action = QAction("Synapse Coverage", mw)
     qconnect(coverage_action.triggered, lambda: dashboard.show_coverage(mw))
     menu.addAction(coverage_action)
+
+    graph_action = QAction("Synapse Graph", mw)
+    qconnect(graph_action.triggered, lambda: dashboard.show_graph(mw))
+    menu.addAction(graph_action)
 
     # --- Mint hooks -----------------------------------------------------------
     mint.install_hooks()

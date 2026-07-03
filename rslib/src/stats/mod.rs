@@ -5,6 +5,7 @@ mod adoption;
 mod card;
 mod concepts;
 mod coverage;
+mod graph;
 mod graphs;
 mod service;
 mod today;
