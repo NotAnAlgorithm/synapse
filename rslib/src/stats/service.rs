@@ -50,6 +50,13 @@ impl crate::services::StatsService for Collection {
     ) -> error::Result<anki_proto::stats::ConceptCoverageResponse> {
         self.concept_coverage(&input.search)
     }
+
+    fn adoption_stats(
+        &mut self,
+        input: anki_proto::stats::AdoptionStatsRequest,
+    ) -> error::Result<anki_proto::stats::AdoptionStatsResponse> {
+        self.adoption_stats(&input.search)
+    }
 }
 
 impl From<RevlogReviewKind> for i32 {

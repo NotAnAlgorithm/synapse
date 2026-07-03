@@ -27,6 +27,7 @@ Pure presentation over the `conceptMemory` RPC; no other backend calls.
     import Container from "$lib/components/Container.svelte";
     import TitledContainer from "$lib/components/TitledContainer.svelte";
 
+    import AdoptionSection from "./AdoptionSection.svelte";
     import WithConceptMemory from "./WithConceptMemory.svelte";
     import {
         conceptLabel,
@@ -124,6 +125,10 @@ Pure presentation over the `conceptMemory` RPC; no other backend calls.
                         </div>
                     {/if}
                 </TitledContainer>
+
+                <!-- Adoption: effort points + streak (E2/E3). Self-hides when
+                     the default-off backend flag is disabled. -->
+                <AdoptionSection {search} />
 
                 <!-- Work on next: weakest concepts (F1) -->
                 {#if weakest.length > 0}

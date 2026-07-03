@@ -18,6 +18,7 @@ service StatsService {
   rpc SetGraphPreferences(GraphPreferences) returns (generic.Empty);
   rpc ConceptMemory(ConceptMemoryRequest) returns (ConceptMemoryResponse);
   rpc ConceptCoverage(ConceptCoverageRequest) returns (ConceptCoverageResponse);
+  rpc AdoptionStats(AdoptionStatsRequest) returns (AdoptionStatsResponse);
 }
 
 // Implicitly includes any of the above methods that are not listed in the
@@ -322,4 +323,50 @@ message ConceptCoverageResponse {
   uint32 expected_count = 4;
   // covered_count / expected_count * 100 (0 when expected_count == 0)
   float coverage = 5;
+}
+
+message AdoptionStatsRequest {
+  // scope filter, e.g. "deck:Synapse"; empty = whole collection
+  string search = 1;
+}
+
+// Adherence read-model (PRD E2/E3). Rewards the *hard, honest* work — a
+// successful retrieval on a card that had drifted to low retrievability, and
+// recoveries of lapsed cards — and de-emphasises easy-rep padding. Streak days
+// are computed with a single-missed-day freeze/forgiveness so one off day does
+// not wipe momentum. Read-only aggregation over the revlog; no schedule change.
+message AdoptionStatsResponse {
+  // One notable "hard win": a successful retrieval whose reconstructed
+  // retrievability at review time was low (or a lapse recovery), surfaced for
+  // recognition on the dashboard.
+  message HardWin {
+    // card that was recalled
+    int64 card_id = 1;
+    // unix seconds of the review
+    int64 reviewed_at = 2;
+    // reconstructed retrievability at review time, 0..1 (lower = harder)
+    float retrievability = 3;
+    // points this single review earned
+    float points = 4;
+    // true if this was a recovery of a lapsed card
+    bool lapse_recovery = 5;
+  }
+  // difficulty-weighted points total (easy reps earn ~0)
+  float points = 1;
+  // total successful retrievals counted (context for the point total)
+  uint32 successful_reviews = 2;
+  // successful retrievals that recovered a lapsed card
+  uint32 lapse_recoveries = 3;
+  // current streak length in days, after freeze/forgiveness is applied
+  uint32 streak_days = 4;
+  // freeze credits remaining (a missed day consumes one instead of resetting)
+  uint32 freezes_remaining = 5;
+  // true when today has already been studied (streak is "safe" today)
+  bool studied_today = 6;
+  // the hardest / most notable wins, most valuable first (for display)
+  repeated HardWin hardest_wins = 7;
+  // reflects the "synapse:adoption_enabled" flag (default off). The read-model
+  // is always computed; callers should only surface points/streaks to the user
+  // when this is true.
+  bool enabled = 8;
 }
