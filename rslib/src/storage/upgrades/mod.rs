@@ -6,7 +6,7 @@ pub(super) const SCHEMA_MIN_VERSION: u8 = 11;
 /// The version new files are initially created with.
 pub(super) const SCHEMA_STARTING_VERSION: u8 = 11;
 /// The maximum schema version we can open.
-pub(super) const SCHEMA_MAX_VERSION: u8 = 19;
+pub(super) const SCHEMA_MAX_VERSION: u8 = 20;
 
 use super::SchemaVersion;
 use super::SqliteStorage;
@@ -47,6 +47,14 @@ impl SqliteStorage {
             // note tags. The tags remain the source of truth.
             self.rebuild_concepts_from_tags()?;
         }
+        if ver < 20 {
+            self.db
+                .execute_batch(include_str!("schema20_upgrade.sql"))?;
+            // Load the authored Synapse prerequisite graph. Edges reference
+            // concepts by tag and are resolved to (local, derived) concept ids,
+            // so this is safe to run after the concept projection exists.
+            self.rebuild_concept_edges_from_seed()?;
+        }
 
         // in some future schema upgrade, we may want to change
         // _collapsed to _expanded in DeckCommon and invert existing values, so
@@ -64,12 +72,14 @@ impl SqliteStorage {
     }
 
     /// Bring the DB back to the wire/on-disk schema 18 used by sync upload and
-    /// colpkg export. The Synapse concept tables are a local, derived
-    /// projection (never synced), so they are dropped here; a subsequent
-    /// open reconstructs them from the `concept::` note tags via the schema
-    /// 19 upgrade step.
+    /// colpkg export. The Synapse concept tables and prerequisite graph are a
+    /// local, derived projection (never synced), so they are dropped here; a
+    /// subsequent open reconstructs them from the `concept::` note tags and the
+    /// authored seed via the schema 19 + 20 upgrade steps.
     fn downgrade_to_schema_18(&self) -> Result<()> {
         self.begin_trx()?;
+        self.db
+            .execute_batch(include_str!("schema20_downgrade.sql"))?;
         self.db
             .execute_batch(include_str!("schema19_downgrade.sql"))?;
         self.commit_trx()?;
@@ -79,6 +89,8 @@ impl SqliteStorage {
     fn downgrade_to_schema_11(&self) -> Result<()> {
         self.begin_trx()?;
 
+        self.db
+            .execute_batch(include_str!("schema20_downgrade.sql"))?;
         self.db
             .execute_batch(include_str!("schema19_downgrade.sql"))?;
         self.db
@@ -107,9 +119,9 @@ mod test {
 
     #[test]
     #[allow(clippy::assertions_on_constants)]
-    fn assert_19_is_latest_schema_version() {
+    fn assert_20_is_latest_schema_version() {
         assert_eq!(
-            19, SCHEMA_MAX_VERSION,
+            20, SCHEMA_MAX_VERSION,
             "must implement SqliteStorage::downgrade_to() for the new latest version"
         );
     }

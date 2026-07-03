@@ -86,6 +86,10 @@ const DEFAULT_DECK_CONFIG_INNER: DeckConfigInner = DeckConfigInner {
     // Synapse concept/question-type interleaving is opt-in; the integrator
     // enables it on the Synapse preset.
     interleave_by_concept: false,
+    // Synapse graph-driven scheduling is opt-in; the integrator enables these on
+    // the Synapse preset.
+    mastery_gating: false,
+    trickle_down_credit: false,
 };
 
 impl Default for DeckConfig {

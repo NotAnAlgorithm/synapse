@@ -13,6 +13,10 @@
 //! calls [`SqliteStorage::refresh_card_concepts_for_note`]) and can be fully
 //! reconstructed at any time via [`SqliteStorage::rebuild_concepts_from_tags`].
 
+mod edges;
+mod mastery;
+mod trickle;
+
 use std::collections::HashMap;
 
 use rusqlite::params;
@@ -219,6 +223,17 @@ impl SqliteStorage {
             .collect()
     }
 
+    /// The concept ids mapped to a single card via `card_concepts`, ordered by
+    /// id. Empty when the card's note carries no concept tag.
+    pub(crate) fn concept_ids_for_card(&self, card_id: CardId) -> Result<Vec<ConceptId>> {
+        self.db
+            .prepare_cached(
+                "SELECT concept_id FROM card_concepts WHERE card_id = ? ORDER BY concept_id",
+            )?
+            .query_and_then([card_id], |r| Ok(ConceptId(r.get(0)?)))?
+            .collect()
+    }
+
     #[cfg(test)]
     pub(crate) fn all_card_concepts_sorted(&self) -> Result<Vec<(CardId, ConceptId)>> {
         let mut rows: Vec<(CardId, ConceptId)> = self
@@ -258,7 +273,7 @@ mod test {
     fn concept_ids_are_stable_and_append_only() -> Result<()> {
         let mut col = Collection::new();
         // ver should be at the latest schema, with the concept tables present.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 19);
+        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 20);
 
         let nt = col.get_notetype_by_name("Basic")?.unwrap();
         let mut note = nt.new_note();
@@ -297,6 +312,9 @@ mod test {
     #[test]
     fn add_note_populates_card_concepts() -> Result<()> {
         let mut col = Collection::new();
+        // The schema-20 seed pre-creates some concept rows on open; measure
+        // against that baseline rather than assuming an empty table.
+        let baseline_concepts = col.storage.all_concepts()?.len();
         let nt = col
             .get_notetype_by_name("basic (and reversed card)")?
             .unwrap();
@@ -320,8 +338,10 @@ mod test {
         expected.sort_unstable();
         assert_eq!(col.storage.all_card_concepts_sorted()?, expected);
 
-        // the non-concept "unrelated" tag must not create a concept row
-        assert_eq!(col.storage.all_concepts()?.len(), 1);
+        // the note added exactly one new concept ("concept::biochem::amino");
+        // the non-concept "unrelated" tag must not create a concept row.
+        assert_eq!(col.storage.all_concepts()?.len(), baseline_concepts + 1);
+        assert!(col.storage.get_concept_id_by_tag("unrelated")?.is_none());
 
         Ok(())
     }
@@ -386,9 +406,9 @@ mod test {
         let col = CollectionBuilder::default()
             .set_collection_path(tempfile.path())
             .build()?;
-        // ...and reopening runs the schema 19 migration, which reconstructs it
-        // from the surviving `concept::` note tags.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 19);
+        // ...and reopening runs the schema 19 + 20 migrations, which reconstruct
+        // it from the surviving `concept::` note tags.
+        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 20);
         let after = col.storage.all_card_concepts_sorted()?;
         assert_eq!(after.len(), 1);
         assert_eq!(after[0].0, cid);

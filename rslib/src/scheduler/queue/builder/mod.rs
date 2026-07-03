@@ -3,6 +3,7 @@
 
 mod burying;
 mod gathering;
+mod gating;
 mod interleave;
 pub(crate) mod intersperser;
 pub(crate) mod sized_chain;
@@ -106,6 +107,9 @@ pub(super) struct QueueSortOptions {
     /// Synapse: reorder the assembled main queue to alternate concept/section
     /// and question-type. Off by default (stock behaviour unchanged).
     pub(super) interleave_by_concept: bool,
+    /// Synapse: withhold NEW application-type cards whose concept has an
+    /// unmastered prerequisite. Off by default (stock behaviour unchanged).
+    pub(super) mastery_gating: bool,
 }
 
 #[derive(Debug)]
@@ -253,6 +257,7 @@ fn sort_options(deck: &Deck, config_map: &HashMap<DeckConfigId, DeckConfig>) -> 
             day_learn_mix: config.inner.interday_learning_mix(),
             new_review_mix: config.inner.new_mix(),
             interleave_by_concept: config.inner.interleave_by_concept,
+            mastery_gating: config.inner.mastery_gating,
         })
         .unwrap_or_else(|| {
             // filtered decks do not space siblings
@@ -306,6 +311,14 @@ impl Collection {
             .update_active_decks(&queues.context.root_deck)?;
 
         queues.gather_cards(self)?;
+
+        // Synapse: withhold NEW application cards with unmastered prerequisites.
+        // Runs before the interleave pass so dropped cards are never classified,
+        // and before build() so the queue counts reflect the filtered pool. Only
+        // runs when the deck-config toggle is on; a no-op otherwise.
+        if queues.context.sort_options.mastery_gating {
+            queues.apply_mastery_gating(self)?;
+        }
 
         // Synapse: classify gathered cards for the interleaving pass. Only runs
         // when the deck-config toggle is on; a no-op (and zero extra queries)
