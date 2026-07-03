@@ -47,7 +47,10 @@ class _SynapsePageDialog(QDialog):
         disable_help_button(self)
         restoreGeom(self, self.name, default_size=(900, 700))
 
-        self.web = AnkiWebView(kind=AnkiWebViewKind.DEFAULT)
+        # SYNAPSE kind is granted media-server API access (webview.py
+        # `_profileForPage`), so these pages' postProto calls carry the auth
+        # token; DEFAULT would 403 with "unexpected API access".
+        self.web = AnkiWebView(kind=AnkiWebViewKind.SYNAPSE)
         self.web.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
