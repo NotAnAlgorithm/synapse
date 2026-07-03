@@ -193,6 +193,12 @@ message DeckConfig {
     float historical_retention = 40;
     string param_search = 45;
 
+    // Synapse: when enabled, the v3 queue builder reorders the assembled main
+    // queue so consecutive cards alternate by concept/section and by
+    // question-type (recall vs application) where possible. Pure reordering of
+    // already-selected cards; defaults off, preserving stock behaviour.
+    bool interleave_by_concept = 47;
+
     bytes other = 255;
   }
 
