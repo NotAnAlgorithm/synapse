@@ -520,7 +520,14 @@ impl Collection {
             .get_deck_config(home_deck.config_id().or_invalid("home deck is filtered")?)?
             .unwrap_or_default();
 
-        let desired_retention = home_deck.effective_desired_retention(&config);
+        // Synapse (M3, workstream A): the test-date governor. When enabled with
+        // a near, future exam date it RAISES the effective desired retention
+        // (never lowers it — PRD A1/A2), compressing intervals so recall peaks
+        // on test day. A byte-for-byte no-op when the governor is off / the date
+        // is unset or (well) past, so stock FSRS behaviour is preserved. See
+        // `scheduler/governor.rs`.
+        let desired_retention = self
+            .governor_effective_retention(home_deck.effective_desired_retention(&config), &timing);
         let fsrs_enabled = self.get_config_bool(BoolKey::Fsrs);
         let fsrs_next_states = if fsrs_enabled {
             let params = config.fsrs_params();
@@ -745,6 +752,84 @@ pub(crate) mod test {
 
     fn current_state(col: &mut Collection, card_id: CardId) -> CardState {
         col.get_scheduling_states(card_id).unwrap().current
+    }
+
+    // Synapse (M3, workstream A): end-to-end proof that the test-date governor
+    // compresses intervals near the exam and is a no-op otherwise. We set up an
+    // FSRS review card, answer Good, and compare the resulting interval across
+    // three governor states.
+    #[test]
+    fn governor_compresses_intervals_near_test_date() -> Result<()> {
+        use crate::card::FsrsMemoryState;
+        use crate::scheduler::governor::GOVERNOR_ENABLED_KEY;
+        use crate::scheduler::governor::TEST_DATE_KEY;
+
+        // Answer a freshly-prepared FSRS review card Good and return its new
+        // interval (days). Rebuilds the card each time so the three runs are
+        // independent.
+        fn good_interval_with(col: &mut Collection) -> Result<u32> {
+            let nt = col.get_notetype_by_name("Basic")?.unwrap();
+            let mut note = nt.new_note();
+            col.add_note(&mut note, DeckId(1))?;
+            let cid = col.storage.all_cards_of_note(note.id)?[0].id;
+            let mut card = col.storage.get_card(cid)?.unwrap();
+            // Make it a stable review card with an FSRS memory state.
+            card.ctype = CardType::Review;
+            card.queue = CardQueue::Review;
+            card.interval = 30;
+            card.reps = 3;
+            card.due = 0;
+            card.memory_state = Some(FsrsMemoryState {
+                stability: 30.0,
+                difficulty: 5.0,
+            });
+            col.storage.update_card(&card)?;
+            col.clear_study_queues();
+
+            let states = col.get_scheduling_states(cid)?;
+            col.answer_card(&mut CardAnswer {
+                card_id: cid,
+                current_state: states.current,
+                new_state: states.good,
+                rating: Rating::Good,
+                answered_at: TimestampMillis::now(),
+                milliseconds_taken: 0,
+                custom_data: None,
+                from_queue: false,
+            })?;
+            Ok(col.storage.get_card(cid)?.unwrap().interval)
+        }
+
+        let mut col = Collection::new();
+        col.set_config_bool(BoolKey::Fsrs, true, false)?;
+        // A modest base retention so there's headroom for the governor to raise.
+        let mut conf = col.get_deck_config(DeckConfigId(1), false)?.unwrap();
+        conf.inner.desired_retention = 0.9;
+        col.storage.update_deck_conf(&conf)?;
+
+        // today's unix day, from the same rollover anchor the governor uses.
+        let timing = col.timing_today()?;
+        let today_unix_day = timing.next_day_at.adding_secs(-1).0.div_euclid(86_400);
+
+        // 1) Governor OFF → stock interval.
+        let stock = good_interval_with(&mut col)?;
+
+        // 2) Governor ON but the exam is far away (100 days) → unchanged.
+        col.set_config(GOVERNOR_ENABLED_KEY, &true)?;
+        col.set_config(TEST_DATE_KEY, &(today_unix_day + 100))?;
+        let far = good_interval_with(&mut col)?;
+        assert_eq!(far, stock, "far-off date must not change the interval");
+
+        // 3) Governor ON with a near exam (3 days out) → shorter interval.
+        col.set_config(TEST_DATE_KEY, &(today_unix_day + 3))?;
+        let near = good_interval_with(&mut col)?;
+        assert!(
+            near < stock,
+            "near test date should compress interval: near={near} stock={stock}"
+        );
+        assert!(near >= 1, "interval must stay positive");
+
+        Ok(())
     }
 
     // Test that deck-specific desired retention is used when available

@@ -11,6 +11,7 @@ pub mod bury_and_suspend;
 pub(crate) mod congrats;
 pub(crate) mod filtered;
 pub mod fsrs;
+pub mod governor;
 pub mod metamorphosis;
 pub mod new;
 pub(crate) mod queue;
