@@ -38,7 +38,10 @@ interface ChunkRow {
 }
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
-const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+// Server-side Supabase key: the new "secret" key (sb_secret_...), falling back
+// to the legacy service_role JWT. Bypasses RLS to upsert corpus_chunks.
+const SECRET_KEY =
+  Deno.env.get("SUPABASE_SECRET_KEY") ?? Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 const BATCH_SIZE = 32; // embed + upsert in modest batches
 
 function parseJsonl(raw: string): CorpusRecord[] {
@@ -62,7 +65,7 @@ async function main(): Promise<void> {
   const raw = await Deno.readTextFile(path);
   const records = parseJsonl(raw).flatMap(chunkRecord);
 
-  const client = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+  const client = createClient(SUPABASE_URL, SECRET_KEY);
   const embedder = makeEmbedder();
 
   let upserted = 0;

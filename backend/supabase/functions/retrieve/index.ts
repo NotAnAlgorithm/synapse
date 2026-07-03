@@ -14,10 +14,13 @@ import { makeEmbedder } from "../_shared/provider.ts";
 import { retrieve } from "../_shared/retrieval.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
-// Service-role key is injected as a function secret at deploy time (never in the
-// repo). Interim auth is a shared dev token (M2 design §3); real per-user auth is
-// required before any multi-user data is collected.
-const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+// Server-side Supabase key: the new "secret" key (sb_secret_...) if set as a
+// function secret, else the legacy service_role JWT that Supabase still
+// auto-injects into deployed functions. Never in the repo. Interim auth is a
+// shared dev token (M2 design §3); real per-user auth is required before any
+// multi-user data is collected.
+const SECRET_KEY =
+  Deno.env.get("SUPABASE_SECRET_KEY") ?? Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
 interface RetrieveRequest {
   concept_tags?: string[];
@@ -51,7 +54,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     return json({ error: "query is required" }, 400);
   }
 
-  const client = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+  const client = createClient(SUPABASE_URL, SECRET_KEY);
   const embedder = makeEmbedder();
 
   try {

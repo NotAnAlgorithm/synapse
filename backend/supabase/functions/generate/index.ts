@@ -27,7 +27,10 @@ import { retrieve, type RetrievedChunk } from "../_shared/retrieval.ts";
 import { checkMcq, type McqDraft } from "../_shared/flaw_check.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
-const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+// Server-side key: new "secret" key (sb_secret_...) if set as a function secret,
+// else the legacy service_role JWT Supabase auto-injects into deployed functions.
+const SECRET_KEY =
+  Deno.env.get("SUPABASE_SECRET_KEY") ?? Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
 interface GenerateRequest {
   concept_tag?: string;
@@ -129,7 +132,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
     return json({ error: "concept_tag is required (generation is concept-scoped)" }, 400);
   }
 
-  const client = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+  const client = createClient(SUPABASE_URL, SECRET_KEY);
   const embedder = makeEmbedder();
   const generator = makeGenerator();
 

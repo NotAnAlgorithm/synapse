@@ -121,8 +121,9 @@ record and a `CHECK` constraint in the migration is a last-resort guard. See
 Nothing below has been run. In order:
 
 1. **Create the Supabase project** and link it: `supabase link --project-ref <ref>`.
-   Copy `.env.example` to `.env` and fill `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and
-   `SUPABASE_SERVICE_ROLE_KEY`.
+   Copy `.env.example` to `.env` and fill `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
+   and `SUPABASE_SECRET_KEY` (the new API keys; the legacy anon / service_role JWTs
+   still work as a fallback).
 2. **Choose the embedding dimension** to match the provider's embedding model. If
    it is not 1536, update `vector(1536)` in `supabase/migrations/0001_init_corpus.sql`
    *and* `0003_match_fn.sql` *and* `SYNAPSE_EMBEDDING_DIM` in `.env` — they must
