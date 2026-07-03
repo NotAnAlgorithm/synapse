@@ -157,6 +157,9 @@ impl super::SqliteStorage {
             CardData::from_card(card).convert_to_json()?,
             card.id,
         ])?;
+        // Synapse (M2, workstream B): keep the derived card-lineage projection
+        // in sync with this card's custom_data.src on every save.
+        self.mirror_card_lineage_from_data(card)?;
         Ok(())
     }
 
@@ -184,12 +187,15 @@ impl super::SqliteStorage {
             CardData::from_card(card).convert_to_json()?,
         ])?;
         card.id = CardId(self.db.last_insert_rowid());
+        // Synapse (M2, workstream B): mirror lineage now that the id is known.
+        self.mirror_card_lineage_from_data(card)?;
         Ok(())
     }
 
     /// Add card if id is unique. True if card was added.
     pub(crate) fn add_card_if_unique(&self, card: &Card) -> Result<bool> {
-        self.db
+        let added = self
+            .db
             .prepare_cached(include_str!("add_card_if_unique.sql"))?
             .execute(params![
                 card.id,
@@ -211,8 +217,13 @@ impl super::SqliteStorage {
                 card.flags,
                 CardData::from_card(card).convert_to_json()?,
             ])
-            .map(|n_rows| n_rows == 1)
-            .map_err(Into::into)
+            .map(|n_rows| n_rows == 1)?;
+        if added {
+            // Synapse (M2, workstream B): only mirror lineage if the row was
+            // actually inserted (id was unique).
+            self.mirror_card_lineage_from_data(card)?;
+        }
+        Ok(added)
     }
 
     /// Add or update card, using the provided ID. Used for syncing & undoing.
@@ -238,6 +249,9 @@ impl super::SqliteStorage {
             card.flags,
             CardData::from_card(card).convert_to_json()?,
         ])?;
+        // Synapse (M2, workstream B): mirror lineage on the sync/undo save path
+        // too, so imported and synced-down cards get a lineage row.
+        self.mirror_card_lineage_from_data(card)?;
 
         Ok(())
     }
@@ -246,6 +260,9 @@ impl super::SqliteStorage {
         self.db
             .prepare_cached("delete from cards where id = ?")?
             .execute([cid])?;
+        // Synapse (M2, workstream B): drop the derived lineage row alongside the
+        // card so the projection doesn't dangle.
+        self.remove_card_lineage(cid)?;
         Ok(())
     }
 
