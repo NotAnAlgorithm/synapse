@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     import anki.cards
     import aqt.main
     import aqt.reviewer
+    from aqt.qt import QMenu
 
 
 def init(mw: aqt.main.AnkiQt) -> None:
@@ -80,10 +81,14 @@ def init(mw: aqt.main.AnkiQt) -> None:
 
     gui_hooks.collection_did_load.append(_first_run_setup)
 
-    # AI affordances at a miss: offer a fresh grounded item + the tutor. Both
-    # self-gate on ease==1 + an MCAT-family note + a configured AI service, so
+    # Post-answer AI offers: the tutor at a miss, generation at mastery (see
+    # _on_answer_ai_offers). Self-gate on an MCAT note + a configured service, so
     # until the service is set up the reviewer behaves exactly as before.
     gui_hooks.reviewer_did_answer_card.append(_on_answer_ai_offers)
+
+    # Persistent access: mint / generate / tutor in the reviewer "More" menu, so
+    # every feature is available on the current card at any time.
+    gui_hooks.reviewer_will_show_context_menu.append(_reviewer_context_menu)
 
 
 def _show_setup(mw: aqt.main.AnkiQt) -> None:
@@ -112,11 +117,13 @@ def _on_answer_ai_offers(
     card: anki.cards.Card,
     ease: Literal[1, 2, 3, 4],
 ) -> None:
-    """On a miss, offer a fresh grounded item and the tutor.
+    """Post-answer AI offers.
 
-    Both offers self-gate (ease==1 + an MCAT-family note + a configured AI
-    service), so this is a no-op until the service is set up, and never blocks
-    the reviewer.
+    The tutor is offered at a MISS (understand the failure); generation is offered
+    at MASTERY, not failure (PRD Principle 2 "difficulty must be earned" + B3
+    add-then-fade). Both self-gate (MCAT-family note + a configured AI service),
+    so this is a no-op until the service is set up and never blocks the reviewer.
+    All three features are also always available from the reviewer "More" menu.
     """
     from aqt import mw
 
@@ -125,10 +132,51 @@ def _on_answer_ai_offers(
     from . import generate, tutor
 
     try:
-        generate.offer_generate_at_miss(mw, card, ease)
         tutor.offer_tutor_at_miss(mw, card, ease)
+        generate.offer_generate_at_mastery(mw, card, ease)
     except Exception as exc:  # noqa: BLE001 - never break the reviewer
-        print(f"Synapse: AI miss-offer failed: {exc}")
+        print(f"Synapse: AI answer-offer failed: {exc}")
+
+
+def _reviewer_context_menu(reviewer: aqt.reviewer.Reviewer, menu: QMenu) -> None:
+    """Add persistent Synapse actions to the reviewer "More" menu.
+
+    Makes mint / generate / tutor available on the current card at any time (not
+    only via the transient at-answer offers). Only shown for MCAT-family notes;
+    generate/tutor are enabled once the AI service is configured (mint works
+    offline).
+    """
+    from aqt import mw
+    from aqt.qt import qconnect
+
+    if mw is None or reviewer.card is None:
+        return
+    card = reviewer.card
+    note = card.note()
+    notetype = note.note_type()
+    if notetype is None or not notetype["name"].startswith("MCAT "):
+        return
+
+    from . import generate, mint, service_client, tutor
+
+    concept_tag = next((t for t in note.tags if t.startswith("concept::")), None)
+    configured = service_client.is_configured(mw.col)
+
+    menu.addSeparator()
+
+    mint_action = menu.addAction("Synapse: Mint recall card")
+    qconnect(mint_action.triggered, lambda: mint.mint_from_note(mw, note.id))
+
+    generate_action = menu.addAction("Synapse: Generate practice for this concept")
+    qconnect(
+        generate_action.triggered,
+        lambda: generate.generate_for_concept(mw, concept_tag or "", source_card=card),
+    )
+    generate_action.setEnabled(bool(concept_tag) and configured)
+
+    tutor_action = menu.addAction("Synapse: Ask the tutor")
+    qconnect(tutor_action.triggered, lambda: tutor.open_tutor_for_card(mw, card))
+    tutor_action.setEnabled(configured)
 
 
 def _set_exam_date(mw: aqt.main.AnkiQt) -> None:

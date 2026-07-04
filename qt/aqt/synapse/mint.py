@@ -112,6 +112,22 @@ def _mint_last_missed() -> None:
     ).run_in_background()
 
 
+def mint_from_note(mw: aqt.main.AnkiQt, source_note_id: NoteId) -> None:
+    """Mint a recall card from a specific note (the reviewer "More" menu).
+
+    Unlike :func:`_mint_last_missed`, this targets an explicit note (the card the
+    user is currently looking at), so it works any time — not only right after a
+    miss.
+    """
+
+    def on_success(_changes: OpChangesWithCount) -> None:
+        tooltip("Minted a recall card in Synapse")
+
+    CollectionOp(parent=mw, op=lambda col: _mint(col, source_note_id)).success(
+        on_success
+    ).run_in_background()
+
+
 def _mint(col: Collection, source_note_id: NoteId) -> OpChangesWithCount:
     """Collection-thread body: build+add the recall note, then link its card.
 

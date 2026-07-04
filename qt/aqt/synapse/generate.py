@@ -16,8 +16,9 @@ Three public entry points are wired by the integrator (``aqt.synapse.__init__``)
   dialog.
 * :func:`pick_concept_and_generate` — the MANUAL action: choose a concept from
   the collection, then generate.
-* :func:`offer_generate_at_miss` — the MISS recommendation: an unobtrusive,
-  dismissible offer to generate a fresh grounded item for the missed concept.
+* :func:`offer_generate_at_mastery` — the MASTERY recommendation: an unobtrusive,
+  dismissible offer to generate a tougher item once a concept is mastered (new
+  practice belongs after mastery, not after a failure).
 
 Everything degrades cleanly when the service is unconfigured or unreachable: a
 tooltip explains the situation and the study loop is never blocked.
@@ -314,21 +315,26 @@ def _concept_tags(col: Collection) -> list[str]:
 # --- Entry point: miss-time offer --------------------------------------------
 
 
-def offer_generate_at_miss(
+def offer_generate_at_mastery(
     mw: aqt.main.AnkiQt,
     card: Card,
     ease: Literal[1, 2, 3, 4],
 ) -> None:
-    """MISS recommendation: an unobtrusive offer to generate for the missed concept.
+    """MASTERY recommendation: offer to generate a tougher item once mastered.
 
-    Intended to be called from ``reviewer_did_answer_card`` (signature
-    ``(reviewer, card, ease)``; the caller passes the hook's ``card``, not
-    ``reviewer.card``). Only fires when the answer was a miss (``ease == 1``) on
-    an MCAT-family note AND the service is configured. Shows a short-lived,
-    dismissible prompt; it never blocks the reviewer and does nothing on its own
-    until the user acts.
+    Per learning science (PRD Principle 2 "difficulty must be earned" + B3
+    add-then-fade), new generated practice belongs AFTER mastery, not after a
+    failure: failed retrieval yields little learning, so piling a fresh item onto
+    a miss is the wrong move. Called from ``reviewer_did_answer_card`` (the caller
+    passes the hook's ``card``); fires only on an *Easy* answer (``ease == 4``) to
+    a now-*mature* MCAT-family card with the service configured. Short-lived,
+    dismissible, and never blocks the reviewer. Manual generation stays available
+    any time from the reviewer "More" menu / Tools.
     """
-    if ease != 1:
+    if ease != 4:
+        return
+    # Only once the card is genuinely mastered (mature: interval >= 21 days).
+    if getattr(card, "ivl", 0) < 21:
         return
     if not service_client.is_configured(mw.col):
         return
@@ -386,7 +392,7 @@ class _MissOffer(QWidget):
         layout.setContentsMargins(12, 8, 12, 8)
 
         concept_name = _concept_name_from_tag(concept_tag)
-        label = QLabel(f"Generate a fresh grounded item for {concept_name}?")
+        label = QLabel(f"Mastered {concept_name} — generate a tougher item?")
         label.setWordWrap(True)
         layout.addWidget(label)
 
