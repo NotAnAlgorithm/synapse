@@ -63,6 +63,14 @@
         app:summaryEntries="@array/sync_summary_entries">
     </com.ichi2.preferences.HeaderPreference>
 
+    <!-- Synapse (AI service + exam-date governor) -->
+    <com.ichi2.preferences.HeaderPreference
+        android:fragment="com.ichi2.anki.preferences.SynapseSettingsFragment"
+        android:key="@string/pref_synapse_screen_key"
+        android:title="@string/synapse_settings_title"
+        android:icon="@drawable/ic_lightbulb_stars"
+        android:summary="@string/synapse_settings_summary" />
+
     <!-- Notifications -->
     <com.ichi2.preferences.HeaderPreference
         android:fragment="com.ichi2.anki.preferences.NotificationsSettingsFragment"

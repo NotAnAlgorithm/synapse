@@ -39,7 +39,14 @@ import com.ichi2.anki.libanki.getNotetypeNamesRaw
 import com.ichi2.anki.libanki.sched.computeFsrsParamsRaw
 import com.ichi2.anki.libanki.sched.computeOptimalRetentionRaw
 import com.ichi2.anki.libanki.sched.simulateFsrsReviewRaw
+import com.ichi2.anki.libanki.stats.adoptionStatsRaw
 import com.ichi2.anki.libanki.stats.cardStatsRaw
+import com.ichi2.anki.libanki.stats.conceptCoverageRaw
+import com.ichi2.anki.libanki.stats.conceptGraphRaw
+import com.ichi2.anki.libanki.stats.conceptMasteryRaw
+import com.ichi2.anki.libanki.stats.conceptMemoryRaw
+import com.ichi2.anki.libanki.stats.conceptPerformanceRaw
+import com.ichi2.anki.libanki.stats.experimentMetricsRaw
 import com.ichi2.anki.libanki.stats.getGraphPreferencesRaw
 import com.ichi2.anki.libanki.stats.graphsRaw
 import com.ichi2.anki.libanki.stats.setGraphPreferencesRaw
@@ -109,6 +116,14 @@ val collectionMethods =
         "completeTag" to { bytes -> completeTagRaw(bytes) },
         "getFieldNames" to { bytes -> getFieldNamesRaw(bytes) },
         "cardStats" to { bytes -> cardStatsRaw(bytes) },
+        // Synapse dashboards (memory/coverage/graph SvelteKit pages)
+        "conceptMemory" to { bytes -> conceptMemoryRaw(bytes) },
+        "conceptCoverage" to { bytes -> conceptCoverageRaw(bytes) },
+        "conceptGraph" to { bytes -> conceptGraphRaw(bytes) },
+        "conceptPerformance" to { bytes -> conceptPerformanceRaw(bytes) },
+        "conceptMastery" to { bytes -> conceptMasteryRaw(bytes) },
+        "adoptionStats" to { bytes -> adoptionStatsRaw(bytes) },
+        "experimentMetrics" to { bytes -> experimentMetricsRaw(bytes) },
         "getDeckConfigsForUpdate" to { bytes -> getDeckConfigsForUpdateRaw(bytes) },
         "computeOptimalRetention" to { bytes -> computeOptimalRetentionRaw(bytes) },
         "computeFsrsParams" to { bytes -> computeFsrsParamsRaw(bytes) },

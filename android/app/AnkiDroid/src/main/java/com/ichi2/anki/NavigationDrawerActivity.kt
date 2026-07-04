@@ -43,6 +43,7 @@ import com.ichi2.anki.common.preferences.sharedPrefs
 import com.ichi2.anki.common.utils.android.HandlerUtils
 import com.ichi2.anki.dialogs.help.HelpDialog
 import com.ichi2.anki.libanki.CardId
+import com.ichi2.anki.synapse.SynapseSetup
 import com.ichi2.anki.utils.ext.showDialogFragment
 import com.ichi2.anki.workarounds.FullDraggableContainerFix
 import com.ichi2.utils.IntentUtil
@@ -355,6 +356,41 @@ abstract class NavigationDrawerActivity(
                     R.id.nav_stats -> {
                         Timber.i("Navigating to stats")
                         openStatistics()
+                    }
+
+                    R.id.nav_synapse_dashboard -> {
+                        Timber.i("Navigating to Synapse dashboard")
+                        startActivity(
+                            com.ichi2.anki.pages.SynapseDashboard
+                                .getIntent(this@NavigationDrawerActivity),
+                        )
+                    }
+
+                    R.id.nav_synapse_coverage -> {
+                        Timber.i("Navigating to Synapse coverage")
+                        startActivity(
+                            com.ichi2.anki.pages.SynapseCoverage
+                                .getIntent(this@NavigationDrawerActivity),
+                        )
+                    }
+
+                    R.id.nav_synapse_graph -> {
+                        Timber.i("Navigating to Synapse concept graph")
+                        startActivity(
+                            com.ichi2.anki.pages.SynapseGraph
+                                .getIntent(this@NavigationDrawerActivity),
+                        )
+                    }
+
+                    R.id.nav_synapse_setup -> {
+                        Timber.i("Launching Synapse setup")
+                        SynapseSetup.confirmAndProvision(this@NavigationDrawerActivity)
+                    }
+
+                    R.id.nav_synapse_generate -> {
+                        Timber.i("Synapse: generate practice item")
+                        com.ichi2.anki.synapse.SynapseGenerate
+                            .pickConceptAndGenerate(this@NavigationDrawerActivity)
                     }
 
                     R.id.nav_settings -> {

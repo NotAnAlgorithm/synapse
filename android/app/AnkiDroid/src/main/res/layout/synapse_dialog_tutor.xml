@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/synapse_tutor_gap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:visibility="gone"
+            tools:text="Likely gap: acid-base equilibria"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/synapse_tutor_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textIsSelectable="true"
+            tools:text="What happens to the reaction rate as substrate concentration increases well beyond Km?" />
+    </LinearLayout>
+</ScrollView>

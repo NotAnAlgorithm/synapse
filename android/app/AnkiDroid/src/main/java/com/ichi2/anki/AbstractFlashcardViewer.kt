@@ -146,6 +146,7 @@ import com.ichi2.anki.settings.Prefs
 import com.ichi2.anki.snackbar.BaseSnackbarBuilderProvider
 import com.ichi2.anki.snackbar.SnackbarBuilder
 import com.ichi2.anki.snackbar.showSnackbar
+import com.ichi2.anki.synapse.SynapseReviewerHooks
 import com.ichi2.anki.ui.windows.reviewer.StudyScreenRepository
 import com.ichi2.anki.utils.OnlyOnce.Method.ANSWER_CARD
 import com.ichi2.anki.utils.OnlyOnce.preventSimultaneousExecutions
@@ -852,7 +853,15 @@ abstract class AbstractFlashcardViewer :
                 stopCardMediaPlayer()
                 currentEase = rating
 
+                // Synapse: capture the just-answered card before the scheduler advances it,
+                // so the post-answer miss hook targets the correct card (not the next one).
+                val answeredCardId = currentCard?.id
                 answerCardInner(rating)
+                // Synapse: post-answer miss hook (mint / tutor offers on an "Again" miss).
+                // Strictly additive + self-gating; a no-op for non-MCAT cards / unset service.
+                if (rating == Rating.AGAIN && answeredCardId != null) {
+                    SynapseReviewerHooks.onAgainMiss(answeredCardId)
+                }
                 updateCardAndRedraw()
             }
         }

@@ -34,3 +34,20 @@ fun Collection.getGraphPreferencesRaw(): ByteArray {
 }
 
 fun Collection.setGraphPreferencesRaw(input: ByteArray): ByteArray = backend.setGraphPreferencesRaw(input)
+
+// Synapse read-model RPCs (StatsService). These back the Synapse dashboard, coverage
+// and concept-graph SvelteKit pages, mirroring the desktop `exposed_backend_list`.
+fun Collection.conceptMemoryRaw(input: ByteArray): ByteArray = backend.conceptMemoryRaw(input)
+
+fun Collection.conceptCoverageRaw(input: ByteArray): ByteArray = backend.conceptCoverageRaw(input)
+
+fun Collection.conceptGraphRaw(input: ByteArray): ByteArray = backend.conceptGraphRaw(input)
+
+fun Collection.conceptPerformanceRaw(input: ByteArray): ByteArray = backend.conceptPerformanceRaw(input)
+
+// Persists `synapse:streak` as a side effect, matching the desktop AdoptionStats RPC.
+fun Collection.adoptionStatsRaw(input: ByteArray): ByteArray = backend.adoptionStatsRaw(input)
+
+fun Collection.conceptMasteryRaw(input: ByteArray): ByteArray = backend.conceptMasteryRaw(input)
+
+fun Collection.experimentMetricsRaw(input: ByteArray): ByteArray = backend.experimentMetricsRaw(input)

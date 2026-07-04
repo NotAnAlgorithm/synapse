@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!--
+  Strings for the Synapse AI reviewer features (miss hook, minting, grounded
+  generation, and the state-grounded tutor). Kept in a distinct file to avoid
+  churn in the shared strings.xml. These are developer-facing MVP strings and
+  are intentionally not translated yet.
+-->
+<resources>
+    <!-- Offers shown at an "Again" miss -->
+    <string name="synapse_offer_mint">Missed this — mint a recall card?</string>
+    <string name="synapse_offer_mint_action">Mint</string>
+    <string name="synapse_offer_tutor">Ask the tutor about this miss?</string>
+    <string name="synapse_offer_tutor_action">Ask tutor</string>
+    <string name="synapse_offer_generate">Generate a fresh grounded item?</string>
+    <string name="synapse_offer_generate_action">Generate</string>
+
+    <!-- Minting -->
+    <string name="synapse_minted">Minted a recall card in Synapse</string>
+
+    <!-- Generation review dialog -->
+    <string name="synapse_generate_review_title">Review generated item</string>
+    <string name="synapse_generate_review_intro">Review this AI-drafted item. It is grounded in the cited source below. Approve to add it to your Synapse deck, edit the fields first, or reject to discard it.</string>
+    <string name="synapse_field_concept">Concept</string>
+    <string name="synapse_field_stem">Stem</string>
+    <string name="synapse_field_answer">Answer</string>
+    <string name="synapse_field_explanation">Explanation</string>
+    <string name="synapse_cited_source">Cited source</string>
+    <string name="synapse_no_citation_warning">No citation was returned — this draft is not grounded and should be rejected.</string>
+    <string name="synapse_approve">Approve</string>
+    <string name="synapse_reject">Reject</string>
+    <string name="synapse_generate_added">Added the generated item to Synapse</string>
+    <string name="synapse_generate_needs_stem_answer">A stem and an answer are required to approve.</string>
+    <string name="synapse_generating">Generating a grounded item…</string>
+    <string name="synapse_generate_no_draft">No grounded draft available for this concept.</string>
+
+    <!-- Tutor dialog -->
+    <string name="synapse_tutor_title">Synapse tutor</string>
+    <string name="synapse_tutor_gap">Likely gap: %1$s</string>
+    <string name="synapse_tutor_asking">Asking the Synapse tutor…</string>
+    <string name="synapse_tutor_nothing">Nothing for the tutor to work with here</string>
+    <string name="synapse_tutor_no_guidance">The tutor had no guidance to offer</string>
+
+    <!-- Shared / errors -->
+    <string name="synapse_ai_unavailable">Synapse AI is unavailable right now</string>
+    <string name="synapse_ai_not_configured">Synapse AI service is not configured</string>
+    <string name="synapse_close">Close</string>
+</resources>

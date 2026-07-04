@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2026 Synapse contributors
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it under
+  ~ the terms of the GNU General Public License as published by the Free Software
+  ~ Foundation; either version 3 of the License, or (at your option) any later
+  ~ version.
+  ~
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  ~ PARTICULAR PURPOSE. See the GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along with
+  ~ this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:search="http://schemas.android.com/apk/com.bytehamster.lib.preferencesearch"
+    android:title="@string/synapse_settings_title"
+    android:key="@string/pref_synapse_screen_key">
+
+    <!-- AI service: the three synced synapse:service_* collection-config keys.
+         The Service URL is stored/loaded verbatim; the key + token are secrets,
+         so they use a password input and never display their value in a summary. -->
+    <PreferenceCategory android:title="@string/synapse_ai_service_category_title">
+        <com.ichi2.preferences.VersatileTextPreference
+            android:key="@string/synapse_service_url_key"
+            android:title="@string/synapse_service_url_title"
+            android:inputType="textUri"
+            app:dialogHint="@string/synapse_service_url_hint"
+            app:useSimpleSummaryProvider="true" />
+        <com.ichi2.preferences.VersatileTextPreference
+            android:key="@string/synapse_service_key_key"
+            android:title="@string/synapse_service_key_title"
+            android:inputType="textPassword"
+            app:dialogHint="@string/synapse_service_key_hint" />
+        <com.ichi2.preferences.VersatileTextPreference
+            android:key="@string/synapse_service_token_key"
+            android:title="@string/synapse_service_token_title"
+            android:inputType="textPassword"
+            app:dialogHint="@string/synapse_service_token_hint" />
+        <Preference
+            android:selectable="false"
+            android:summary="@string/synapse_ai_service_help"
+            search:ignore="true" />
+    </PreferenceCategory>
+
+    <!-- Exam-date governor: synapse:governor_enabled (bool) + synapse:test_date
+         (YYYY-MM-DD). A blank/cleared date disables the governor. -->
+    <PreferenceCategory android:title="@string/synapse_governor_category_title">
+        <com.ichi2.preferences.VersatileTextPreference
+            android:key="@string/synapse_test_date_key"
+            android:title="@string/synapse_test_date_title"
+            android:inputType="date"
+            app:dialogHint="@string/synapse_test_date_hint" />
+        <Preference
+            android:selectable="false"
+            android:summary="@string/synapse_governor_help"
+            search:ignore="true" />
+    </PreferenceCategory>
+
+    <!-- Cloud sync: the sync URL is Anki's NATIVE custom sync URL, not a synapse:
+         key. Cross-link to AnkiDroid's existing custom sync server screen rather
+         than duplicating that setting here. -->
+    <PreferenceCategory android:title="@string/synapse_sync_category_title">
+        <Preference
+            android:title="@string/synapse_sync_link_title"
+            android:summary="@string/synapse_sync_link_summary"
+            android:fragment="com.ichi2.anki.preferences.CustomSyncServerSettingsFragment"
+            search:ignore="true" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Synapse: provisioning ("Set up") action strings. -->
+<resources>
+    <!-- Navigation drawer label -->
+    <string name="nav_synapse_setup">Synapse: Set up</string>
+
+    <!-- Confirmation dialog -->
+    <string name="synapse_setup_dialog_title">Set up Synapse</string>
+    <string name="synapse_setup_dialog_message">Set up the Synapse study environment? This enables FSRS, creates the Synapse deck, preset and notetypes, and adds a few demo notes. Running it again is safe.</string>
+    <string name="synapse_setup_confirm">Set up</string>
+
+    <!-- Progress -->
+    <string name="synapse_setup_progress">Setting up Synapse…</string>
+
+    <!-- Summary snackbar: %1$d = notetypes, %2$d = notes seeded -->
+    <plurals name="synapse_setup_complete">
+        <item quantity="one">Synapse ready: %1$d notetypes, %2$d note added</item>
+        <item quantity="other">Synapse ready: %1$d notetypes, %2$d notes added</item>
+    </plurals>
+</resources>

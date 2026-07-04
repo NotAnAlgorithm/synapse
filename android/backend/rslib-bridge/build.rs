@@ -4,11 +4,7 @@
 pub mod fluent;
 pub mod proto;
 
-use std::{
-    env::{self, consts::OS},
-    path::PathBuf,
-    process::Command,
-};
+use std::{env, path::PathBuf, process::Command};
 
 use anyhow::Result;
 use prost_reflect::DescriptorPool;
@@ -26,25 +22,36 @@ fn main() -> Result<()> {
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     if target_arch == "x86_64" && target_os == "android" {
-        let android_ndk_home = env::var("ANDROID_NDK_HOME").expect("ANDROID_NDK_HOME not set");
-        let platform = if OS == "linux" {
-            "linux-x86_64"
-        } else if OS == "macos" {
-            "darwin-x86_64"
-        } else {
-            "windows-x86_64"
-        };
-
-        // cargo-ndk sets CC_x86_64-linux-android to the path to `clang`, within the
-        // Android NDK.
+        // Derive the compiler-rt lib dir from the `clang` binary cargo-ndk points
+        // us at (CC_x86_64-linux-android), NOT from ANDROID_NDK_HOME. A bare
+        // `.../ndk/` (missing the version segment, e.g. when the version lookup in
+        // set-android-ndk-home.sh comes back empty) otherwise produces a broken,
+        // silently-wrong `-L` path and the linker fails to find
+        // libclang_rt.builtins-x86_64-android.a. Deriving from clang always points
+        // at whichever NDK is actually in use.
+        //
+        // rerun-if-env-changed so that fixing the toolchain env re-runs this build
+        // script without a manual `cargo clean` (this crate declares a
+        // rerun-if-changed above, which otherwise pins the cached output).
+        println!("cargo:rerun-if-env-changed=CC_x86_64-linux-android");
         let clang_path = PathBuf::from(
             env::var("CC_x86_64-linux-android").expect("CC_x86_64-linux-android not set"),
         );
         let clang_version = get_clang_major_version(&clang_path);
 
-        let lib_dir =
-            format!("/toolchains/llvm/prebuilt/{platform}/lib/clang/{clang_version}/lib/linux/");
-        println!("cargo:rustc-link-search={android_ndk_home}/{lib_dir}");
+        // clang lives at `<toolchain>/bin/<triple><api>-clang`; the runtime libs
+        // sit alongside it at `<toolchain>/lib/clang/<major>/lib/linux/`.
+        let toolchain_root = clang_path
+            .parent()
+            .and_then(|bin| bin.parent())
+            .expect("unexpected clang path layout (expected <toolchain>/bin/clang)");
+        let lib_dir = toolchain_root
+            .join("lib")
+            .join("clang")
+            .join(&clang_version)
+            .join("lib")
+            .join("linux");
+        println!("cargo:rustc-link-search={}", lib_dir.display());
         println!("cargo:rustc-link-lib=static=clang_rt.builtins-x86_64-android");
     }
 

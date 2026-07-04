@@ -18,6 +18,29 @@
             android:icon="@drawable/ic_bar_chart_black"
             android:title="@string/statistics"/>
     </group>
+    <group android:id="@+id/group_synapse"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_synapse_dashboard"
+            android:icon="@drawable/ic_bar_chart_black"
+            android:title="@string/nav_synapse_dashboard"/>
+        <item
+            android:id="@+id/nav_synapse_coverage"
+            android:icon="@drawable/ic_check_circle_24"
+            android:title="@string/nav_synapse_coverage"/>
+        <item
+            android:id="@+id/nav_synapse_graph"
+            android:icon="@drawable/ic_list_black"
+            android:title="@string/nav_synapse_graph"/>
+        <item
+            android:id="@+id/nav_synapse_generate"
+            android:icon="@drawable/ic_flashcard_black"
+            android:title="@string/nav_synapse_generate"/>
+        <item
+            android:id="@+id/nav_synapse_setup"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/nav_synapse_setup"/>
+    </group>
     <group  android:id="@+id/group2">
         <item
             android:id="@+id/nav_settings"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Synapse: dashboard/coverage/graph WebView screens + navigation labels. -->
+<resources>
+    <!-- Screen titles (toolbar) -->
+    <string name="synapse_dashboard_title">Memory</string>
+    <string name="synapse_coverage_title">Coverage</string>
+    <string name="synapse_graph_title">Concept graph</string>
+
+    <!-- Navigation drawer labels -->
+    <string name="nav_synapse_dashboard">Synapse Memory</string>
+    <string name="nav_synapse_coverage">Synapse Coverage</string>
+    <string name="nav_synapse_graph">Concept graph</string>
+    <string name="nav_synapse_generate">Generate practice item</string>
+
+    <!-- Grounded-generation concept picker -->
+    <string name="synapse_generate_pick_concept">Generate for which concept?</string>
+    <string name="synapse_generate_no_concepts">No concepts yet. Tag cards with concept:: or run Synapse setup first.</string>
+
+    <!-- Miss offer: when both mint and tutor apply (chooser) -->
+    <string name="synapse_offer_mint_or_tutor">Missed this — mint a recall card or ask the tutor?</string>
+    <string name="synapse_offer_options_action">Options</string>
+</resources>

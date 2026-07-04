@@ -48,6 +48,7 @@ import com.ichi2.anki.servicelayer.MARKED_TAG
 import com.ichi2.anki.servicelayer.NoteService
 import com.ichi2.anki.servicelayer.isBuryNoteAvailable
 import com.ichi2.anki.servicelayer.isSuspendNoteAvailable
+import com.ichi2.anki.synapse.SynapseReviewerHooks
 import com.ichi2.anki.tryRedo
 import com.ichi2.anki.tryUndo
 import com.ichi2.anki.ui.windows.reviewer.autoadvance.AnswerAction
@@ -520,6 +521,12 @@ class ReviewerViewModel(
         undoableOp(handler = this) { sched.answerCard(answer) }
         answerFeedbackFlow.emit(rating)
         savedStateHandle[KEY_PREVIOUS_CARD_ID] = card.id
+
+        // Synapse: post-answer miss hook (mint / tutor offers on an "Again" miss).
+        // Strictly additive + self-gating; uses the just-answered card, not the next.
+        if (rating == Rating.AGAIN) {
+            SynapseReviewerHooks.onAgainMiss(card.id)
+        }
 
         val wasLeech = withCol { sched.stateIsLeech(answer.newState) }
         if (wasLeech) {

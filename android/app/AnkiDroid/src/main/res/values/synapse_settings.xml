@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2026 Synapse contributors
+  ~
+  ~ This program is free software; you can redistribute it and/or modify it under
+  ~ the terms of the GNU General Public License as published by the Free Software
+  ~ Foundation; either version 3 of the License, or (at your option) any later
+  ~ version.
+  ~
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT ANY
+  ~ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  ~ PARTICULAR PURPOSE. See the GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License along with
+  ~ this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<!--
+  Strings + preference keys for the Synapse settings screen. Kept in a separate
+  values file (rather than the shared preferences.xml / strings.xml) to avoid
+  merge conflicts with the parallel Synapse ports. The android:key values below
+  are app-local SharedPreferences keys; SynapseSettingsFragment maps them to the
+  synced collection-config keys defined in Synapse.kt (synapse:service_url etc.).
+-->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- Screen / header -->
+    <string name="pref_synapse_screen_key">synapseScreen</string>
+    <string name="synapse_settings_title">Synapse</string>
+    <string name="synapse_settings_summary">AI service &amp; exam-date governor</string>
+
+    <!-- AI service category -->
+    <string name="synapse_ai_service_category_title">AI service (grounded generation + tutor)</string>
+    <string name="synapse_ai_service_help">Leave the Service URL blank to keep AI features off. The base study loop never depends on the service.</string>
+
+    <string name="synapse_service_url_key">synapseServiceUrl</string>
+    <string name="synapse_service_url_title">Service URL</string>
+    <string name="synapse_service_url_hint">https://&lt;project-ref&gt;.supabase.co/functions/v1</string>
+
+    <string name="synapse_service_key_key">synapseServiceKey</string>
+    <string name="synapse_service_key_title">Anon / publishable key</string>
+    <string name="synapse_service_key_hint">Supabase publishable/anon key</string>
+
+    <string name="synapse_service_token_key">synapseServiceToken</string>
+    <string name="synapse_service_token_title">Service token</string>
+    <string name="synapse_service_token_hint">Service bearer token (optional; dev token)</string>
+
+    <!-- Summary shown for a secret that has been set (never echo the secret itself) -->
+    <string name="synapse_secret_set_summary">Set (hidden)</string>
+    <string name="synapse_value_not_set_summary">Not set</string>
+
+    <!-- Exam-date governor category -->
+    <string name="synapse_governor_category_title">Exam-date governor</string>
+    <string name="synapse_governor_help">Set your exam date to gradually raise the desired retention as the date approaches. Clear the date to turn the governor off.</string>
+
+    <string name="synapse_test_date_key">synapseTestDate</string>
+    <string name="synapse_test_date_title">Exam date</string>
+    <string name="synapse_test_date_hint">YYYY-MM-DD</string>
+    <string name="synapse_test_date_summary_off">No exam date set (governor off)</string>
+    <string name="synapse_test_date_summary_on">Governor on — exam date: %1$s</string>
+    <string name="synapse_test_date_invalid">Please enter the date as YYYY-MM-DD.</string>
+
+    <!-- Cloud sync cross-link -->
+    <string name="synapse_sync_category_title">Cloud sync (login)</string>
+    <string name="synapse_sync_link_title">Custom sync server</string>
+    <string name="synapse_sync_link_summary">Point Synapse at your self-hosted sync server, then use Sync to log in. Uses AnkiDroid\'s existing custom sync server setting.</string>
+</resources>
