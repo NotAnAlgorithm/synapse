@@ -76,6 +76,12 @@ libraries (strict CSP).
         return NODE_RADIUS + Math.min(6, Math.sqrt(node.cardCount));
     }
 
+    // Position transform for a node. Takes the per-tick `frame` counter purely
+    // so this read re-runs as d3 moves the node in place (`_frame` is unused).
+    function nodeTransform(node: GraphNode, _frame: number): string {
+        return `translate(${node.x ?? 0},${node.y ?? 0})`;
+    }
+
     let svgEl: SVGSVGElement | null = $state(null);
 
     // --- data loading --------------------------------------------------------
@@ -102,19 +108,28 @@ libraries (strict CSP).
         loadData(search);
     });
 
-    // Layout state, mirrored from the simulation on each tick. These use
-    // `$state.raw` deliberately: d3-force OWNS these objects and mutates
-    // `node.x/y/vx/vy` (and the ZoomTransform) in place ~60×/s. A plain `$state`
-    // would deep-proxy them, so every physics tick would fire a storm of
-    // per-property reactive writes that stalls rendering (nodes freeze at their
-    // initial near-origin positions) and breaks pan/drag. With `.raw`, only the
-    // explicit reassignments below (in the tick handler / zoom handler) are
-    // reactive — exactly the granularity we want.
+    // Layout state. `nodes`/`links`/`transform` use `$state.raw` deliberately:
+    // d3-force and d3-zoom OWN these objects and mutate `node.x/y/vx/vy` (and
+    // the ZoomTransform) in place ~60×/s. A plain `$state` would deep-proxy
+    // them, so every physics tick would fire a storm of per-property reactive
+    // writes. With `.raw`, only our explicit reassignments (rebuilding the graph
+    // in buildSimulation, and swapping in a fresh ZoomTransform on zoom) are
+    // reactive.
+    //
+    // Per-tick redraws are driven by `frame` (below), NOT by reassigning the
+    // arrays: d3 mutates the SAME node objects in place, so `nodes = [...nodes]`
+    // is a no-op for a keyed {#each} — Svelte compares items by reference (its
+    // default `equals`) and the instances are unchanged, so per-node transforms
+    // would never re-run and the nodes would stay frozen at their initial
+    // near-origin positions.
     let nodes = $state.raw<GraphNode[]>([]);
     let links = $state.raw<GraphLink[]>([]);
     let transform = $state.raw<ZoomTransform>(zoomIdentity);
     let selectedId = $state<string | null>(null);
     let hoverId = $state<string | null>(null);
+    /** Bumped on every simulation tick to pulse the position-dependent reads
+     * (node transforms + edge geometry) as d3 mutates coordinates in place. */
+    let frame = $state(0);
 
     let simulation: Simulation<GraphNode, GraphLink> | null = null;
     /** The zoom behavior bound to the <svg>; kept so "Reset view" can drive it
@@ -160,10 +175,13 @@ libraries (strict CSP).
                 forceCollide<GraphNode>().radius((n) => radiusFor(n) + 6),
             )
             .on("tick", () => {
-                // Reassign to trigger Svelte reactivity; the objects are the
-                // same instances the simulation mutates in place.
-                nodes = [...nodes];
-                links = [...links];
+                // d3 mutates node.x/y and the hydrated link endpoints in place;
+                // pulse `frame` so the position-dependent reads (each node's
+                // transform and the `drawn` edge geometry) re-run and mirror the
+                // new coordinates into the DOM. Reassigning `nodes`/`links` here
+                // would NOT update anything: the keyed {#each} compares items by
+                // reference and these are the same instances.
+                frame += 1;
             });
     }
 
@@ -235,14 +253,22 @@ libraries (strict CSP).
                 d.fx = null;
                 d.fy = null;
             });
-        // Read `nodes` untracked: the node *set* only changes with
-        // `layoutVersion` (our trigger above); per-tick position updates also
-        // reassign `nodes`, and tracking them here would re-bind drag handlers
-        // ~60×/s for no benefit.
+        // Bind each node's datum to its rendered <g.node> and attach the drag
+        // behaviour. `.data(nodes)` joins BY INDEX (no key function): Svelte
+        // owns these elements, so d3's `__data__` is unset on them — passing a
+        // key accessor like `(d) => d.id` would call it with the existing DOM
+        // data (`undefined`) and throw, which previously aborted this effect's
+        // flush and froze the whole layout (nodes stuck at their initial
+        // near-origin positions, and zoom/pan dead). Index order is correct:
+        // the keyed {#each} renders `g.node` elements in `nodes` order, so
+        // element i pairs with nodes[i]. Read `nodes` untracked — the node set
+        // only changes on rebuild (via `layoutVersion`, our trigger above); the
+        // per-tick `frame` pulse never reassigns it, so drag handlers bind once
+        // per rebuild rather than ~60×/s.
         untrack(() =>
             select(svgNode)
                 .selectAll<SVGGElement, GraphNode>("g.node")
-                .data(nodes, (d) => d.id)
+                .data(nodes)
                 .call(dragBehavior),
         );
     });
@@ -330,8 +356,13 @@ libraries (strict CSP).
 
     // The concept currently emphasised: hover takes priority over selection.
     const highlight = $derived(hoverId ?? selectedId);
-    // Edge geometry for the current layout, recomputed as the sim ticks.
-    const drawn = $derived(drawnLinks(links, highlight));
+    // Edge geometry for the current layout, recomputed as the sim ticks
+    // (`frame`) and when the link set or highlight changes. `drawnLinks` reads
+    // the live, d3-mutated endpoint coordinates, so it must re-run per tick.
+    const drawn = $derived.by(() => {
+        void frame;
+        return drawnLinks(links, highlight);
+    });
 
     function isDimmed(
         id: string,
@@ -449,7 +480,7 @@ libraries (strict CSP).
                                     class="node"
                                     class:selected={selectedId === node.id}
                                     class:dimmed
-                                    transform="translate({node.x ?? 0},{node.y ?? 0})"
+                                    transform={nodeTransform(node, frame)}
                                     role="button"
                                     tabindex="0"
                                     aria-label={conceptLabel(node.id)}
