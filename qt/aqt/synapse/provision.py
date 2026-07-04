@@ -58,7 +58,22 @@ EXPLAIN_WHY_NOTETYPE_NAME = "MCAT Explain-Why"
 # Do NOT lower this; 0.9 is the intended default retention for the demo.
 SYNAPSE_DESIRED_RETENTION = 0.9
 
-MCAT_FIELDS = ["Stem", "Passage", "Answer", "Explanation", "Concept"]
+# The user-visible name of the grounding/citation field, appended LAST (C1). It
+# holds the cited source for AI-generated items; existing notes simply carry it
+# empty. Exported so the generation flow (aqt.synapse.generate) can fill it
+# without duplicating the string.
+MCAT_GROUNDING_FIELD = "Grounding"
+
+# Field order is append-only: "Grounding" MUST stay last so existing collections
+# just gain a new (empty) trailing field and no prior field's index shifts.
+MCAT_FIELDS = [
+    "Stem",
+    "Passage",
+    "Answer",
+    "Explanation",
+    "Concept",
+    MCAT_GROUNDING_FIELD,
+]
 
 # Front: show the passage, then the application-style stem, then a typed answer
 # box. `{{type:Answer}}` renders the comparison input against the Answer field.
@@ -68,12 +83,16 @@ MCAT_QFMT = """\
 <div class="stem">{{Stem}}</div>
 {{type:Answer}}"""
 
-# Back: the rendered front, a divider, then the answer and explanation.
+# Back: the rendered front, a divider, the answer and explanation, then a small
+# cited-source line. `{{#Grounding}}...{{/Grounding}}` renders the source line
+# only when the field is non-empty, so hand-authored notes (which leave it blank)
+# show nothing extra.
 MCAT_AFMT = """\
 {{FrontSide}}
 <hr id="answer">
 <div class="answer">{{Answer}}</div>
-<div class="explanation">{{Explanation}}</div>"""
+<div class="explanation">{{Explanation}}</div>
+{{#Grounding}}<div class="grounding">Source: {{Grounding}}</div>{{/Grounding}}"""
 
 
 # --- M1 application-item notetypes -------------------------------------------
