@@ -13,12 +13,14 @@ submodules lazily so that ``import aqt.synapse`` stays Qt-free.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import anki.collection
 
 if TYPE_CHECKING:
+    import anki.cards
     import aqt.main
+    import aqt.reviewer
 
 
 def init(mw: aqt.main.AnkiQt) -> None:
@@ -57,6 +59,14 @@ def init(mw: aqt.main.AnkiQt) -> None:
     qconnect(exam_date_action.triggered, lambda: _set_exam_date(mw))
     menu.addAction(exam_date_action)
 
+    generate_action = QAction("Synapse: Generate practice...", mw)
+    qconnect(generate_action.triggered, lambda: _generate_practice(mw))
+    menu.addAction(generate_action)
+
+    settings_action = QAction("Synapse: Service & Sync...", mw)
+    qconnect(settings_action.triggered, lambda: _show_service_settings(mw))
+    menu.addAction(settings_action)
+
     # --- Mint hooks -----------------------------------------------------------
     mint.install_hooks()
 
@@ -70,12 +80,55 @@ def init(mw: aqt.main.AnkiQt) -> None:
 
     gui_hooks.collection_did_load.append(_first_run_setup)
 
+    # AI affordances at a miss: offer a fresh grounded item + the tutor. Both
+    # self-gate on ease==1 + an MCAT-family note + a configured AI service, so
+    # until the service is set up the reviewer behaves exactly as before.
+    gui_hooks.reviewer_did_answer_card.append(_on_answer_ai_offers)
+
 
 def _show_setup(mw: aqt.main.AnkiQt) -> None:
     """Open the Synapse setup wizard (re-openable from the Tools menu)."""
     from . import setup
 
     setup.show_setup(mw)
+
+
+def _generate_practice(mw: aqt.main.AnkiQt) -> None:
+    """Manual grounded-generation flow (Tools menu)."""
+    from . import generate
+
+    generate.pick_concept_and_generate(mw)
+
+
+def _show_service_settings(mw: aqt.main.AnkiQt) -> None:
+    """Open the AI service + cloud-sync settings dialog."""
+    from . import settings
+
+    settings.show_service_settings(mw)
+
+
+def _on_answer_ai_offers(
+    _reviewer: aqt.reviewer.Reviewer,
+    card: anki.cards.Card,
+    ease: Literal[1, 2, 3, 4],
+) -> None:
+    """On a miss, offer a fresh grounded item and the tutor.
+
+    Both offers self-gate (ease==1 + an MCAT-family note + a configured AI
+    service), so this is a no-op until the service is set up, and never blocks
+    the reviewer.
+    """
+    from aqt import mw
+
+    if mw is None:
+        return
+    from . import generate, tutor
+
+    try:
+        generate.offer_generate_at_miss(mw, card, ease)
+        tutor.offer_tutor_at_miss(mw, card, ease)
+    except Exception as exc:  # noqa: BLE001 - never break the reviewer
+        print(f"Synapse: AI miss-offer failed: {exc}")
 
 
 def _set_exam_date(mw: aqt.main.AnkiQt) -> None:
