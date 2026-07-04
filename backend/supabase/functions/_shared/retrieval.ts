@@ -30,10 +30,13 @@ export interface RetrieveParams {
 // Minimal shape of the Supabase JS client method we use, to avoid importing the
 // full SDK types at scaffold time. The real client is injected by the caller.
 export interface RpcClient {
+  // The real Supabase client's rpc() returns a thenable PostgrestFilterBuilder
+  // (awaitable, but not a full Promise), so this is typed as PromiseLike so the
+  // concrete SupabaseClient is assignable here without importing its full types.
   rpc(
     fn: string,
     args: Record<string, unknown>,
-  ): Promise<{ data: unknown; error: { message: string } | null }>;
+  ): PromiseLike<{ data: unknown; error: { message: string } | null }>;
 }
 
 /**
