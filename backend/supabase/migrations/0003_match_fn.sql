@@ -7,7 +7,10 @@
 --
 -- Returns cosine SIMILARITY (1 - distance) so callers can threshold on a
 -- higher-is-closer value. Uses the <=> cosine-distance operator, matching the
--- HNSW vector_cosine_ops index in 0001_init_corpus.sql.
+-- HNSW vector_cosine_ops index in 0001_init_corpus.sql. pgvector lives in the
+-- `extensions` schema (0001), which is not on the search_path when this SQL
+-- function body is parsed at CREATE time, so the operator is schema-qualified
+-- via OPERATOR(extensions.<=>) to resolve it (avoids SQLSTATE 42883).
 
 create or replace function public.match_corpus_chunks(
     concept_tags     text[],
@@ -37,14 +40,14 @@ as $$
         c.source_section,
         c.source_anchor,
         c.source_license,
-        1 - (c.embedding <=> query_embedding) as similarity
+        1 - (c.embedding OPERATOR(extensions.<=>) query_embedding) as similarity
     from public.corpus_chunks as c
     -- Step 1: structured concept filter FIRST. @> = array containment: the row's
     -- concept_tags must include (at least) the requested concept_tags.
     where c.concept_tags @> match_corpus_chunks.concept_tags
       and c.embedding is not null
     -- Step 2: vector rank within the concept-scoped survivors.
-    order by c.embedding <=> query_embedding
+    order by c.embedding OPERATOR(extensions.<=>) query_embedding
     limit match_count;
 $$;
 
