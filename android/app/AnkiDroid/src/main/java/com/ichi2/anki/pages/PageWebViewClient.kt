@@ -122,6 +122,10 @@ fun isSvelteKitPage(path: String): Boolean {
         "import-csv",
         "import-page",
         "image-occlusion",
+        // Synapse dashboards (mirror of desktop mediasrv.is_sveltekit_page)
+        "synapse",
+        "coverage",
+        "graph",
         -> true
         else -> false
     }
