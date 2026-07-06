@@ -182,8 +182,8 @@ mod test {
     }
 
     /// Build a deck with mastery gating on, an application card on
-    /// `enzyme_kinetics` (which depends on the seeded prerequisite
-    /// `amino_acid_charge`), and `prereq_cards` recall cards on that
+    /// `protein_structure` (which depends on the seeded prerequisite
+    /// `amino_acids`), and `prereq_cards` recall cards on that
     /// prerequisite. Returns (deck id, prerequisite card ids).
     fn setup_gated_deck(col: &mut Collection, prereq_cards: usize) -> (DeckId, Vec<CardId>) {
         let deck = DeckAdder::new("Synapse")
@@ -199,11 +199,11 @@ mod test {
         for _ in 0..prereq_cards {
             prereq_ids.push(col.add_tagged_card(
                 &recall,
-                "concept::biochem::amino_acid_charge",
+                "concept::BB::1A::amino_acids",
                 deck.id,
             ));
         }
-        col.add_tagged_card(&application, "concept::biochem::enzyme_kinetics", deck.id);
+        col.add_tagged_card(&application, "concept::BB::1A::protein_structure", deck.id);
         (deck.id, prereq_ids)
     }
 
@@ -238,8 +238,8 @@ mod test {
         let recall = col.add_gating_notetype("Basic Recall");
         let application = col.add_gating_notetype("MCAT Application");
         // Unmastered prerequisite present...
-        col.add_tagged_card(&recall, "concept::biochem::amino_acid_charge", deck.id);
-        col.add_tagged_card(&application, "concept::biochem::enzyme_kinetics", deck.id);
+        col.add_tagged_card(&recall, "concept::BB::1A::amino_acids", deck.id);
+        col.add_tagged_card(&application, "concept::BB::1A::protein_structure", deck.id);
         // ...but with gating off the application card still appears.
         assert_eq!(col.queue_application_card_count(deck.id), 1);
         Ok(())

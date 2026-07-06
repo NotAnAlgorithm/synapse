@@ -260,9 +260,9 @@ message ConceptMemoryRequest {
 
 message ConceptMemoryResponse {
   message ConceptScore {
-    // full tag, e.g. concept::biochem::amino_acid_charge
+    // full tag, e.g. concept::BB::1A::amino_acids
     string concept = 1;
-    // 2nd tag segment, e.g. biochem ("" if absent)
+    // 2nd tag segment, e.g. BB (AAMC section) ("" if absent)
     string section = 2;
     // mean retrievability 0..100 over scored cards
     float memory = 3;
@@ -290,7 +290,7 @@ message ConceptCoverageResponse {
   // One expected concept from the seed outline, with whether the user has a
   // card mapped to it.
   message ExpectedConcept {
-    // full concept tag, e.g. concept::biochem::amino_acid_charge
+    // full concept tag, e.g. concept::BB::1A::amino_acids
     string concept = 1;
     // human-readable concept name from the outline
     string name = 2;
@@ -300,9 +300,9 @@ message ConceptCoverageResponse {
     uint32 card_count = 4;
   }
   message Category {
-    // outline section, e.g. biochem
+    // outline section, e.g. BB (AAMC section)
     string section = 1;
-    // stable outline category id, e.g. biochem::amino_acids
+    // stable outline category id, e.g. BB::1A::amino_acids
     string id = 2;
     // human-readable category name
     string name = 3;
@@ -316,7 +316,7 @@ message ConceptCoverageResponse {
     float coverage = 7;
   }
   message Section {
-    // outline section, e.g. biochem
+    // outline section, e.g. BB (AAMC section)
     string section = 1;
     uint32 covered_count = 2;
     uint32 expected_count = 3;
@@ -392,9 +392,9 @@ message ConceptGraphRequest {
 message ConceptGraphResponse {
   // One concept node: its identity plus the mastery signal used to colour it.
   message Node {
-    // full concept tag, e.g. concept::biochem::amino_acid_charge
+    // full concept tag, e.g. concept::BB::1A::amino_acids
     string concept = 1;
-    // 2nd tag segment, e.g. biochem ("" if absent)
+    // 2nd tag segment, e.g. BB (AAMC section) ("" if absent)
     string section = 2;
     // mean retrievability 0..100 over scored cards (0 when none scored)
     float memory = 3;
@@ -439,9 +439,9 @@ message ConceptPerformanceRequest {
 // returned.
 message ConceptPerformanceResponse {
   message ConceptScore {
-    // full tag, e.g. concept::biochem::amino_acid_charge
+    // full tag, e.g. concept::BB::1A::amino_acids
     string concept = 1;
-    // 2nd tag segment, e.g. biochem ("" if absent)
+    // 2nd tag segment, e.g. BB (AAMC section) ("" if absent)
     string section = 2;
     // provisional, uncalibrated Performance 0..100 (see module docs for the
     // exact blend). Not a calibrated probability.
@@ -466,7 +466,7 @@ message ConceptPerformanceResponse {
 
 message ConceptMasteryBundleRequest {
   // The concept tag(s) the student just missed on, e.g.
-  // ["concept::biochem::enzyme_kinetics"]. Usually one; a multi-concept item
+  // ["concept::BB::1D::enzyme_kinetics"]. Usually one; a multi-concept item
   // may pass several. Unknown/untagged tags yield an empty focus (not an
   // error).
   repeated string concepts = 1;
@@ -483,9 +483,9 @@ message ConceptMasteryBundleRequest {
 // concept_edges (no new data). See notes/M3_tutor_design.md §2.
 message ConceptMasteryBundleResponse {
   message ConceptState {
-    // full tag, e.g. concept::biochem::amino_acid_charge
+    // full tag, e.g. concept::BB::1A::amino_acids
     string concept = 1;
-    // 2nd tag segment, e.g. biochem ("" if absent)
+    // 2nd tag segment, e.g. BB (AAMC section) ("" if absent)
     string section = 2;
     // mean retrievability 0..100 over scored cards (0 when none scored)
     float memory = 3;

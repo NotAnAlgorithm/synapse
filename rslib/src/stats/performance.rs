@@ -441,7 +441,7 @@ mod test {
 
         // Application card for the concept: three passes, one Again -> the
         // recency-weighted accuracy should be high but below 1.
-        let app_cid = add_card(&mut col, &app, "apply", &["concept::biochem::amino"]);
+        let app_cid = add_card(&mut col, &app, "apply", &["concept::BB::1A::amino_acids"]);
         let b = base_ms();
         add_review(&mut col, app_cid, b, false); // oldest: Again
         add_review(&mut col, app_cid, b + 1000, true);
@@ -450,15 +450,15 @@ mod test {
 
         // A RECALL (Basic) card for the SAME concept, all Again. It must NOT
         // drag the concept's application accuracy down (F2 excludes recall).
-        let recall_cid = add_card(&mut col, &basic, "recall", &["concept::biochem::amino"]);
+        let recall_cid = add_card(&mut col, &basic, "recall", &["concept::BB::1A::amino_acids"]);
         add_review(&mut col, recall_cid, b + 10, false);
         add_review(&mut col, recall_cid, b + 20, false);
 
         let resp = col.concept_performance("")?;
         assert_eq!(resp.concepts.len(), 1, "only the application card counts");
         let amino = &resp.concepts[0];
-        assert_eq!(amino.concept, "concept::biochem::amino");
-        assert_eq!(amino.section, "biochem");
+        assert_eq!(amino.concept, "concept::BB::1A::amino_acids");
+        assert_eq!(amino.section, "BB");
         // 4 application reviews counted; the 2 recall reviews excluded.
         assert_eq!(amino.applied_count, 4);
         assert!(amino.sufficient_data);
@@ -477,8 +477,8 @@ mod test {
         let mut col = Collection::new();
         let app = application_notetype(&mut col);
 
-        let amino = add_card(&mut col, &app, "a", &["concept::biochem::amino"]);
-        let kin = add_card(&mut col, &app, "k", &["concept::physics::kinematics"]);
+        let amino = add_card(&mut col, &app, "a", &["concept::BB::1A::amino_acids"]);
+        let kin = add_card(&mut col, &app, "k", &["concept::CP::4A::translational_motion"]);
         let b = base_ms();
         for i in 0..3 {
             add_review(&mut col, amino, b + i, true);
@@ -486,9 +486,9 @@ mod test {
         }
 
         // Scoping to one concept's tag restricts the read-model to its cards.
-        let resp = col.concept_performance("tag:concept::biochem::amino")?;
+        let resp = col.concept_performance("tag:concept::BB::1A::amino_acids")?;
         assert_eq!(resp.concepts.len(), 1);
-        assert_eq!(resp.concepts[0].concept, "concept::biochem::amino");
+        assert_eq!(resp.concepts[0].concept, "concept::BB::1A::amino_acids");
 
         // A search matching nothing yields no concepts.
         let resp = col.concept_performance("tag:concept::nope::missing")?;
@@ -501,51 +501,49 @@ mod test {
         let mut col = Collection::new();
         let app = application_notetype(&mut col);
 
-        // enzyme_kinetics depends (via SEED_EDGES) on amino_acid_charge and
-        // protein_structure. Give the dependent a perfect application record so
-        // its score is driven purely by prerequisite mastery.
-        let kinetics = add_card(
+        // enzyme_structure_and_function depends (via the spine seed) on
+        // amino_acids and protein_structure. Give the dependent a perfect
+        // application record so its score is driven purely by prerequisite
+        // mastery.
+        let enzyme = add_card(
             &mut col,
             &app,
-            "kinetics",
-            &["concept::biochem::enzyme_kinetics"],
+            "enzyme",
+            &["concept::BB::1A::enzyme_structure_and_function"],
         );
-        give_memory_state(&mut col, kinetics);
+        give_memory_state(&mut col, enzyme);
         let b = base_ms();
         for i in 0..4 {
-            add_review(&mut col, kinetics, b + i, true);
+            add_review(&mut col, enzyme, b + i, true);
         }
 
         // Baseline: prerequisites have NO studyable cards -> not applicable ->
         // P defaults to 1.0, so the score isn't penalised.
-        let baseline = col.concept_performance("tag:concept::biochem::enzyme_kinetics")?;
+        let baseline =
+            col.concept_performance("tag:concept::BB::1A::enzyme_structure_and_function")?;
         let baseline_score = baseline
             .concepts
             .iter()
-            .find(|c| c.concept == "concept::biochem::enzyme_kinetics")
+            .find(|c| c.concept == "concept::BB::1A::enzyme_structure_and_function")
             .expect("dependent present")
             .performance;
         assert!(baseline_score > 0.0);
 
-        // Now give a prerequisite (amino_acid_charge) a studyable card with a
-        // WEAK memory (unscored -> F1 Memory 0.0). This drags prereq_mastery
-        // below 1.0 and must lower the dependent's Performance, even though its
-        // own application accuracy is unchanged. The prereq card is a recall
+        // Now give a prerequisite (amino_acids) a studyable card with a WEAK
+        // memory (unscored -> F1 Memory 0.0). This drags prereq_mastery below
+        // 1.0 and must lower the dependent's Performance, even though its own
+        // application accuracy is unchanged. The prereq card is a recall
         // (Basic) card and out of the dependent's search scope, proving the
         // penalty comes through the prerequisite graph, not the card table.
         let basic = col.basic_notetype();
-        add_card(
-            &mut col,
-            &basic,
-            "amino",
-            &["concept::biochem::amino_acid_charge"],
-        );
+        add_card(&mut col, &basic, "amino", &["concept::BB::1A::amino_acids"]);
 
-        let penalised = col.concept_performance("tag:concept::biochem::enzyme_kinetics")?;
+        let penalised =
+            col.concept_performance("tag:concept::BB::1A::enzyme_structure_and_function")?;
         let entry = penalised
             .concepts
             .iter()
-            .find(|c| c.concept == "concept::biochem::enzyme_kinetics")
+            .find(|c| c.concept == "concept::BB::1A::enzyme_structure_and_function")
             .expect("dependent present");
         assert!(
             entry.prereq_mastery < 1.0,

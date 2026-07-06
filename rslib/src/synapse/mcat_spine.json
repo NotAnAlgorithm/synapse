@@ -1,0 +1,1997 @@
+{
+ "meta": {
+  "source": "Projection of AAMC MCAT content spine + authored Synapse prerequisites",
+  "note": "Vendored for rslib include_str!; prerequisites are authored Synapse IP (survive an AAMC-spine swap by merging on tag)."
+ },
+ "topics": [
+  {
+   "section": "BB",
+   "category": "1A",
+   "category_name": "Structure and function of proteins and their constituent amino acids",
+   "topic_id": "1A.amino-acids",
+   "name": "Amino Acids",
+   "disciplines": [
+    "BC",
+    "OC"
+   ],
+   "tag": "concept::BB::1A::amino_acids",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1A",
+   "category_name": "Structure and function of proteins and their constituent amino acids",
+   "topic_id": "1A.protein-structure",
+   "name": "Protein Structure",
+   "disciplines": [
+    "BIO",
+    "BC",
+    "OC"
+   ],
+   "tag": "concept::BB::1A::protein_structure",
+   "prerequisites": [
+    "concept::BB::1A::amino_acids"
+   ]
+  },
+  {
+   "section": "BB",
+   "category": "1A",
+   "category_name": "Structure and function of proteins and their constituent amino acids",
+   "topic_id": "1A.nonenzymatic-protein-function",
+   "name": "Nonenzymatic Protein Function",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1A::nonenzymatic_protein_function",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1A",
+   "category_name": "Structure and function of proteins and their constituent amino acids",
+   "topic_id": "1A.enzyme-structure-and-function",
+   "name": "Enzyme Structure and Function",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1A::enzyme_structure_and_function",
+   "prerequisites": [
+    "concept::BB::1A::amino_acids",
+    "concept::BB::1A::protein_structure"
+   ]
+  },
+  {
+   "section": "BB",
+   "category": "1A",
+   "category_name": "Structure and function of proteins and their constituent amino acids",
+   "topic_id": "1A.control-of-enzyme-activity",
+   "name": "Control of Enzyme Activity",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1A::control_of_enzyme_activity",
+   "prerequisites": [
+    "concept::BB::1A::enzyme_structure_and_function"
+   ]
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.nucleic-acid-structure-and-function",
+   "name": "Nucleic Acid Structure and Function",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1B::nucleic_acid_structure_and_function",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.dna-replication",
+   "name": "DNA Replication",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::dna_replication",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.repair-of-dna",
+   "name": "Repair of DNA",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::repair_of_dna",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.genetic-code",
+   "name": "Genetic Code",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::genetic_code",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.transcription",
+   "name": "Transcription",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::transcription",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.translation",
+   "name": "Translation",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::translation",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.eukaryotic-chromosome-organization",
+   "name": "Eukaryotic Chromosome Organization",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::eukaryotic_chromosome_organization",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.control-of-gene-expression-in-prokaryotes",
+   "name": "Control of Gene Expression in Prokaryotes",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::control_of_gene_expression_in_prokaryotes",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.control-of-gene-expression-in-eukaryotes",
+   "name": "Control of Gene Expression in Eukaryotes",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::control_of_gene_expression_in_eukaryotes",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1B",
+   "category_name": "Transmission of genetic information from the gene to the protein",
+   "topic_id": "1B.recombinant-dna-and-biotechnology",
+   "name": "Recombinant DNA and Biotechnology",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1B::recombinant_dna_and_biotechnology",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1C",
+   "category_name": "Transmission of heritable information from generation to generation and the processes that increase genetic diversity",
+   "topic_id": "1C.evidence-that-dna-is-genetic-material",
+   "name": "Evidence That DNA Is Genetic Material",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1C::evidence_that_dna_is_genetic_material",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1C",
+   "category_name": "Transmission of heritable information from generation to generation and the processes that increase genetic diversity",
+   "topic_id": "1C.mendelian-concepts",
+   "name": "Mendelian Concepts",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1C::mendelian_concepts",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1C",
+   "category_name": "Transmission of heritable information from generation to generation and the processes that increase genetic diversity",
+   "topic_id": "1C.meiosis-and-other-factors-affecting-genetic-variab",
+   "name": "Meiosis and Other Factors Affecting Genetic Variability",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1C::meiosis_and_other_factors_affecting_genetic_variab",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1C",
+   "category_name": "Transmission of heritable information from generation to generation and the processes that increase genetic diversity",
+   "topic_id": "1C.analytic-methods",
+   "name": "Analytic Methods",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1C::analytic_methods",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1C",
+   "category_name": "Transmission of heritable information from generation to generation and the processes that increase genetic diversity",
+   "topic_id": "1C.evolution",
+   "name": "Evolution",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1C::evolution",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.principles-of-bioenergetics",
+   "name": "Principles of Bioenergetics",
+   "disciplines": [
+    "BC",
+    "GC"
+   ],
+   "tag": "concept::BB::1D::principles_of_bioenergetics",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.carbohydrates",
+   "name": "Carbohydrates",
+   "disciplines": [
+    "BC",
+    "OC"
+   ],
+   "tag": "concept::BB::1D::carbohydrates",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.glycolysis-gluconeogenesis-and-the-pentose-phospha",
+   "name": "Glycolysis, Gluconeogenesis, and the Pentose Phosphate Pathway",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1D::glycolysis_gluconeogenesis_and_the_pentose_phospha",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.principles-of-metabolic-regulation",
+   "name": "Principles of Metabolic Regulation",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::BB::1D::principles_of_metabolic_regulation",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.citric-acid-cycle",
+   "name": "Citric Acid Cycle",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1D::citric_acid_cycle",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.metabolism-of-fatty-acids-and-proteins",
+   "name": "Metabolism of Fatty Acids and Proteins",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1D::metabolism_of_fatty_acids_and_proteins",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.polysaccharides",
+   "name": "polysaccharides",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::1D::polysaccharides",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.oxidative-phosphorylation",
+   "name": "Oxidative Phosphorylation",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::1D::oxidative_phosphorylation",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "1D",
+   "category_name": "Principles of bioenergetics and fuel molecule metabolism",
+   "topic_id": "1D.hormonal-regulation-and-integration-of-metabolism",
+   "name": "Hormonal Regulation and Integration of Metabolism",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::BB::1D::hormonal_regulation_and_integration_of_metabolism",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2A",
+   "category_name": "Assemblies of molecules, cells, and groups of cells within single cellular and multicellular organisms",
+   "topic_id": "2A.plasma-membrane",
+   "name": "Plasma Membrane",
+   "disciplines": [
+    "BIO",
+    "BC"
+   ],
+   "tag": "concept::BB::2A::plasma_membrane",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2A",
+   "category_name": "Assemblies of molecules, cells, and groups of cells within single cellular and multicellular organisms",
+   "topic_id": "2A.membrane-bound-organelles-and-defining-characteris",
+   "name": "Membrane-Bound Organelles and Defining Characteristics of Eukaryotic Cells",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2A::membrane_bound_organelles_and_defining_characteris",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2A",
+   "category_name": "Assemblies of molecules, cells, and groups of cells within single cellular and multicellular organisms",
+   "topic_id": "2A.cytoskeleton",
+   "name": "Cytoskeleton",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2A::cytoskeleton",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2A",
+   "category_name": "Assemblies of molecules, cells, and groups of cells within single cellular and multicellular organisms",
+   "topic_id": "2A.tissues-formed-from-eukaryotic-cells",
+   "name": "Tissues Formed From Eukaryotic Cells",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2A::tissues_formed_from_eukaryotic_cells",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2B",
+   "category_name": "The structure, growth, physiology, and genetics of prokaryotes and viruses",
+   "topic_id": "2B.cell-theory",
+   "name": "Cell Theory",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2B::cell_theory",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2B",
+   "category_name": "The structure, growth, physiology, and genetics of prokaryotes and viruses",
+   "topic_id": "2B.classification-and-structure-of-prokaryotic-cells",
+   "name": "Classification and Structure of Prokaryotic Cells",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2B::classification_and_structure_of_prokaryotic_cells",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2B",
+   "category_name": "The structure, growth, physiology, and genetics of prokaryotes and viruses",
+   "topic_id": "2B.growth-and-physiology-of-prokaryotic-cells",
+   "name": "Growth and Physiology of Prokaryotic Cells",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2B::growth_and_physiology_of_prokaryotic_cells",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2B",
+   "category_name": "The structure, growth, physiology, and genetics of prokaryotes and viruses",
+   "topic_id": "2B.genetics-of-prokaryotic-cells",
+   "name": "Genetics of Prokaryotic Cells",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2B::genetics_of_prokaryotic_cells",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2B",
+   "category_name": "The structure, growth, physiology, and genetics of prokaryotes and viruses",
+   "topic_id": "2B.virus-structure",
+   "name": "Virus Structure",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2B::virus_structure",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2B",
+   "category_name": "The structure, growth, physiology, and genetics of prokaryotes and viruses",
+   "topic_id": "2B.viral-life-cycle",
+   "name": "Viral Life Cycle",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2B::viral_life_cycle",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2C",
+   "category_name": "Processes of cell division, differentiation, and specialization",
+   "topic_id": "2C.mitosis",
+   "name": "Mitosis",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2C::mitosis",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2C",
+   "category_name": "Processes of cell division, differentiation, and specialization",
+   "topic_id": "2C.biosignaling",
+   "name": "Biosignaling",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::BB::2C::biosignaling",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2C",
+   "category_name": "Processes of cell division, differentiation, and specialization",
+   "topic_id": "2C.reproductive-system",
+   "name": "Reproductive System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2C::reproductive_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2C",
+   "category_name": "Processes of cell division, differentiation, and specialization",
+   "topic_id": "2C.embryogenesis",
+   "name": "Embryogenesis",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2C::embryogenesis",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "2C",
+   "category_name": "Processes of cell division, differentiation, and specialization",
+   "topic_id": "2C.mechanisms-of-development",
+   "name": "Mechanisms of Development",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::2C::mechanisms_of_development",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3A",
+   "category_name": "Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems",
+   "topic_id": "3A.nervous-system-structure-and-function",
+   "name": "Nervous System: Structure and Function",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3A::nervous_system_structure_and_function",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3A",
+   "category_name": "Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems",
+   "topic_id": "3A.nerve-cell",
+   "name": "Nerve Cell",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3A::nerve_cell",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3A",
+   "category_name": "Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems",
+   "topic_id": "3A.electrochemistry",
+   "name": "Electrochemistry",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::BB::3A::electrochemistry",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3A",
+   "category_name": "Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems",
+   "topic_id": "3A.nernst-equation-biosignaling",
+   "name": "Nernst equation Biosignaling",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::BB::3A::nernst_equation_biosignaling",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3A",
+   "category_name": "Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems",
+   "topic_id": "3A.lipids",
+   "name": "Lipids",
+   "disciplines": [
+    "BC",
+    "OC"
+   ],
+   "tag": "concept::BB::3A::lipids",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3A",
+   "category_name": "Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems",
+   "topic_id": "3A.endocrine-system-hormones-and-their-sources",
+   "name": "Endocrine System: Hormones and Their Sources",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3A::endocrine_system_hormones_and_their_sources",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3A",
+   "category_name": "Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems",
+   "topic_id": "3A.endocrine-system-mechanisms-of-hormone-action",
+   "name": "Endocrine System: Mechanisms of Hormone Action",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3A::endocrine_system_mechanisms_of_hormone_action",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.respiratory-system",
+   "name": "Respiratory System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::respiratory_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.2-circulatory-system",
+   "name": "2 Circulatory System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::2_circulatory_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.lymphatic-system",
+   "name": "Lymphatic System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::lymphatic_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.immune-system",
+   "name": "Immune System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::immune_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.digestive-system",
+   "name": "Digestive System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::digestive_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.excretory-system",
+   "name": "Excretory System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::excretory_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.reproductive-system",
+   "name": "Reproductive System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::reproductive_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.muscle-system",
+   "name": "Muscle System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::muscle_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.specialized-cell-muscle-cell",
+   "name": "Specialized Cell ― Muscle Cell",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::specialized_cell_muscle_cell",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.skeletal-system",
+   "name": "Skeletal System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::skeletal_system",
+   "prerequisites": []
+  },
+  {
+   "section": "BB",
+   "category": "3B",
+   "category_name": "Structure and integrative functions of the main organ systems",
+   "topic_id": "3B.skin-system",
+   "name": "Skin System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::BB::3B::skin_system",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4A",
+   "category_name": "Translational motion, forces, work, energy, and equilibrium in living systems",
+   "topic_id": "4A.translational-motion",
+   "name": "Translational Motion",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4A::translational_motion",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4A",
+   "category_name": "Translational motion, forces, work, energy, and equilibrium in living systems",
+   "topic_id": "4A.force",
+   "name": "Force",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4A::force",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4A",
+   "category_name": "Translational motion, forces, work, energy, and equilibrium in living systems",
+   "topic_id": "4A.equilibrium",
+   "name": "Equilibrium",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4A::equilibrium",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4A",
+   "category_name": "Translational motion, forces, work, energy, and equilibrium in living systems",
+   "topic_id": "4A.work",
+   "name": "Work",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4A::work",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4A",
+   "category_name": "Translational motion, forces, work, energy, and equilibrium in living systems",
+   "topic_id": "4A.energy-of-point-object-systems",
+   "name": "Energy of Point Object Systems",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4A::energy_of_point_object_systems",
+   "prerequisites": [
+    "concept::CP::4A::force"
+   ]
+  },
+  {
+   "section": "CP",
+   "category": "4A",
+   "category_name": "Translational motion, forces, work, energy, and equilibrium in living systems",
+   "topic_id": "4A.periodic-motion",
+   "name": "Periodic Motion",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4A::periodic_motion",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4B",
+   "category_name": "Importance of fluids for the circulation of blood, gas movement, and gas exchange",
+   "topic_id": "4B.fluids",
+   "name": "Fluids",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4B::fluids",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4B",
+   "category_name": "Importance of fluids for the circulation of blood, gas movement, and gas exchange",
+   "topic_id": "4B.circulatory-system",
+   "name": "Circulatory System",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::CP::4B::circulatory_system",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4B",
+   "category_name": "Importance of fluids for the circulation of blood, gas movement, and gas exchange",
+   "topic_id": "4B.gas-phase",
+   "name": "Gas Phase",
+   "disciplines": [
+    "GC",
+    "PHY"
+   ],
+   "tag": "concept::CP::4B::gas_phase",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4B",
+   "category_name": "Importance of fluids for the circulation of blood, gas movement, and gas exchange",
+   "topic_id": "4B.constant-pressure",
+   "name": "constant pressure",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4B::constant_pressure",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4C",
+   "category_name": "Electrochemistry and electrical circuits and their elements",
+   "topic_id": "4C.electrostatics",
+   "name": "Electrostatics",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4C::electrostatics",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4C",
+   "category_name": "Electrochemistry and electrical circuits and their elements",
+   "topic_id": "4C.circuit-elements",
+   "name": "Circuit Elements",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4C::circuit_elements",
+   "prerequisites": [
+    "concept::CP::4C::electrostatics"
+   ]
+  },
+  {
+   "section": "CP",
+   "category": "4C",
+   "category_name": "Electrochemistry and electrical circuits and their elements",
+   "topic_id": "4C.magnetism",
+   "name": "Magnetism",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4C::magnetism",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4C",
+   "category_name": "Electrochemistry and electrical circuits and their elements",
+   "topic_id": "4C.lorentz-force-electrochemistry",
+   "name": "Lorentz force Electrochemistry",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::4C::lorentz_force_electrochemistry",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4C",
+   "category_name": "Electrochemistry and electrical circuits and their elements",
+   "topic_id": "4C.specialized-cell-nerve-cell",
+   "name": "Specialized Cell ― Nerve Cell",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::CP::4C::specialized_cell_nerve_cell",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4D",
+   "category_name": "How light and sound interact with matter",
+   "topic_id": "4D.sound",
+   "name": "Sound",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4D::sound",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4D",
+   "category_name": "How light and sound interact with matter",
+   "topic_id": "4D.light-electromagnetic-radiation",
+   "name": "Light, Electromagnetic Radiation",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4D::light_electromagnetic_radiation",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4D",
+   "category_name": "How light and sound interact with matter",
+   "topic_id": "4D.molecular-structure-and-absorption-spectra",
+   "name": "Molecular Structure and Absorption Spectra",
+   "disciplines": [
+    "OC"
+   ],
+   "tag": "concept::CP::4D::molecular_structure_and_absorption_spectra",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4D",
+   "category_name": "How light and sound interact with matter",
+   "topic_id": "4D.geometrical-optics",
+   "name": "Geometrical Optics",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::4D::geometrical_optics",
+   "prerequisites": [
+    "concept::CP::4A::energy_of_point_object_systems"
+   ]
+  },
+  {
+   "section": "CP",
+   "category": "4E",
+   "category_name": "Atoms, nuclear decay, electronic structure, and atomic chemical behavior",
+   "topic_id": "4E.atomic-nucleus",
+   "name": "Atomic Nucleus",
+   "disciplines": [
+    "PHY",
+    "GC"
+   ],
+   "tag": "concept::CP::4E::atomic_nucleus",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4E",
+   "category_name": "Atoms, nuclear decay, electronic structure, and atomic chemical behavior",
+   "topic_id": "4E.electronic-structure",
+   "name": "Electronic Structure",
+   "disciplines": [
+    "PHY",
+    "GC"
+   ],
+   "tag": "concept::CP::4E::electronic_structure",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4E",
+   "category_name": "Atoms, nuclear decay, electronic structure, and atomic chemical behavior",
+   "topic_id": "4E.orbital",
+   "name": "orbital",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::4E::orbital",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4E",
+   "category_name": "Atoms, nuclear decay, electronic structure, and atomic chemical behavior",
+   "topic_id": "4E.the-periodic-table-classification-of-elements-into",
+   "name": "The Periodic Table ― Classification of Elements Into Groups by Electronic Structure",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::4E::the_periodic_table_classification_of_elements_into",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4E",
+   "category_name": "Atoms, nuclear decay, electronic structure, and atomic chemical behavior",
+   "topic_id": "4E.the-periodic-table-variations-of-chemical-properti",
+   "name": "The Periodic Table ― Variations of Chemical Properties with Group and Row",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::4E::the_periodic_table_variations_of_chemical_properti",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "4E",
+   "category_name": "Atoms, nuclear decay, electronic structure, and atomic chemical behavior",
+   "topic_id": "4E.stoichiometry",
+   "name": "Stoichiometry",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::4E::stoichiometry",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5A",
+   "category_name": "Unique nature of water and its solutions",
+   "topic_id": "5A.acid-base-equilibria",
+   "name": "Acid-Base Equilibria",
+   "disciplines": [
+    "GC",
+    "BC"
+   ],
+   "tag": "concept::CP::5A::acid_base_equilibria",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5A",
+   "category_name": "Unique nature of water and its solutions",
+   "topic_id": "5A.ions-in-solutions",
+   "name": "Ions in Solutions",
+   "disciplines": [
+    "GC",
+    "BC"
+   ],
+   "tag": "concept::CP::5A::ions_in_solutions",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5A",
+   "category_name": "Unique nature of water and its solutions",
+   "topic_id": "5A.solubility",
+   "name": "Solubility",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::5A::solubility",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5A",
+   "category_name": "Unique nature of water and its solutions",
+   "topic_id": "5A.titration",
+   "name": "Titration",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::5A::titration",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5B",
+   "category_name": "Nature of molecules and intermolecular interactions",
+   "topic_id": "5B.covalent-bond",
+   "name": "Covalent Bond",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::5B::covalent_bond",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5B",
+   "category_name": "Nature of molecules and intermolecular interactions",
+   "topic_id": "5B.liquid-phase-intermolecular-forces",
+   "name": "Liquid Phase ― Intermolecular Forces",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::5B::liquid_phase_intermolecular_forces",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5C",
+   "category_name": "Separation and purification methods",
+   "topic_id": "5C.separations-and-purifications",
+   "name": "Separations and Purifications",
+   "disciplines": [
+    "OC",
+    "BC"
+   ],
+   "tag": "concept::CP::5C::separations_and_purifications",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5C",
+   "category_name": "Separation and purification methods",
+   "topic_id": "5C.proteins",
+   "name": "proteins",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::CP::5C::proteins",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.nucleotides-and-nucleic-acids",
+   "name": "Nucleotides and Nucleic Acids",
+   "disciplines": [
+    "BC",
+    "BIO"
+   ],
+   "tag": "concept::CP::5D::nucleotides_and_nucleic_acids",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.amino-acids-peptides-proteins",
+   "name": "Amino Acids, Peptides, Proteins",
+   "disciplines": [
+    "OC",
+    "BC"
+   ],
+   "tag": "concept::CP::5D::amino_acids_peptides_proteins",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.the-three-dimensional-protein-structure",
+   "name": "The Three-Dimensional Protein Structure",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::CP::5D::the_three_dimensional_protein_structure",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.nonenzymatic-protein-function",
+   "name": "Nonenzymatic Protein Function",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::CP::5D::nonenzymatic_protein_function",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.lipids",
+   "name": "Lipids",
+   "disciplines": [
+    "BC",
+    "OC"
+   ],
+   "tag": "concept::CP::5D::lipids",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.carbohydrates",
+   "name": "Carbohydrates",
+   "disciplines": [
+    "OC"
+   ],
+   "tag": "concept::CP::5D::carbohydrates",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.aldehydes-and-ketones",
+   "name": "Aldehydes and Ketones",
+   "disciplines": [
+    "OC"
+   ],
+   "tag": "concept::CP::5D::aldehydes_and_ketones",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.alcohols",
+   "name": "Alcohols",
+   "disciplines": [
+    "OC"
+   ],
+   "tag": "concept::CP::5D::alcohols",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.carboxylic-acids",
+   "name": "Carboxylic Acids",
+   "disciplines": [
+    "OC"
+   ],
+   "tag": "concept::CP::5D::carboxylic_acids",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.acid-derivatives-anhydrides-amides-esters",
+   "name": "Acid Derivatives (Anhydrides, Amides, Esters)",
+   "disciplines": [
+    "OC"
+   ],
+   "tag": "concept::CP::5D::acid_derivatives_anhydrides_amides_esters",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.phenols",
+   "name": "Phenols",
+   "disciplines": [
+    "OC",
+    "BC"
+   ],
+   "tag": "concept::CP::5D::phenols",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5D",
+   "category_name": "Structure, function, and reactivity of biologically relevant molecules",
+   "topic_id": "5D.polycyclic-and-heterocyclic-aromatic-compounds",
+   "name": "Polycyclic and Heterocyclic Aromatic Compounds",
+   "disciplines": [
+    "OC",
+    "BC"
+   ],
+   "tag": "concept::CP::5D::polycyclic_and_heterocyclic_aromatic_compounds",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5E",
+   "category_name": "Principles of chemical thermodynamics and kinetics",
+   "topic_id": "5E.enzymes",
+   "name": "Enzymes",
+   "disciplines": [
+    "BC",
+    "BIO"
+   ],
+   "tag": "concept::CP::5E::enzymes",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5E",
+   "category_name": "Principles of chemical thermodynamics and kinetics",
+   "topic_id": "5E.principles-of-bioenergetics",
+   "name": "Principles of Bioenergetics",
+   "disciplines": [
+    "BC"
+   ],
+   "tag": "concept::CP::5E::principles_of_bioenergetics",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5E",
+   "category_name": "Principles of chemical thermodynamics and kinetics",
+   "topic_id": "5E.energy-changes-in-chemical-reactions-thermochemist",
+   "name": "Energy Changes in Chemical Reactions ― Thermochemistry, Thermodynamics",
+   "disciplines": [
+    "GC",
+    "PHY"
+   ],
+   "tag": "concept::CP::5E::energy_changes_in_chemical_reactions_thermochemist",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5E",
+   "category_name": "Principles of chemical thermodynamics and kinetics",
+   "topic_id": "5E.curve",
+   "name": "curve",
+   "disciplines": [
+    "PHY"
+   ],
+   "tag": "concept::CP::5E::curve",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5E",
+   "category_name": "Principles of chemical thermodynamics and kinetics",
+   "topic_id": "5E.formation",
+   "name": "formation",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::5E::formation",
+   "prerequisites": []
+  },
+  {
+   "section": "CP",
+   "category": "5E",
+   "category_name": "Principles of chemical thermodynamics and kinetics",
+   "topic_id": "5E.rate-processes-in-chemical-reactions-kinetics-and-",
+   "name": "Rate Processes in Chemical Reactions ― Kinetics and Equilibrium",
+   "disciplines": [
+    "GC"
+   ],
+   "tag": "concept::CP::5E::rate_processes_in_chemical_reactions_kinetics_and",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6A",
+   "category_name": "Sensing the environment",
+   "topic_id": "6A.sensory-processing",
+   "name": "Sensory Processing",
+   "disciplines": [
+    "PSY",
+    "BIO"
+   ],
+   "tag": "concept::PS::6A::sensory_processing",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6A",
+   "category_name": "Sensing the environment",
+   "topic_id": "6A.vision",
+   "name": "Vision",
+   "disciplines": [
+    "PSY",
+    "BIO"
+   ],
+   "tag": "concept::PS::6A::vision",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6A",
+   "category_name": "Sensing the environment",
+   "topic_id": "6A.hearing",
+   "name": "Hearing",
+   "disciplines": [
+    "PSY",
+    "BIO"
+   ],
+   "tag": "concept::PS::6A::hearing",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6A",
+   "category_name": "Sensing the environment",
+   "topic_id": "6A.other-senses",
+   "name": "Other Senses",
+   "disciplines": [
+    "PSY",
+    "BIO"
+   ],
+   "tag": "concept::PS::6A::other_senses",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6A",
+   "category_name": "Sensing the environment",
+   "topic_id": "6A.perception",
+   "name": "Perception",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6A::perception",
+   "prerequisites": [
+    "concept::PS::6A::sensory_processing"
+   ]
+  },
+  {
+   "section": "PS",
+   "category": "6B",
+   "category_name": "Making sense of the environment",
+   "topic_id": "6B.attention",
+   "name": "Attention",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6B::attention",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6B",
+   "category_name": "Making sense of the environment",
+   "topic_id": "6B.cognition",
+   "name": "Cognition",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6B::cognition",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6B",
+   "category_name": "Making sense of the environment",
+   "topic_id": "6B.consciousness",
+   "name": "Consciousness",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6B::consciousness",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6B",
+   "category_name": "Making sense of the environment",
+   "topic_id": "6B.memory",
+   "name": "Memory",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6B::memory",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6B",
+   "category_name": "Making sense of the environment",
+   "topic_id": "6B.and-learning",
+   "name": "and learning",
+   "disciplines": [
+    "PSY",
+    "BIO"
+   ],
+   "tag": "concept::PS::6B::and_learning",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6B",
+   "category_name": "Making sense of the environment",
+   "topic_id": "6B.language",
+   "name": "Language",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6B::language",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6C",
+   "category_name": "Responding to the world",
+   "topic_id": "6C.emotion",
+   "name": "Emotion",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6C::emotion",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "6C",
+   "category_name": "Responding to the world",
+   "topic_id": "6C.stress",
+   "name": "Stress",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::6C::stress",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7A",
+   "category_name": "Individual influences on behavior",
+   "topic_id": "7A.biological-bases-of-behavior",
+   "name": "Biological Bases of Behavior",
+   "disciplines": [
+    "PSY",
+    "BIO"
+   ],
+   "tag": "concept::PS::7A::biological_bases_of_behavior",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7A",
+   "category_name": "Individual influences on behavior",
+   "topic_id": "7A.behavior",
+   "name": "behavior",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7A::behavior",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7A",
+   "category_name": "Individual influences on behavior",
+   "topic_id": "7A.personality",
+   "name": "Personality",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7A::personality",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7A",
+   "category_name": "Individual influences on behavior",
+   "topic_id": "7A.psychological-disorders",
+   "name": "Psychological Disorders",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7A::psychological_disorders",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7A",
+   "category_name": "Individual influences on behavior",
+   "topic_id": "7A.the-central-nervous-system",
+   "name": "the central nervous system",
+   "disciplines": [
+    "BIO"
+   ],
+   "tag": "concept::PS::7A::the_central_nervous_system",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7A",
+   "category_name": "Individual influences on behavior",
+   "topic_id": "7A.motivation",
+   "name": "Motivation",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7A::motivation",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7A",
+   "category_name": "Individual influences on behavior",
+   "topic_id": "7A.attitudes",
+   "name": "Attitudes",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7A::attitudes",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7B",
+   "category_name": "Social processes that influence human behavior",
+   "topic_id": "7B.how-the-presence-of-others-affects-individual-beha",
+   "name": "How the Presence of Others Affects Individual Behavior",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7B::how_the_presence_of_others_affects_individual_beha",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7B",
+   "category_name": "Social processes that influence human behavior",
+   "topic_id": "7B.group-decision-making-processes",
+   "name": "Group Decision-Making Processes",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::7B::group_decision_making_processes",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7B",
+   "category_name": "Social processes that influence human behavior",
+   "topic_id": "7B.normative-and-nonnormative-behavior",
+   "name": "Normative and Nonnormative Behavior",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::7B::normative_and_nonnormative_behavior",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7B",
+   "category_name": "Social processes that influence human behavior",
+   "topic_id": "7B.socialization",
+   "name": "Socialization",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::7B::socialization",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7C",
+   "category_name": "Attitude and behavior change",
+   "topic_id": "7C.habituation-and-dishabituation",
+   "name": "Habituation and Dishabituation",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7C::habituation_and_dishabituation",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7C",
+   "category_name": "Attitude and behavior change",
+   "topic_id": "7C.associative-learning",
+   "name": "Associative Learning",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7C::associative_learning",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7C",
+   "category_name": "Attitude and behavior change",
+   "topic_id": "7C.bio-observational-learning",
+   "name": "BIO) Observational Learning",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7C::bio_observational_learning",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "7C",
+   "category_name": "Attitude and behavior change",
+   "topic_id": "7C.theories-of-attitude-and-behavior-change",
+   "name": "Theories of Attitude and Behavior Change",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::7C::theories_of_attitude_and_behavior_change",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8A",
+   "category_name": "Self-identity",
+   "topic_id": "8A.control-in-self-concept-and-self-identity",
+   "name": "control in self-concept and self-identity",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::8A::control_in_self_concept_and_self_identity",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8A",
+   "category_name": "Self-identity",
+   "topic_id": "8A.formation-of-identity",
+   "name": "Formation of Identity",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::8A::formation_of_identity",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8B",
+   "category_name": "Social thinking",
+   "topic_id": "8B.attributing-behavior-to-persons-or-situations",
+   "name": "Attributing Behavior to Persons or Situations",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::8B::attributing_behavior_to_persons_or_situations",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8B",
+   "category_name": "Social thinking",
+   "topic_id": "8B.prejudice-and-bias",
+   "name": "Prejudice and Bias",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::8B::prejudice_and_bias",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8B",
+   "category_name": "Social thinking",
+   "topic_id": "8B.processes-related-to-stereotypes",
+   "name": "Processes Related to Stereotypes",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::8B::processes_related_to_stereotypes",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8C",
+   "category_name": "Social interactions",
+   "topic_id": "8C.elements-of-social-interaction",
+   "name": "Elements of Social Interaction",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::8C::elements_of_social_interaction",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8C",
+   "category_name": "Social interactions",
+   "topic_id": "8C.approach",
+   "name": "approach)",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::8C::approach",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8C",
+   "category_name": "Social interactions",
+   "topic_id": "8C.social-behavior",
+   "name": "Social Behavior",
+   "disciplines": [
+    "PSY"
+   ],
+   "tag": "concept::PS::8C::social_behavior",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8C",
+   "category_name": "Social interactions",
+   "topic_id": "8C.discrimination",
+   "name": "Discrimination",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::8C::discrimination",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "8C",
+   "category_name": "Social interactions",
+   "topic_id": "8C.discrimination-content-categories",
+   "name": "discrimination Content Categories",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::8C::discrimination_content_categories",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "9A",
+   "category_name": "Understanding social structure",
+   "topic_id": "9A.theoretical-approaches",
+   "name": "Theoretical Approaches",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::9A::theoretical_approaches",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "9A",
+   "category_name": "Understanding social structure",
+   "topic_id": "9A.social-institutions",
+   "name": "Social Institutions",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::9A::social_institutions",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "9A",
+   "category_name": "Understanding social structure",
+   "topic_id": "9A.abuse-spousal-abuse",
+   "name": "abuse, spousal abuse)",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::9A::abuse_spousal_abuse",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "9A",
+   "category_name": "Understanding social structure",
+   "topic_id": "9A.culture",
+   "name": "Culture",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::9A::culture",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "9B",
+   "category_name": "Demographic characteristics and processes",
+   "topic_id": "9B.demographic-structure-of-society",
+   "name": "Demographic Structure of Society",
+   "disciplines": [
+    "PSY",
+    "SOC"
+   ],
+   "tag": "concept::PS::9B::demographic_structure_of_society",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "9B",
+   "category_name": "Demographic characteristics and processes",
+   "topic_id": "9B.demographic-shifts-and-social-change",
+   "name": "Demographic Shifts and Social Change",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::9B::demographic_shifts_and_social_change",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "10A",
+   "category_name": "Social inequality",
+   "topic_id": "10A.spatial-inequality",
+   "name": "Spatial Inequality",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::10A::spatial_inequality",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "10A",
+   "category_name": "Social inequality",
+   "topic_id": "10A.social-class",
+   "name": "Social Class",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::10A::social_class",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "10A",
+   "category_name": "Social inequality",
+   "topic_id": "10A.health-disparities",
+   "name": "Health Disparities",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::10A::health_disparities",
+   "prerequisites": []
+  },
+  {
+   "section": "PS",
+   "category": "10A",
+   "category_name": "Social inequality",
+   "topic_id": "10A.health-care-disparities",
+   "name": "Health Care Disparities",
+   "disciplines": [
+    "SOC"
+   ],
+   "tag": "concept::PS::10A::health_care_disparities",
+   "prerequisites": []
+  }
+ ]
+}

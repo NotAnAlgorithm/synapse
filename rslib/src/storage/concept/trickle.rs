@@ -159,9 +159,9 @@ mod test {
     #[test]
     fn credit_strengthens_prereq_review_card() -> Result<()> {
         let mut col = Collection::new();
-        // amino_acid_charge is a seeded prerequisite of enzyme_kinetics.
-        let prereq_card = add_card(&mut col, "concept::biochem::amino_acid_charge");
-        let app_card = add_card(&mut col, "concept::biochem::enzyme_kinetics");
+        // amino_acids is a seeded prerequisite of protein_structure.
+        let prereq_card = add_card(&mut col, "concept::BB::1A::amino_acids");
+        let app_card = add_card(&mut col, "concept::BB::1A::protein_structure");
         make_review(&mut col, prereq_card, 20, 40.0);
 
         let before = col.storage.get_card(prereq_card)?.unwrap();
@@ -180,8 +180,8 @@ mod test {
     #[test]
     fn credit_skips_new_and_learning_cards() -> Result<()> {
         let mut col = Collection::new();
-        let prereq_card = add_card(&mut col, "concept::biochem::amino_acid_charge");
-        let app_card = add_card(&mut col, "concept::biochem::enzyme_kinetics");
+        let prereq_card = add_card(&mut col, "concept::BB::1A::amino_acids");
+        let app_card = add_card(&mut col, "concept::BB::1A::protein_structure");
         // prereq card left New (no memory state).
         let before = col.storage.get_card(prereq_card)?.unwrap();
         col.apply_trickle_down_credit(app_card)?;
@@ -195,11 +195,11 @@ mod test {
     #[test]
     fn credit_noop_when_no_prerequisites() -> Result<()> {
         let mut col = Collection::new();
-        // amino_acid_charge has no prerequisites of its own.
-        let leaf_prereq = add_card(&mut col, "concept::biochem::amino_acid_charge");
+        // amino_acids has no prerequisites of its own.
+        let leaf_prereq = add_card(&mut col, "concept::BB::1A::amino_acids");
         make_review(&mut col, leaf_prereq, 20, 40.0);
         let before = col.storage.get_card(leaf_prereq)?.unwrap();
-        // answering amino_acid_charge grants nothing (it depends on nothing).
+        // answering amino_acids grants nothing (it depends on nothing).
         col.apply_trickle_down_credit(leaf_prereq)?;
         let after = col.storage.get_card(leaf_prereq)?.unwrap();
         assert_eq!(before.interval, after.interval);

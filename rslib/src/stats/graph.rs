@@ -126,25 +126,25 @@ mod test {
     fn nodes_from_tagged_cards_edges_from_seed() -> Result<()> {
         let mut col = Collection::new();
         // Two concepts joined by a seed prerequisite edge
-        // (amino_acid_charge -> enzyme_kinetics).
-        let a = add_tagged_note(&mut col, "a", &["concept::biochem::amino_acid_charge"]);
+        // (amino_acids -> protein_structure).
+        let a = add_tagged_note(&mut col, "a", &["concept::BB::1A::amino_acids"]);
         give_card_memory_state(&mut col, a);
-        add_tagged_note(&mut col, "b", &["concept::biochem::enzyme_kinetics"]);
+        add_tagged_note(&mut col, "b", &["concept::BB::1A::protein_structure"]);
 
         let resp = col.concept_graph("")?;
 
         // Both tagged concepts are nodes.
         let node_tags: Vec<&str> = resp.nodes.iter().map(|n| n.concept.as_str()).collect();
-        assert!(node_tags.contains(&"concept::biochem::amino_acid_charge"));
-        assert!(node_tags.contains(&"concept::biochem::enzyme_kinetics"));
+        assert!(node_tags.contains(&"concept::BB::1A::amino_acids"));
+        assert!(node_tags.contains(&"concept::BB::1A::protein_structure"));
 
         // The node carries the Memory signal from concept_memory.
         let amino = resp
             .nodes
             .iter()
-            .find(|n| n.concept == "concept::biochem::amino_acid_charge")
+            .find(|n| n.concept == "concept::BB::1A::amino_acids")
             .unwrap();
-        assert_eq!(amino.section, "biochem");
+        assert_eq!(amino.section, "BB");
         assert_eq!(amino.card_count, 1);
         assert_eq!(amino.scored_card_count, 1);
         assert!(amino.memory > 99.0, "memory was {}", amino.memory);
@@ -153,9 +153,9 @@ mod test {
         let edge = resp
             .edges
             .iter()
-            .find(|e| e.from_concept == "concept::biochem::amino_acid_charge")
+            .find(|e| e.from_concept == "concept::BB::1A::amino_acids")
             .expect("seed edge present");
-        assert_eq!(edge.to_concept, "concept::biochem::enzyme_kinetics");
+        assert_eq!(edge.to_concept, "concept::BB::1A::protein_structure");
         Ok(())
     }
 
@@ -164,23 +164,23 @@ mod test {
         let mut col = Collection::new();
         // Only tag the prerequisite end of a seed edge; the dependent has no
         // card, so it is not a node, and the edge must be dropped.
-        add_tagged_note(&mut col, "a", &["concept::biochem::amino_acid_charge"]);
+        add_tagged_note(&mut col, "a", &["concept::BB::1A::amino_acids"]);
 
         let resp = col.concept_graph("")?;
         assert!(resp
             .nodes
             .iter()
-            .any(|n| n.concept == "concept::biochem::amino_acid_charge"));
+            .any(|n| n.concept == "concept::BB::1A::amino_acids"));
         assert!(!resp
             .nodes
             .iter()
-            .any(|n| n.concept == "concept::biochem::enzyme_kinetics"));
+            .any(|n| n.concept == "concept::BB::1A::protein_structure"));
         // No edge may reference the missing dependent.
         assert!(resp
             .edges
             .iter()
-            .all(|e| e.to_concept != "concept::biochem::enzyme_kinetics"
-                && e.from_concept != "concept::biochem::enzyme_kinetics"));
+            .all(|e| e.to_concept != "concept::BB::1A::protein_structure"
+                && e.from_concept != "concept::BB::1A::protein_structure"));
         Ok(())
     }
 
@@ -188,15 +188,15 @@ mod test {
     fn search_scopes_nodes_and_their_edges() -> Result<()> {
         let mut col = Collection::new();
         // A seed-connected pair, plus an unrelated concept.
-        add_tagged_note(&mut col, "a", &["concept::biochem::amino_acid_charge"]);
-        add_tagged_note(&mut col, "b", &["concept::biochem::enzyme_kinetics"]);
-        add_tagged_note(&mut col, "c", &["concept::physics::kinematics"]);
+        add_tagged_note(&mut col, "a", &["concept::BB::1A::amino_acids"]);
+        add_tagged_note(&mut col, "b", &["concept::BB::1A::protein_structure"]);
+        add_tagged_note(&mut col, "c", &["concept::CP::4A::translational_motion"]);
 
         // Scope to a single concept: only that node, and — because the other
         // endpoint is excluded — none of its edges.
-        let resp = col.concept_graph("tag:concept::biochem::amino_acid_charge")?;
+        let resp = col.concept_graph("tag:concept::BB::1A::amino_acids")?;
         assert_eq!(resp.nodes.len(), 1);
-        assert_eq!(resp.nodes[0].concept, "concept::biochem::amino_acid_charge");
+        assert_eq!(resp.nodes[0].concept, "concept::BB::1A::amino_acids");
         assert!(resp.edges.is_empty());
 
         // A search matching nothing yields an empty graph, not an error.

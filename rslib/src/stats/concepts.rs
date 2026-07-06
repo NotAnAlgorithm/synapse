@@ -134,28 +134,28 @@ mod test {
         // note A: one concept, with a fresh memory state (high retrievability)
         let mut a = nt.new_note();
         a.set_field(0, "a")?;
-        a.tags = vec!["concept::biochem::amino".into()];
+        a.tags = vec!["concept::BB::1A::amino_acids".into()];
         col.add_note(&mut a, DeckId(1))?;
         give_card_memory_state(&mut col, a.id)?;
 
         // note B: same concept, no memory state -> counts for coverage only
         let mut b = nt.new_note();
         b.set_field(0, "b")?;
-        b.tags = vec!["concept::biochem::amino".into()];
+        b.tags = vec!["concept::BB::1A::amino_acids".into()];
         col.add_note(&mut b, DeckId(1))?;
 
         // note C: a different concept
         let mut c = nt.new_note();
         c.set_field(0, "c")?;
-        c.tags = vec!["concept::physics::kinematics".into()];
+        c.tags = vec!["concept::CP::4A::translational_motion".into()];
         col.add_note(&mut c, DeckId(1))?;
 
         let resp = col.concept_memory("")?;
         assert_eq!(resp.concepts.len(), 2);
 
         let amino = &resp.concepts[0];
-        assert_eq!(amino.concept, "concept::biochem::amino");
-        assert_eq!(amino.section, "biochem");
+        assert_eq!(amino.concept, "concept::BB::1A::amino_acids");
+        assert_eq!(amino.section, "BB");
         assert_eq!(amino.card_count, 2);
         assert_eq!(amino.scored_card_count, 1);
         // one just-reviewed card at stability 100 -> retrievability ~= 100%
@@ -163,8 +163,8 @@ mod test {
         assert!(!amino.sufficient_data);
 
         let kin = &resp.concepts[1];
-        assert_eq!(kin.concept, "concept::physics::kinematics");
-        assert_eq!(kin.section, "physics");
+        assert_eq!(kin.concept, "concept::CP::4A::translational_motion");
+        assert_eq!(kin.section, "CP");
         assert_eq!(kin.card_count, 1);
         assert_eq!(kin.scored_card_count, 0);
         assert_eq!(kin.memory, 0.0);
@@ -179,19 +179,19 @@ mod test {
 
         let mut a = nt.new_note();
         a.set_field(0, "a")?;
-        a.tags = vec!["concept::biochem::amino".into()];
+        a.tags = vec!["concept::BB::1A::amino_acids".into()];
         col.add_note(&mut a, DeckId(1))?;
 
         let mut b = nt.new_note();
         b.set_field(0, "b")?;
-        b.tags = vec!["concept::physics::kinematics".into()];
+        b.tags = vec!["concept::CP::4A::translational_motion".into()];
         col.add_note(&mut b, DeckId(1))?;
 
         // scoping the search to one concept's tag restricts the read model to
         // that concept's cards only.
-        let resp = col.concept_memory("tag:concept::biochem::amino")?;
+        let resp = col.concept_memory("tag:concept::BB::1A::amino_acids")?;
         assert_eq!(resp.concepts.len(), 1);
-        assert_eq!(resp.concepts[0].concept, "concept::biochem::amino");
+        assert_eq!(resp.concepts[0].concept, "concept::BB::1A::amino_acids");
         assert_eq!(resp.concepts[0].card_count, 1);
 
         // a search matching nothing yields no concepts.

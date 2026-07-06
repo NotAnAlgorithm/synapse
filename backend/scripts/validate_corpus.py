@@ -15,8 +15,8 @@ stderr). Do not run in this environment — the integrator runs it centrally.
 Record contract (see corpus/README.md — keep the two in sync):
     {
       "id": str,                    # unique, non-empty slug
-      "concept_tags": [str, ...],   # >=1, each "concept::<section>::<id>"
-      "aamc_category": str,         # non-empty content-category code
+      "concept_tags": [str, ...],   # >=1, "concept::<section>::<category>::<topic>"
+      "aamc_category": str,         # content-category code == tag's 3rd segment
       "text": str,                  # one atomic fact, non-empty
       "source": {
         "title": str,               # non-empty
@@ -38,9 +38,14 @@ import sys
 # Anything else (e.g. a copyright-restricted author-reference source) is rejected.
 ALLOWED_LICENSES = {"CC-BY-4.0", "Synapse-Original"}
 
-# Concept-tag convention shared with the client (qt/aqt/synapse/provision.py):
-# concept::<section>::<id>, underscores only, no spaces.
-CONCEPT_TAG_RE = re.compile(r"^concept::[a-z0-9_]+::[a-z0-9_]+$")
+# Canonical concept-tag convention aligned to the AAMC spine, shared with the
+# client (qt/aqt/synapse/provision.py): four segments
+# concept::<section>::<category>::<topic> where
+#   section  = AAMC section code, uppercase letters (BB / CP / PS)
+#   category = content-category code, digits + a trailing uppercase letter (1A, 4C, 7C)
+#   topic    = lowercase/underscore slug, no spaces.
+# The `aamc_category` field must equal the tag's 3rd segment (the category code).
+CONCEPT_TAG_RE = re.compile(r"^concept::[A-Z]+::[0-9]+[A-Z]::[a-z0-9_]+$")
 
 DEFAULT_PATH = "corpus/seed.jsonl"
 
@@ -74,6 +79,8 @@ def _validate_record(record: object, prefix: str) -> list[str]:
     if not isinstance(rec_id, str) or not rec_id.strip():
         errors.append(f"{prefix}: 'id' must be a non-empty string")
 
+    aamc_category = record.get("aamc_category")
+
     tags = record.get("concept_tags")
     if not isinstance(tags, list) or not tags:
         errors.append(f"{prefix}: 'concept_tags' must be a non-empty array")
@@ -82,7 +89,17 @@ def _validate_record(record: object, prefix: str) -> list[str]:
             if not isinstance(tag, str) or not CONCEPT_TAG_RE.match(tag):
                 errors.append(
                     f"{prefix}: concept tag {tag!r} must match "
-                    f"concept::<section>::<id> (lowercase, underscores, no spaces)"
+                    f"concept::<section>::<category>::<topic> "
+                    f"(e.g. concept::BB::1A::amino_acids)"
+                )
+                continue
+            # aamc_category is derivable from the tag: it must equal the 3rd
+            # segment (the category code), keeping the two in sync per record.
+            category_segment = tag.split("::")[2]
+            if isinstance(aamc_category, str) and aamc_category != category_segment:
+                errors.append(
+                    f"{prefix}: aamc_category {aamc_category!r} must equal the "
+                    f"category segment {category_segment!r} of concept tag {tag!r}"
                 )
 
     for key in ("aamc_category", "text"):
