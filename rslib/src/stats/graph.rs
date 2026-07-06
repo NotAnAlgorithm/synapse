@@ -125,11 +125,17 @@ mod test {
     #[test]
     fn nodes_from_tagged_cards_edges_from_seed() -> Result<()> {
         let mut col = Collection::new();
-        // Two concepts joined by a seed prerequisite edge
-        // (amino_acids -> protein_structure).
+        // Two concepts joined by a prerequisite edge
+        // (amino_acids -> protein_structure), built in-test since the
+        // production spine seed is now empty.
         let a = add_tagged_note(&mut col, "a", &["concept::BB::1A::amino_acids"]);
         give_card_memory_state(&mut col, a);
         add_tagged_note(&mut col, "b", &["concept::BB::1A::protein_structure"]);
+        crate::storage::concept::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::protein_structure",
+        );
 
         let resp = col.concept_graph("")?;
 

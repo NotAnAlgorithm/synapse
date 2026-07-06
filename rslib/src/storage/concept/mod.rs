@@ -15,7 +15,7 @@
 //! calls [`SqliteStorage::refresh_card_concepts_for_note`]) and can be fully
 //! reconstructed at any time via [`SqliteStorage::rebuild_concepts_from_tags`].
 
-mod edges;
+pub(crate) mod edges;
 mod mastery;
 mod trickle;
 

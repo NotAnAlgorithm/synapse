@@ -16,7 +16,9 @@
 //! - [`all_topics`] — every topic, used to build the coverage expected-set;
 //! - [`seed_edges`] — the authored prerequisite graph as `(from, to)` tag pairs,
 //!   where `from` is a PREREQUISITE of `to`. Topic `prerequisites` in the JSON
-//!   are authored as topic ids and resolved to canonical tags here.
+//!   (if any) are authored as topic ids and resolved to canonical tags here.
+//!   The authored prerequisite edges have been removed pending research, so this
+//!   currently yields no edges; the machinery remains for when they return.
 
 use std::collections::HashMap;
 use std::sync::OnceLock;
@@ -222,15 +224,9 @@ mod test {
 
     #[test]
     fn seed_edges_are_prereq_to_dependent_pairs() {
-        let edges = seed_edges();
-        // 8 authored prerequisite edges across BB/CP/PS.
-        assert_eq!(edges.len(), 8);
-
-        // protein_structure depends on amino_acids, so (amino_acids ->
-        // protein_structure) is a from=prereq, to=dependent pair.
-        assert!(edges.contains(&(
-            "concept::BB::1A::amino_acids".to_string(),
-            "concept::BB::1A::protein_structure".to_string(),
-        )));
+        // Authored prerequisite edges have been removed pending research, so the
+        // spine currently declares no prerequisites and seed_edges() is empty.
+        // The resolution machinery is retained for when the edges return.
+        assert!(seed_edges().is_empty());
     }
 }

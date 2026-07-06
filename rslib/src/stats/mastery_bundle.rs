@@ -311,11 +311,22 @@ mod test {
     #[test]
     fn focus_with_prerequisites_orders_weakest_first() -> Result<()> {
         let mut col = Collection::new();
-        // enzyme_structure_and_function depends (via the spine seed) on
-        // amino_acids and protein_structure.
+        // enzyme_structure_and_function depends on amino_acids and
+        // protein_structure. The production spine seed is now empty, so build
+        // those prerequisite edges in-test.
         add_concept_card(
             &mut col,
             "enzyme",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
+        crate::storage::concept::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
+        crate::storage::concept::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::protein_structure",
             "concept::BB::1A::enzyme_structure_and_function",
         );
 
@@ -406,8 +417,15 @@ mod test {
             "concept::BB::1A::enzyme_structure_and_function",
         );
         add_concept_card(&mut col, "amino", "concept::BB::1A::amino_acids");
+        // amino_acids is a prerequisite of enzyme (built in-test; the production
+        // spine seed is now empty).
+        crate::storage::concept::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
 
-        // Whole collection: focus sees both its cards; the seeded prerequisite
+        // Whole collection: focus sees both its cards; the prerequisite
         // that has a card in scope reads has_cards.
         let full = col.concept_mastery_bundle(
             &["concept::BB::1A::enzyme_structure_and_function".to_string()],

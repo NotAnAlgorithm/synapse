@@ -501,8 +501,9 @@ mod test {
         let mut col = Collection::new();
         let app = application_notetype(&mut col);
 
-        // enzyme_structure_and_function depends (via the spine seed) on
-        // amino_acids and protein_structure. Give the dependent a perfect
+        // enzyme_structure_and_function depends on amino_acids and
+        // protein_structure. The production spine seed is now empty, so build
+        // those prerequisite edges in-test. Give the dependent a perfect
         // application record so its score is driven purely by prerequisite
         // mastery.
         let enzyme = add_card(
@@ -510,6 +511,16 @@ mod test {
             &app,
             "enzyme",
             &["concept::BB::1A::enzyme_structure_and_function"],
+        );
+        crate::storage::concept::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
+        crate::storage::concept::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::protein_structure",
+            "concept::BB::1A::enzyme_structure_and_function",
         );
         give_memory_state(&mut col, enzyme);
         let b = base_ms();

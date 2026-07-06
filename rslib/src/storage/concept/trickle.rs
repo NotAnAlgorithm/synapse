@@ -159,9 +159,15 @@ mod test {
     #[test]
     fn credit_strengthens_prereq_review_card() -> Result<()> {
         let mut col = Collection::new();
-        // amino_acids is a seeded prerequisite of protein_structure.
+        // amino_acids is a prerequisite of protein_structure (built in-test, as
+        // the production spine seed is now empty).
         let prereq_card = add_card(&mut col, "concept::BB::1A::amino_acids");
         let app_card = add_card(&mut col, "concept::BB::1A::protein_structure");
+        super::super::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::protein_structure",
+        );
         make_review(&mut col, prereq_card, 20, 40.0);
 
         let before = col.storage.get_card(prereq_card)?.unwrap();
@@ -182,6 +188,11 @@ mod test {
         let mut col = Collection::new();
         let prereq_card = add_card(&mut col, "concept::BB::1A::amino_acids");
         let app_card = add_card(&mut col, "concept::BB::1A::protein_structure");
+        super::super::edges::add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::protein_structure",
+        );
         // prereq card left New (no memory state).
         let before = col.storage.get_card(prereq_card)?.unwrap();
         col.apply_trickle_down_credit(app_card)?;

@@ -124,6 +124,17 @@ impl SqliteStorage {
     }
 }
 
+/// Test-only helper: resolve `from_tag`/`to_tag` to concept ids (creating the
+/// concepts if missing) and add a prerequisite edge between them. Lets tests
+/// build the exact edges they exercise without depending on the (now empty)
+/// production spine seed.
+#[cfg(test)]
+pub(crate) fn add_test_concept_edge(col: &Collection, from_tag: &str, to_tag: &str) {
+    let from = col.storage.get_or_create_concept(from_tag).unwrap();
+    let to = col.storage.get_or_create_concept(to_tag).unwrap();
+    col.storage.add_concept_edge(from, to).unwrap();
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -131,11 +142,31 @@ mod test {
     #[test]
     fn seed_edges_load_and_are_queryable() -> Result<()> {
         let col = Collection::new();
-        // The schema-20 migration ran the seed load on open.
-        let edges = col.storage.all_concept_edges()?;
-        assert_eq!(edges.len(), spine::seed_edges().len());
 
-        // amino_acids is a prerequisite of enzyme_structure_and_function.
+        // The production spine seed is now empty (authored edges removed pending
+        // research); build the edges this test needs directly:
+        //   amino_acids -> protein_structure
+        //   amino_acids -> enzyme_structure_and_function
+        //   protein_structure -> enzyme_structure_and_function
+        add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::protein_structure",
+        );
+        add_test_concept_edge(
+            &col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
+        add_test_concept_edge(
+            &col,
+            "concept::BB::1A::protein_structure",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
+
+        // The three edges just added are all present.
+        assert_eq!(col.storage.all_concept_edges()?.len(), 3);
+
         let amino = col
             .storage
             .get_concept_id_by_tag("concept::BB::1A::amino_acids")?
@@ -169,7 +200,10 @@ mod test {
     #[test]
     fn rebuild_is_idempotent() -> Result<()> {
         let col = Collection::new();
+        // With an empty seed, rebuild inserts nothing; it must still be a no-op
+        // when run repeatedly.
         let before = col.storage.all_concept_edges()?;
+        assert!(before.is_empty());
         col.storage.rebuild_concept_edges_from_seed()?;
         let after = col.storage.all_concept_edges()?;
         assert_eq!(before, after);

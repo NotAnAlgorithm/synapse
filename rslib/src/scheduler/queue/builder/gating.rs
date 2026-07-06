@@ -182,9 +182,10 @@ mod test {
     }
 
     /// Build a deck with mastery gating on, an application card on
-    /// `protein_structure` (which depends on the seeded prerequisite
-    /// `amino_acids`), and `prereq_cards` recall cards on that
-    /// prerequisite. Returns (deck id, prerequisite card ids).
+    /// `protein_structure` (which depends on the prerequisite `amino_acids`),
+    /// and `prereq_cards` recall cards on that prerequisite. The prerequisite
+    /// edge is built in-test (the production spine seed is now empty). Returns
+    /// (deck id, prerequisite card ids).
     fn setup_gated_deck(col: &mut Collection, prereq_cards: usize) -> (DeckId, Vec<CardId>) {
         let deck = DeckAdder::new("Synapse")
             .with_config(|c: &mut DeckConfig| {
@@ -204,6 +205,11 @@ mod test {
             ));
         }
         col.add_tagged_card(&application, "concept::BB::1A::protein_structure", deck.id);
+        crate::storage::concept::edges::add_test_concept_edge(
+            col,
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::protein_structure",
+        );
         (deck.id, prereq_ids)
     }
 
