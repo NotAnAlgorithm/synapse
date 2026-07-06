@@ -42,7 +42,7 @@ impl Collection {
     /// Coverage of the user's cards (within `search`) against the AAMC MCAT
     /// spine. Read-model behind the Synapse coverage checker (PRD B4).
     ///
-    /// `search` scopes which cards count toward coverage (e.g. `deck:Synapse`);
+    /// `search` scopes which cards count toward coverage (e.g. `deck:MCAT`);
     /// empty means the whole collection.
     pub(crate) fn concept_coverage(&mut self, search: &str) -> Result<ConceptCoverageResponse> {
         // Reuse the concept-memory read-model to learn which concept tags the
@@ -104,7 +104,10 @@ impl Collection {
             total_expected += expected_count;
 
             // Fold into the section rollup.
-            match section_totals.iter_mut().find(|(s, _, _)| *s == cat.section) {
+            match section_totals
+                .iter_mut()
+                .find(|(s, _, _)| *s == cat.section)
+            {
                 Some(entry) => {
                     entry.1 += covered_count;
                     entry.2 += expected_count;

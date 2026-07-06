@@ -9,11 +9,16 @@ pub(super) const SCHEMA_STARTING_VERSION: u8 = 11;
 ///
 /// Synapse (M1/M2): the wire/on-disk format is still schema 18; the versions
 /// above it — 19 (concepts projection), 20 (prerequisite edges), 21 (card
-/// lineage), 22 (AAMC-spine re-key of the concept projection) — add or refresh
+/// lineage), 22 (AAMC-spine re-key of the concept projection), 23 (refresh of
+/// the prerequisite graph after the spine gained its full authored
+/// prerequisites), 24 (rebuild of the concept projection + graph so cards added
+/// via the importer, which bypasses the per-note projection refresh, appear),
+/// 25 (re-seed of the prerequisite graph after the central-nervous-system topic
+/// was connected, and the seam for later spine-edge edits) — add or refresh
 /// LOCAL, DERIVED tables that never sync. They are dropped on downgrade to the
 /// schema-18 sync/colpkg format and rebuilt from source (tags / authored seed /
 /// custom_data) on next open.
-pub(super) const SCHEMA_MAX_VERSION: u8 = 22;
+pub(super) const SCHEMA_MAX_VERSION: u8 = 25;
 
 use super::SchemaVersion;
 use super::SqliteStorage;
@@ -81,6 +86,40 @@ impl SqliteStorage {
             self.rebuild_concepts_from_tags()?;
             self.rebuild_concept_edges_from_seed()?;
         }
+        if ver < 23 {
+            // Synapse: the AAMC spine gained its full authored prerequisite set
+            // (a few seed edges -> the complete concept graph). Refresh the
+            // LOCAL, DERIVED prerequisite graph from it. No table shape change;
+            // concept_edges is truncated here and rebuilt from the vendored
+            // spine seed. Concepts/card_concepts are left as-is (they derive
+            // from note tags, unaffected by the edge growth).
+            self.db
+                .execute_batch(include_str!("schema23_upgrade.sql"))?;
+            self.rebuild_concept_edges_from_seed()?;
+        }
+        if ver < 24 {
+            // Synapse: the text/CSV importer adds notes via the low-level path
+            // that bypasses the per-note concept-projection refresh, so
+            // collections that imported the demo cards after an earlier
+            // migration were left with an empty `card_concepts` projection (the
+            // concept graph showed no nodes). Rebuild the projection AND the
+            // prerequisite graph from the current note tags + the vendored
+            // spine. No table shape change.
+            self.db
+                .execute_batch(include_str!("schema24_upgrade.sql"))?;
+            self.rebuild_concepts_from_tags()?;
+            self.rebuild_concept_edges_from_seed()?;
+        }
+        if ver < 25 {
+            // Synapse: the prerequisite graph gained edges connecting the
+            // previously-isolated central-nervous-system topic (and this step is
+            // the seam that propagates later spine-edge edits to collections that
+            // already migrated). Re-seed the LOCAL, DERIVED graph from the
+            // vendored spine. No table shape change.
+            self.db
+                .execute_batch(include_str!("schema25_upgrade.sql"))?;
+            self.rebuild_concept_edges_from_seed()?;
+        }
 
         // in some future schema upgrade, we may want to change
         // _collapsed to _expanded in DeckCommon and invert existing values, so
@@ -114,10 +153,18 @@ impl SqliteStorage {
     /// wire/on-disk format; ends at `ver = 18`. Rebuilt from source on next
     /// open.
     fn drop_local_synapse_tables(&self) -> Result<()> {
-        // spine re-key (22, no shape) -> card_lineage (21) -> concept_edges
-        // (20) -> concepts + card_concepts (19). schema22_downgrade only steps
-        // the version back to 21; schema19_downgrade runs last and leaves
+        // prereq-graph re-seed (25, no shape) -> projection+graph rebuild (24,
+        // no shape) -> prereq-graph refresh (23, no shape) -> spine re-key (22,
+        // no shape) -> card_lineage (21) -> concept_edges (20) -> concepts +
+        // card_concepts (19). schema25/24/23/22 downgrades only step the version
+        // back (to 24, 23, 22, then 21); schema19_downgrade runs last and leaves
         // ver = 18.
+        self.db
+            .execute_batch(include_str!("schema25_downgrade.sql"))?;
+        self.db
+            .execute_batch(include_str!("schema24_downgrade.sql"))?;
+        self.db
+            .execute_batch(include_str!("schema23_downgrade.sql"))?;
         self.db
             .execute_batch(include_str!("schema22_downgrade.sql"))?;
         self.db
@@ -161,10 +208,10 @@ mod test {
     #[allow(clippy::assertions_on_constants)]
     fn assert_latest_schema_version() {
         // The wire/on-disk format is still schema 18; local Synapse tables push
-        // the openable max to 22 (see SCHEMA_MAX_VERSION). If this bumps again,
+        // the openable max to 25 (see SCHEMA_MAX_VERSION). If this bumps again,
         // ensure downgrade_to(SchemaVersion::V18) drops any new local table.
         assert_eq!(
-            22, SCHEMA_MAX_VERSION,
+            25, SCHEMA_MAX_VERSION,
             "on bump, update downgrade_to() to drop new local tables and keep V18 the sync format"
         );
     }

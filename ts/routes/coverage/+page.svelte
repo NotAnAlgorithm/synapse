@@ -11,4 +11,4 @@ container. See CoveragePage.svelte for the checker itself.
     import CoveragePage from "./CoveragePage.svelte";
 </script>
 
-<CoveragePage initialSearch="deck:Synapse" />
+<CoveragePage initialSearch="deck:MCAT" />

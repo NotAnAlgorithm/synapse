@@ -266,10 +266,7 @@ mod test {
     #[test]
     fn section_and_tag_parsing() {
         // Canonical `concept::<section>::<category>::<topic>` form.
-        assert_eq!(
-            section_of_concept_tag("concept::BB::1A::amino_acids"),
-            "BB"
-        );
+        assert_eq!(section_of_concept_tag("concept::BB::1A::amino_acids"), "BB");
         assert_eq!(
             category_of_concept_tag("concept::BB::1A::amino_acids"),
             "1A"
@@ -297,7 +294,10 @@ mod test {
     fn concept_ids_are_stable_and_append_only() -> Result<()> {
         let mut col = Collection::new();
         // ver should be at the latest schema, with the concept tables present.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 22);
+        assert_eq!(
+            col.storage.db_scalar::<u8>("select ver from col")?,
+            crate::storage::upgrades::SCHEMA_MAX_VERSION,
+        );
 
         let nt = col.get_notetype_by_name("Basic")?.unwrap();
         let mut note = nt.new_note();
@@ -345,19 +345,16 @@ mod test {
         let mut note = nt.new_note();
         note.set_field(0, "front")?;
         note.set_field(1, "back")?;
-        // Use a spine topic NOT referenced by any seed prerequisite edge, so the
-        // schema-22 seed load has not already created it: adding this note must
-        // create exactly one new concept row.
-        note.tags = vec![
-            "concept::BB::1A::nonenzymatic_protein_function".into(),
-            "unrelated".into(),
-        ];
+        // Use a synthetic concept tag NOT present in the spine, so the schema-22
+        // seed load has not already created it: adding this note must create
+        // exactly one new concept row (robust as the seed graph grows).
+        note.tags = vec!["concept::test::note_only".into(), "unrelated".into()];
         col.add_note(&mut note, DeckId(1))?;
 
         // basic+reversed generates two cards; each maps to the single concept.
         let concept_id = col
             .storage
-            .get_concept_id_by_tag("concept::BB::1A::nonenzymatic_protein_function")?
+            .get_concept_id_by_tag("concept::test::note_only")?
             .unwrap();
         let card_ids = col
             .storage
@@ -368,9 +365,8 @@ mod test {
         expected.sort_unstable();
         assert_eq!(col.storage.all_card_concepts_sorted()?, expected);
 
-        // the note added exactly one new concept
-        // ("concept::BB::1A::nonenzymatic_protein_function"); the non-concept
-        // "unrelated" tag must not create a concept row.
+        // the note added exactly one new concept ("concept::test::note_only");
+        // the non-concept "unrelated" tag must not create a concept row.
         assert_eq!(col.storage.all_concepts()?.len(), baseline_concepts + 1);
         assert!(col.storage.get_concept_id_by_tag("unrelated")?.is_none());
 
@@ -439,7 +435,10 @@ mod test {
             .build()?;
         // ...and reopening runs the schema 19 + 20 + 21 + 22 migrations, which
         // reconstruct it from the surviving `concept::` note tags.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 22);
+        assert_eq!(
+            col.storage.db_scalar::<u8>("select ver from col")?,
+            crate::storage::upgrades::SCHEMA_MAX_VERSION,
+        );
         let after = col.storage.all_card_concepts_sorted()?;
         assert_eq!(after.len(), 1);
         assert_eq!(after[0].0, cid);

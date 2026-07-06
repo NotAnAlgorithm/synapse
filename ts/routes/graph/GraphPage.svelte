@@ -31,6 +31,7 @@ libraries (strict CSP).
     } from "d3";
     import type { Simulation } from "d3";
     import { drag as d3drag } from "d3";
+    import type { SubjectPosition } from "d3";
     import { localizedNumber } from "@tslib/i18n";
     import { select } from "d3";
     import { zoom as d3zoom, zoomIdentity } from "d3";
@@ -53,14 +54,14 @@ libraries (strict CSP).
     } from "./graph";
 
     interface Props {
-        /** Scope filter passed to the backend (e.g. "deck:Synapse").
+        /** Scope filter passed to the backend (e.g. "deck:MCAT").
          * Overridable so this page can be embedded against other scopes. */
         initialSearch?: string;
     }
 
-    const { initialSearch = "deck:Synapse" }: Props = $props();
+    const { initialSearch = "deck:MCAT" }: Props = $props();
 
-    // Scope tracks the prop for now (defaults to the Synapse deck). When a
+    // Scope tracks the prop for now (defaults to the MCAT deck). When a
     // search input is added, promote this to `$state` and bind it.
     const search = $derived(initialSearch);
 
@@ -170,17 +171,17 @@ libraries (strict CSP).
                 "link",
                 forceLink<GraphNode, GraphLink>(links)
                     .id((n) => n.id)
-                    .distance(60)
+                    .distance(72)
                     .strength(0.6),
             )
             // Gentler repulsion with a capped range keeps the graph a compact
             // cluster instead of flinging nodes to the edges of the (now larger,
             // adaptive) canvas.
-            .force("charge", forceManyBody().strength(-180).distanceMax(320))
+            .force("charge", forceManyBody().strength(-220).distanceMax(320))
             .force("center", forceCenter(width / 2, height / 2))
             .force(
                 "collide",
-                forceCollide<GraphNode>().radius((n) => radiusFor(n) + 6),
+                forceCollide<GraphNode>().radius((n) => radiusFor(n) + 10),
             )
             .on("tick", () => {
                 // d3 mutates node.x/y and the hydrated link endpoints in place;
@@ -266,12 +267,22 @@ libraries (strict CSP).
         }
         const sim = simulation;
         const svgNode = svgEl;
-        const dragBehavior = d3drag<SVGGElement, GraphNode>()
+        const dragBehavior = d3drag<SVGGElement, GraphNode, SubjectPosition>()
             // Measure the pointer against the <svg> (screen space) rather than
             // the drag target's transformed parent, so undoing the zoom
             // transform below gives the correct simulation-space position at any
             // zoom level.
             .container(svgNode)
+            // d3-drag reports `event.x/y` relative to the SUBJECT, not the raw
+            // pointer. Report the node in the SAME <svg> (zoomed/panned) space
+            // the pointer is measured in — its on-screen position — so the two
+            // aren't mixed. Reporting the node's raw layout coords here (the
+            // default subject) offsets the grab by the current pan/zoom, making
+            // the node jump when you start dragging after panning.
+            .subject((_event, d) => ({
+                x: transform.applyX(d.x ?? 0),
+                y: transform.applyY(d.y ?? 0),
+            }))
             .on("start", (event, d) => {
                 if (!event.active) {
                     sim.alphaTarget(0.3).restart();
@@ -538,11 +549,7 @@ libraries (strict CSP).
                                         fill={nodeColour(node)}
                                         class="node-circle"
                                     />
-                                    <text
-                                        class="node-label"
-                                        x={radiusFor(node) + 4}
-                                        y="4"
-                                    >
+                                    <text class="node-label">
                                         {conceptLabel(node.id)}
                                     </text>
                                 </g>
@@ -777,6 +784,10 @@ libraries (strict CSP).
         fill: var(--fg);
         pointer-events: none;
         text-transform: capitalize;
+        // Centre the label on the node (was offset to the right), so labels sit
+        // symmetrically and overlap neighbours less.
+        text-anchor: middle;
+        dominant-baseline: central;
         paint-order: stroke;
         stroke: var(--canvas);
         stroke-width: 3px;

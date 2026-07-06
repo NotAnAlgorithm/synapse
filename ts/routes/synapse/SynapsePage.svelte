@@ -41,12 +41,12 @@ Pure presentation over the `conceptMemory` RPC; no other backend calls.
     } from "./memory";
 
     interface Props {
-        /** Scope filter passed to the backend (e.g. "deck:Synapse").
+        /** Scope filter passed to the backend (e.g. "deck:MCAT").
          * Overridable so this page can be embedded against other scopes. */
         initialSearch?: string;
     }
 
-    const { initialSearch = "deck:Synapse" }: Props = $props();
+    const { initialSearch = "deck:MCAT" }: Props = $props();
 
     // For M0 the scope tracks the prop (defaults to the Synapse deck). When a
     // search input is added, promote this to `$state` and bind it.

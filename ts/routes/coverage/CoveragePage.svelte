@@ -25,12 +25,12 @@ Pure presentation over the `conceptCoverage` RPC; no other backend calls.
     import { categoriesBySection, coveragePct, gaps, sectionLabel } from "./coverage";
 
     interface Props {
-        /** Scope filter passed to the backend (e.g. "deck:Synapse").
+        /** Scope filter passed to the backend (e.g. "deck:MCAT").
          * Overridable so this page can be embedded against other scopes. */
         initialSearch?: string;
     }
 
-    const { initialSearch = "deck:Synapse" }: Props = $props();
+    const { initialSearch = "deck:MCAT" }: Props = $props();
 
     // Scope tracks the prop for now (defaults to the Synapse deck). When a
     // search input is added, promote this to `$state` and bind it.

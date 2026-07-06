@@ -1,6 +1,6 @@
 # MCAT Content Outline — Structured Spine (Synapse)
 
-*Derived from AAMC — What's on the MCAT Exam? (official content outline). Extracted 2026-07-03.*
+_Derived from AAMC — What's on the MCAT Exam? (official content outline). Extracted 2026-07-03._
 
 This is the backbone for the Synapse knowledge graph and the AAMC coverage checker. Every card and question the app creates is tagged to a node in this tree (section → foundational concept → content category → topic), plus one of the four reasoning skills below.
 
@@ -10,10 +10,10 @@ This is the backbone for the Synapse knowledge graph and the AAMC coverage check
 
 These cut across all science content. They map directly onto our scoring: Skill 1 is recall (the **Memory** score); Skills 2–4 are application and reasoning (the **Performance** score). Tag every science item with a SIRS skill and the scoring routes itself.
 
-- **SIRS1 — Knowledge of Scientific Concepts and Principles** (→ *memory*): Recognize, identify, recall, or define concepts and their relationships across the natural, behavioral, and social sciences; read them in words, graphs, tables, diagrams, or formulas.
-- **SIRS2 — Scientific Reasoning and Problem-Solving** (→ *performance*): Use scientific knowledge to solve problems: make predictions, evaluate the credibility of explanations, judge cause-and-effect arguments, and draw conclusions from models and observations.
-- **SIRS3 — Reasoning About the Design and Execution of Research** (→ *performance*): Reason about scientific methodology: pose testable hypotheses, evaluate sampling, manipulation and control of variables, measurement, confounds, research limitations, and research ethics.
-- **SIRS4 — Data-Based and Statistical Reasoning** (→ *performance*): Reason with data: interpret tables, graphs, and charts; use central tendency and dispersion; reason about random and systematic error and uncertainty; and draw inferences about associations and causation.
+- **SIRS1 — Knowledge of Scientific Concepts and Principles** (→ _memory_): Recognize, identify, recall, or define concepts and their relationships across the natural, behavioral, and social sciences; read them in words, graphs, tables, diagrams, or formulas.
+- **SIRS2 — Scientific Reasoning and Problem-Solving** (→ _performance_): Use scientific knowledge to solve problems: make predictions, evaluate the credibility of explanations, judge cause-and-effect arguments, and draw conclusions from models and observations.
+- **SIRS3 — Reasoning About the Design and Execution of Research** (→ _performance_): Reason about scientific methodology: pose testable hypotheses, evaluate sampling, manipulation and control of variables, measurement, confounds, research limitations, and research ethics.
+- **SIRS4 — Data-Based and Statistical Reasoning** (→ _performance_): Reason with data: interpret tables, graphs, and charts; use central tendency and dispersion; reason about random and systematic error and uncertainty; and draw inferences about associations and causation.
 
 ## Disciplines
 
@@ -26,7 +26,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC1 (55% of section) — Biomolecules have unique properties that determine how they contribute to the structure and function of cells and how they participate in the processes necessary to maintain life.
 
 #### 1A. Structure and function of proteins and their constituent amino acids
-*Macromolecules formed from amino acids adopt well- defined, three-dimensional structures with chemical properties that are responsible for their participation in virtually every process occurring within and between cells. The three-dimensional structure of proteins is a direct consequence of the nature of the covalently bonded sequence of amino acids, their chemical and physical properties, and the way the whole assembly interacts with water.*
+
+_Macromolecules formed from amino acids adopt well- defined, three-dimensional structures with chemical properties that are responsible for their participation in virtually every process occurring within and between cells. The three-dimensional structure of proteins is a direct consequence of the nature of the covalently bonded sequence of amino acids, their chemical and physical properties, and the way the whole assembly interacts with water._
 
 - **Amino Acids** (BC, OC)
   - Description
@@ -85,7 +86,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Zymogen
 
 #### 1B. Transmission of genetic information from the gene to the protein
-*Biomolecules and biomolecular assemblies interact in specific, highly regulated ways to transfer sequence information between biopolymers in living organisms. By storing and transferring biological information, DNA and RNA enable living organisms to reproduce their complex components from one generation to the next. The nucleotide monomers of these biopolymers, being joined by phosphodiester linkages, form a polynucleotide molecule with a “backbone” composed of repeating sugar-phosphate units and “appendages” of nitrogenous bases. The unique sequence of bases in each gene provides specific information to the cell. DNA molecules are composed of two polynucleotides that spiral around an imaginary axis, forming a double helix. The two polynucleotides are held together by hydrogen bonds between the paired bases and van der Waals interactions between the stacked bases. The pairing between the bases of two polynucleotides is very specific, and its complementarity allows for a precise replication of the DNA molecule. The DNA inherited by an organism leads to specific traits by dictating the synthesis of the biomolecules (RNA molecules and proteins) involved in protein synthesis. While every cell in a multicellular organism inherits the same DNA, its expression is precisely*
+
+_Biomolecules and biomolecular assemblies interact in specific, highly regulated ways to transfer sequence information between biopolymers in living organisms. By storing and transferring biological information, DNA and RNA enable living organisms to reproduce their complex components from one generation to the next. The nucleotide monomers of these biopolymers, being joined by phosphodiester linkages, form a polynucleotide molecule with a “backbone” composed of repeating sugar-phosphate units and “appendages” of nitrogenous bases. The unique sequence of bases in each gene provides specific information to the cell. DNA molecules are composed of two polynucleotides that spiral around an imaginary axis, forming a double helix. The two polynucleotides are held together by hydrogen bonds between the paired bases and van der Waals interactions between the stacked bases. The pairing between the bases of two polynucleotides is very specific, and its complementarity allows for a precise replication of the DNA molecule. The DNA inherited by an organism leads to specific traits by dictating the synthesis of the biomolecules (RNA molecules and proteins) involved in protein synthesis. While every cell in a multicellular organism inherits the same DNA, its expression is precisely_
 
 - **Nucleic Acid Structure and Function** (BIO, BC)
   - Description
@@ -160,7 +162,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Safety and ethics of DNA technology
 
 #### 1C. Transmission of heritable information from generation to generation and the processes that increase genetic diversity
-*The information necessary to direct life functions is contained within discrete nucleotide sequences transmitted from generation to generation by mechanisms that, by nature of their various processes, provide the raw materials for evolution by increasing genetic diversity. Specific sequences of deoxyribonucleic acids store and transfer the heritable information necessary for the continuation of life from one generation to the next. These sequences, called genes ― being part of longer DNA molecules ― are*
+
+_The information necessary to direct life functions is contained within discrete nucleotide sequences transmitted from generation to generation by mechanisms that, by nature of their various processes, provide the raw materials for evolution by increasing genetic diversity. Specific sequences of deoxyribonucleic acids store and transfer the heritable information necessary for the continuation of life from one generation to the next. These sequences, called genes ― being part of longer DNA molecules ― are_
 
 - **Evidence That DNA Is Genetic Material** (BIO)
 - **Mendelian Concepts** (BIO)
@@ -219,7 +222,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Evolutionary time as measured by gradual random changes in genome
 
 #### 1D. Principles of bioenergetics and fuel molecule metabolism
-*Living things harness energy from fuel molecules in a controlled manner that sustains all the processes responsible for maintaining life. Cell maintenance and growth is energetically costly. Cells harness the energy stored in fuel molecules, such as carbohydrates and fatty acids, and convert it into smaller units of chemical potential known as adenosine triphosphate (ATP). The hydrolysis of ATP provides a ready source of energy for cells that can be coupled to other chemical processes that make them thermodynamically favorable. Fuel molecule mobilization, transport, and storage are regulated according to the needs of the organism. The content in this category covers the principles of bioenergetics and fuel molecule catabolism. Details of oxidative phosphorylation including the role of chemiosmotic coupling and biological electron transfer reactions are covered, as are the general features of fatty acid and glucose metabolism. Additionally,*
+
+_Living things harness energy from fuel molecules in a controlled manner that sustains all the processes responsible for maintaining life. Cell maintenance and growth is energetically costly. Cells harness the energy stored in fuel molecules, such as carbohydrates and fatty acids, and convert it into smaller units of chemical potential known as adenosine triphosphate (ATP). The hydrolysis of ATP provides a ready source of energy for cells that can be coupled to other chemical processes that make them thermodynamically favorable. Fuel molecule mobilization, transport, and storage are regulated according to the needs of the organism. The content in this category covers the principles of bioenergetics and fuel molecule catabolism. Details of oxidative phosphorylation including the role of chemiosmotic coupling and biological electron transfer reactions are covered, as are the general features of fatty acid and glucose metabolism. Additionally,_
 
 - **Principles of Bioenergetics** (BC, GC)
   - Bioenergetics/thermodynamics
@@ -302,7 +306,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC2 (20% of section) — Highly organized assemblies of molecules, cells, and organs interact to carry out the functions of living organisms.
 
 #### 2A. Assemblies of molecules, cells, and groups of cells within single cellular and multicellular organisms
-*The processes necessary to maintain life are executed by assemblies of molecules, cells, and groups of cells, all of which are organized into highly specific structures as determined by the unique properties of their component molecules. The processes necessary to maintain life require that cells create and maintain internal environments within the cytoplasm and*
+
+_The processes necessary to maintain life are executed by assemblies of molecules, cells, and groups of cells, all of which are organized into highly specific structures as determined by the unique properties of their component molecules. The processes necessary to maintain life require that cells create and maintain internal environments within the cytoplasm and_
 
 - **Plasma Membrane** (BIO, BC)
   - General function in cell containment
@@ -360,7 +365,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Connective tissue cells
 
 #### 2B. The structure, growth, physiology, and genetics of prokaryotes and viruses
-*The highly organized assembly of molecules that is the cell represents the fundamental unit of structure, function, and organization in all living organisms. In the hierarchy of biological organization, the cell is the simplest collection of matter capable of carrying out the processes that distinguish living organisms. As such, cells have the ability to undergo metabolism; maintain homeostasis, including ionic gradients; grow; move in response to their local environments; respond to stimuli; reproduce; and adapt to their environment in successive generations. Life at cellular levels arises from structural order and its dynamic modulation. This happens in response to signals, thereby reflecting properties that result from individual and interactive features of molecular assemblies, their compartmentalization, and their interaction with environmental signals at many spatial and temporal scales. The content in this category covers the classification, structure, growth, physiology, and genetics of*
+
+_The highly organized assembly of molecules that is the cell represents the fundamental unit of structure, function, and organization in all living organisms. In the hierarchy of biological organization, the cell is the simplest collection of matter capable of carrying out the processes that distinguish living organisms. As such, cells have the ability to undergo metabolism; maintain homeostasis, including ionic gradients; grow; move in response to their local environments; respond to stimuli; reproduce; and adapt to their environment in successive generations. Life at cellular levels arises from structural order and its dynamic modulation. This happens in response to signals, thereby reflecting properties that result from individual and interactive features of molecular assemblies, their compartmentalization, and their interaction with environmental signals at many spatial and temporal scales. The content in this category covers the classification, structure, growth, physiology, and genetics of_
 
 - **Cell Theory** (BIO)
   - History and development
@@ -406,6 +412,7 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Prions and viroids: subviral particles
 
 #### 2C. Processes of cell division, differentiation, and specialization
+
 - **Mitosis** (BIO)
   - Mitotic process: prophase, metaphase, anaphase, telophase, interphase
   - Mitotic structures
@@ -456,7 +463,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC3 (25% of section) — Complex systems of tissues and organs sense the internal and external environments of multicellular organisms, and through integrated functioning, maintain a stable internal environment within an ever-changing external environment.
 
 #### 3A. Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems
-*The nervous and endocrine systems work together to detect external and internal signals, transmit and integrate information, and maintain homeostasis. They do all this by producing appropriate responses to internal and external cues and stressors. The integration of these systems both with one another and with the other organ systems ultimately results in the successful and adaptive behaviors that allow for the propagation of the species. Animals have evolved a nervous system that senses and processes internal and external information used to facilitate and enhance survival, growth, and reproduction. The nervous system interfaces with*
+
+_The nervous and endocrine systems work together to detect external and internal signals, transmit and integrate information, and maintain homeostasis. They do all this by producing appropriate responses to internal and external cues and stressors. The integration of these systems both with one another and with the other organ systems ultimately results in the successful and adaptive behaviors that allow for the propagation of the species. Animals have evolved a nervous system that senses and processes internal and external information used to facilitate and enhance survival, growth, and reproduction. The nervous system interfaces with_
 
 - **Nervous System: Structure and Function** (BIO)
   - Major functions
@@ -509,7 +517,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Regulation by second messengers
 
 #### 3B. Structure and integrative functions of the main organ systems
-*Animals use a number of highly organized and integrated organ systems to carry out the necessary functions associated with maintaining life processes. Within the body, no organ system is an island. Interactions and coordination between organ systems allow organisms to engage in the processes necessary to sustain life. For example, the organs and structures of the circulatory system carry out a number of functions, such as transporting: ▪ Nutrients absorbed in the digestive system. ▪ Gases absorbed from the respiratory system and muscle tissue. ▪ Hormones secreted from the endocrine system. ▪ Blood cells, produced in bone marrow, to and from cells in the body to help fight disease. The content in this category covers the structure and function of the major organ systems of the body, including the respiratory, circulatory, lymphatic, immune, digestive, excretory, reproductive, muscle, skeletal, and skin systems. Also covered in this category is the integration of these systems and their control*
+
+_Animals use a number of highly organized and integrated organ systems to carry out the necessary functions associated with maintaining life processes. Within the body, no organ system is an island. Interactions and coordination between organ systems allow organisms to engage in the processes necessary to sustain life. For example, the organs and structures of the circulatory system carry out a number of functions, such as transporting: ▪ Nutrients absorbed in the digestive system. ▪ Gases absorbed from the respiratory system and muscle tissue. ▪ Hormones secreted from the endocrine system. ▪ Blood cells, produced in bone marrow, to and from cells in the body to help fight disease. The content in this category covers the structure and function of the major organ systems of the body, including the respiratory, circulatory, lymphatic, immune, digestive, excretory, reproductive, muscle, skeletal, and skin systems. Also covered in this category is the integration of these systems and their control_
 
 - **Respiratory System** (BIO)
   - General function
@@ -719,7 +728,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC4 (40% of section) — Complex living organisms transport materials, sense their environment, process signals, and respond to changes using processes understood in terms of physical principles.
 
 #### 4A. Translational motion, forces, work, energy, and equilibrium in living systems
-*The motion of any object can be described in terms of displacement, velocity, and acceleration. Objects accelerate when subjected to external forces and are at equilibrium when the net force and the net torque acting on them are zero. Many aspects of motion can be calculated with the knowledge that energy is conserved, even though it may be converted into different forms. In a living system, the energy for*
+
+_The motion of any object can be described in terms of displacement, velocity, and acceleration. Objects accelerate when subjected to external forces and are at equilibrium when the net force and the net torque acting on them are zero. Many aspects of motion can be calculated with the knowledge that energy is conserved, even though it may be converted into different forms. In a living system, the energy for_
 
 - **Translational Motion** (PHY)
   - Units and dimensions
@@ -753,7 +763,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Transverse and longitudinal waves: wavelength and propagation speed
 
 #### 4B. Importance of fluids for the circulation of blood, gas movement, and gas exchange
-*Fluids are featured in several physiologically important processes, including the circulation of blood, gas movement into and out of the lungs, and gas exchange with the blood. The energetic requirements of fluid dynamics can be modeled using physical equations. A thorough understanding of fluids is necessary to understand the origins of numerous forms of disease.*
+
+_Fluids are featured in several physiologically important processes, including the circulation of blood, gas movement into and out of the lungs, and gas exchange with the blood. The energetic requirements of fluid dynamics can be modeled using physical equations. A thorough understanding of fluids is necessary to understand the origins of numerous forms of disease._
 
 - **Fluids** (PHY)
   - Density, specific gravity
@@ -790,7 +801,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Dalton’s Law relating partial pressure to composition
 
 #### 4C. Electrochemistry and electrical circuits and their elements
-*Charged particles can be set in motion by the action of an applied electrical field and can be used to transmit energy or information over long distances. The energy released during certain chemical reactions can be converted to electrical energy, which can be harnessed to perform other reactions or work. Physiologically, a concentration gradient of charged particles is set up across the cell membrane of neurons at considerable energetic expense. This allows for the*
+
+_Charged particles can be set in motion by the action of an applied electrical field and can be used to transmit energy or information over long distances. The energy released during certain chemical reactions can be converted to electrical energy, which can be harnessed to perform other reactions or work. Physiologically, a concentration gradient of charged particles is set up across the cell membrane of neurons at considerable energetic expense. This allows for the_
 
 - **Electrostatics** (PHY)
   - Charge, conductors, charge conservation
@@ -842,7 +854,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Nodes of Ranvier: propagation of nerve impulse along axon
 
 #### 4D. How light and sound interact with matter
-*Light is a form of electromagnetic radiation — waves of electric and magnetic fields that transmit energy. The behavior of light depends on its frequency (or wavelength). The properties of light are used in the optical elements of the eye to focus rays of light on sensory elements. When light interacts with matter, spectroscopic changes occur that can be used to identify the material on an atomic or molecular level. Differential absorption of electromagnetic radiation can be used to generate images useful in diagnostic medicine. Interference and diffraction of light waves are used in many analytical and diagnostic techniques. The photon model of light explains why electromagnetic radiation of different wavelengths interacts differently with matter. When mechanical energy is transmitted through solids, liquids, and gases, oscillating pressure waves known as “sound” are generated. Sound waves are audible if the sensory elements of the ear vibrate in response to exposure to these vibrations. The detection of reflected sound waves is used in ultrasound imaging. This noninvasive technique readily locates dense subcutaneous structures, such as bone and cartilage, and is very useful in diagnostic medicine. The content in this category covers the properties of both light and sound and how these energy waves interact with matter.*
+
+_Light is a form of electromagnetic radiation — waves of electric and magnetic fields that transmit energy. The behavior of light depends on its frequency (or wavelength). The properties of light are used in the optical elements of the eye to focus rays of light on sensory elements. When light interacts with matter, spectroscopic changes occur that can be used to identify the material on an atomic or molecular level. Differential absorption of electromagnetic radiation can be used to generate images useful in diagnostic medicine. Interference and diffraction of light waves are used in many analytical and diagnostic techniques. The photon model of light explains why electromagnetic radiation of different wavelengths interacts differently with matter. When mechanical energy is transmitted through solids, liquids, and gases, oscillating pressure waves known as “sound” are generated. Sound waves are audible if the sensory elements of the ear vibrate in response to exposure to these vibrations. The detection of reflected sound waves is used in ultrasound imaging. This noninvasive technique readily locates dense subcutaneous structures, such as bone and cartilage, and is very useful in diagnostic medicine. The content in this category covers the properties of both light and sound and how these energy waves interact with matter._
 
 - **Sound** (PHY)
   - Production of sound
@@ -895,7 +908,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Optical Instruments, including the human eye
 
 #### 4E. Atoms, nuclear decay, electronic structure, and atomic chemical behavior
-*Atoms are classified by their atomic number: the number of protons in the atomic nucleus, which also includes neutrons. Chemical interactions between atoms are the result of electrostatic forces involving the electrons and the nuclei. Because neutrons are uncharged, they do not dramatically affect the chemistry of any particular type of atom, but they do affect the stability of the nucleus itself. When a nucleus is unstable, decay results from one of several different processes, which are random but occur at well-characterized average rates. The products of nuclear decay (alpha, beta, and gamma rays) can interact with living tissue, breaking chemical bonds and ionizing atoms and molecules in the process. The electronic structure of an atom is responsible for its chemical and physical properties. Only discrete energy levels are allowed for electrons. These levels are described individually by quantum numbers. Since the outermost, or valence, electrons are responsible for the strongest chemical interactions, a description of these electrons alone is a good first approximation to describe the behavior of any particular type of atom. Mass spectrometry is an analytical tool that allows characterization of atoms or molecules based on well- recognized fragmentation patterns and the charge-to- mass ratio (m/z) of ions generated in the gas phase. The content in this category covers atomic structure, nuclear decay, electronic structure, and the periodic nature of atomic chemical behavior.*
+
+_Atoms are classified by their atomic number: the number of protons in the atomic nucleus, which also includes neutrons. Chemical interactions between atoms are the result of electrostatic forces involving the electrons and the nuclei. Because neutrons are uncharged, they do not dramatically affect the chemistry of any particular type of atom, but they do affect the stability of the nucleus itself. When a nucleus is unstable, decay results from one of several different processes, which are random but occur at well-characterized average rates. The products of nuclear decay (alpha, beta, and gamma rays) can interact with living tissue, breaking chemical bonds and ionizing atoms and molecules in the process. The electronic structure of an atom is responsible for its chemical and physical properties. Only discrete energy levels are allowed for electrons. These levels are described individually by quantum numbers. Since the outermost, or valence, electrons are responsible for the strongest chemical interactions, a description of these electrons alone is a good first approximation to describe the behavior of any particular type of atom. Mass spectrometry is an analytical tool that allows characterization of atoms or molecules based on well- recognized fragmentation patterns and the charge-to- mass ratio (m/z) of ions generated in the gas phase. The content in this category covers atomic structure, nuclear decay, electronic structure, and the periodic nature of atomic chemical behavior._
 
 - **Atomic Nucleus** (PHY, GC)
   - Atomic number, atomic weight
@@ -959,7 +973,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC5 (60% of section) — The principles that govern chemical interactions and reactions form the basis for a broader understanding of the molecular dynamics of living systems.
 
 #### 5A. Unique nature of water and its solutions
-*To fully understand the complex and dynamic nature of living systems, it is first necessary to understand the unique nature of water and its solutions. The unique properties of water allow it to strongly interact with and mobilize many types of solutes, including ions. Water is also unique in its ability to absorb energy and buffer living systems from the chemical changes necessary to sustain life. The content in this category covers the nature of solutions, solubility, acids, bases, and buffers.*
+
+_To fully understand the complex and dynamic nature of living systems, it is first necessary to understand the unique nature of water and its solutions. The unique properties of water allow it to strongly interact with and mobilize many types of solutes, including ions. Water is also unique in its ability to absorb energy and buffer living systems from the chemical changes necessary to sustain life. The content in this category covers the nature of solutions, solubility, acids, bases, and buffers._
 
 - **Acid-Base Equilibria** (GC, BC)
   - Brønsted-Lowry definition of acid, base
@@ -993,7 +1008,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Redox titration
 
 #### 5B. Nature of molecules and intermolecular interactions
-*Covalent bonding involves the sharing of electrons between atoms. If the result of such interactions is not a network solid, then the covalently bonded substance will be discrete and molecular. The shape of molecules can be predicted based on electrostatic principles and quantum mechanics since only two electrons can occupy the same orbital. Bond polarity (both direction and magnitude) can be predicted based on knowledge of the valence electron structure of the constituent atoms. The strength of intermolecular interactions depends on molecular shape and the polarity of the covalent bonds present. The solubility and other physical properties of molecular substances depend on the strength of intermolecular interactions. The content in this category covers the nature of molecules and includes covalent bonding, molecular structure, nomenclature, and intermolecular interactions.*
+
+_Covalent bonding involves the sharing of electrons between atoms. If the result of such interactions is not a network solid, then the covalently bonded substance will be discrete and molecular. The shape of molecules can be predicted based on electrostatic principles and quantum mechanics since only two electrons can occupy the same orbital. Bond polarity (both direction and magnitude) can be predicted based on knowledge of the valence electron structure of the constituent atoms. The strength of intermolecular interactions depends on molecular shape and the polarity of the covalent bonds present. The solubility and other physical properties of molecular substances depend on the strength of intermolecular interactions. The content in this category covers the nature of molecules and includes covalent bonding, molecular structure, nomenclature, and intermolecular interactions._
 
 - **Covalent Bond** (GC)
   - Lewis electron dot formulas
@@ -1026,7 +1042,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Van der Waals’ Forces (London dispersion forces)
 
 #### 5C. Separation and purification methods
-*Analysis of complex mixtures of substances ― especially biologically relevant materials ― typically requires separation of the components. Many methods have been developed to accomplish this task, and the method used is dependent on the types of substances which comprise the mixture. All these methods rely on the magnification of potential differences in the strength of intermolecular interactions. The content in this category covers separation and purification methods including extraction, liquid and gas chromatography, and electrophoresis.*
+
+_Analysis of complex mixtures of substances ― especially biologically relevant materials ― typically requires separation of the components. Many methods have been developed to accomplish this task, and the method used is dependent on the types of substances which comprise the mixture. All these methods rely on the magnification of potential differences in the strength of intermolecular interactions. The content in this category covers separation and purification methods including extraction, liquid and gas chromatography, and electrophoresis._
 
 - **Separations and Purifications** (OC, BC)
   - Extraction: distribution of solute between two immiscible solvents
@@ -1048,7 +1065,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Racemic mixtures, separation of enantiomers (OC)
 
 #### 5D. Structure, function, and reactivity of biologically relevant molecules
-*The structure of biological molecules forms the basis of their chemical reactions including oligomerization and polymerization. Unique aspects of each type of biological molecule dictate their role in living systems, whether providing structure or information storage or serving as fuel and catalysts. The content in this category covers the structure, function, and reactivity of biologically relevant molecules including the mechanistic considerations that dictate their modes of reactivity.*
+
+_The structure of biological molecules forms the basis of their chemical reactions including oligomerization and polymerization. Unique aspects of each type of biological molecule dictate their role in living systems, whether providing structure or information storage or serving as fuel and catalysts. The content in this category covers the structure, function, and reactivity of biologically relevant molecules including the mechanistic considerations that dictate their modes of reactivity._
 
 - **Nucleotides and Nucleic Acids** (BC, BIO)
   - Nucleotides and nucleosides: composition
@@ -1165,7 +1183,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Biological aromatic heterocycles
 
 #### 5E. Principles of chemical thermodynamics and kinetics
-*The processes that occur in living systems are dynamic, and they follow the principles of chemical thermodynamics and kinetics. The position of chemical equilibrium is dictated by the relative energies of products and reactants. The rate at which chemical equilibrium is attained is dictated by a variety of factors: concentration of reactants, temperature, and the amount of catalyst (if any). Biological systems have evolved to harness energy and use it in very efficient ways to support all processes of life, including homeostasis and anabolism. Biological catalysts, known as enzymes, have evolved that allow all the relevant chemical reactions required to sustain life to occur both rapidly and efficiently and under the narrow set of conditions required. The content in this category covers all principles of chemical thermodynamics and kinetics including enzymatic catalysis.*
+
+_The processes that occur in living systems are dynamic, and they follow the principles of chemical thermodynamics and kinetics. The position of chemical equilibrium is dictated by the relative energies of products and reactants. The rate at which chemical equilibrium is attained is dictated by a variety of factors: concentration of reactants, temperature, and the amount of catalyst (if any). Biological systems have evolved to harness energy and use it in very efficient ways to support all processes of life, including homeostasis and anabolism. Biological catalysts, known as enzymes, have evolved that allow all the relevant chemical reactions required to sustain life to occur both rapidly and efficiently and under the narrow set of conditions required. The content in this category covers all principles of chemical thermodynamics and kinetics including enzymatic catalysis._
 
 - **Enzymes** (BC, BIO)
   - Classification by reaction type
@@ -1243,7 +1262,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC6 (25% of section) — Biological, psychological, and sociocultural factors influence the ways that individuals perceive, think about, and react to the world.
 
 #### 6A. Sensing the environment
-*Psychological, sociocultural, and biological factors affect how we sense and perceive the world. All sensory processing begins with first detecting a stimulus in the environment through sensory cells, receptors, and biological pathways. After collecting sensory information, we then interpret and make sense of it. Although sensation and perception are distinct functions, they are both influenced by psychological, social, and biological factors and thus become almost indistinguishable in practice. This complexity is illuminated by examining human sight, hearing, touch, taste, and smell. The content in this category covers sensation and perception across all human senses.*
+
+_Psychological, sociocultural, and biological factors affect how we sense and perceive the world. All sensory processing begins with first detecting a stimulus in the environment through sensory cells, receptors, and biological pathways. After collecting sensory information, we then interpret and make sense of it. Although sensation and perception are distinct functions, they are both influenced by psychological, social, and biological factors and thus become almost indistinguishable in practice. This complexity is illuminated by examining human sight, hearing, touch, taste, and smell. The content in this category covers sensation and perception across all human senses._
 
 - **Sensory Processing** (PSY, BIO)
   - Sensation
@@ -1280,7 +1300,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Gestalt principles
 
 #### 6B. Making sense of the environment
-*The way we think about the world depends on our awareness, thoughts, knowledge, and memories. It is also influenced by our ability to solve problems, make decisions, form judgments, and communicate. Psychological, sociocultural, and biological influences determine the development and use of these different yet convergent processes. Biological factors underlie the mental processes that create our reality, shape our perception of the world, and influence the way we perceive and react to every aspect of our lives. The content in this category covers critical aspects of cognition ― including consciousness, cognitive development, problem-solving and decision-making, intelligence, memory, and language.*
+
+_The way we think about the world depends on our awareness, thoughts, knowledge, and memories. It is also influenced by our ability to solve problems, make decisions, form judgments, and communicate. Psychological, sociocultural, and biological influences determine the development and use of these different yet convergent processes. Biological factors underlie the mental processes that create our reality, shape our perception of the world, and influence the way we perceive and react to every aspect of our lives. The content in this category covers critical aspects of cognition ― including consciousness, cognitive development, problem-solving and decision-making, intelligence, memory, and language._
 
 - **Attention** (PSY)
   - Selective attention
@@ -1344,7 +1365,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Brain areas that control language and speech (PSY, BIO)
 
 #### 6C. Responding to the world
-*We experience a barrage of environmental stimuli throughout the course of our lives. In many cases, environmental stimuli trigger physiological responses, such as an elevated heart rate, increased perspiration, or heightened feelings of anxiety. How we perceive and interpret these physiological responses is complex and influenced by psychological, sociocultural, and biological factors. Emotional responses, such as feelings of happiness, sadness, anger, or stress, are often born out of our interpretation of this interplay of physiological responses. Our experience with emotions and stress not only affects our behavior, but also shapes our interactions with others. The content in this category covers the basic components and theories of emotion and their underlying psychological, sociocultural, and biological factors. It also addresses stress, stress outcomes, and stress management.*
+
+_We experience a barrage of environmental stimuli throughout the course of our lives. In many cases, environmental stimuli trigger physiological responses, such as an elevated heart rate, increased perspiration, or heightened feelings of anxiety. How we perceive and interpret these physiological responses is complex and influenced by psychological, sociocultural, and biological factors. Emotional responses, such as feelings of happiness, sadness, anger, or stress, are often born out of our interpretation of this interplay of physiological responses. Our experience with emotions and stress not only affects our behavior, but also shapes our interactions with others. The content in this category covers the basic components and theories of emotion and their underlying psychological, sociocultural, and biological factors. It also addresses stress, stress outcomes, and stress management._
 
 - **Emotion** (PSY)
   - Three components of emotion (i.e., cognitive, physiological, behavioral)
@@ -1376,7 +1398,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC7 (35% of section) — Biological, psychological, and sociocultural factors influence behavior and behavior change.
 
 #### 7A. Individual influences on behavior
-*A complex interplay of psychological and biological factors shapes behavior. Biological structures and processes serve as the pathways by which bodies carry out activities. They also affect predispositions to behave in certain ways, shape personalities, and influence the likelihood of developing psychological disorders. Psychological factors also affect behavior and, consequently, health and well-being. The content in this category covers biological bases of behavior, including the effect of genetics and how the nervous and endocrine systems affect behavior. It also addresses how personality, psychological disorders, motivation, and attitudes affect behavior. Some of these topics are learned in the context of nonhuman animal species.*
+
+_A complex interplay of psychological and biological factors shapes behavior. Biological structures and processes serve as the pathways by which bodies carry out activities. They also affect predispositions to behave in certain ways, shape personalities, and influence the likelihood of developing psychological disorders. Psychological factors also affect behavior and, consequently, health and well-being. The content in this category covers biological bases of behavior, including the effect of genetics and how the nervous and endocrine systems affect behavior. It also addresses how personality, psychological disorders, motivation, and attitudes affect behavior. Some of these topics are learned in the context of nonhuman animal species._
 
 - **Biological Bases of Behavior** (PSY, BIO)
   - The nervous system
@@ -1459,7 +1482,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Cognitive dissonance theory
 
 #### 7B. Social processes that influence human behavior
-*Many social processes influence human behavior; in fact, the mere presence of other individuals can influence our behavior. Groups and social norms also exert influence over our behavior. Oftentimes, social processes influence our behavior through unwritten rules that define acceptable and unacceptable behavior in society. Our understanding of groups and social norms is learned through the process of socialization. What we learn about the groups and society to which we belong affects our behavior and influences our perceptions and interactions with others. The content in this category covers how the presence of others, group decision-making processes, social norms, and socialization shape our behavior.*
+
+_Many social processes influence human behavior; in fact, the mere presence of other individuals can influence our behavior. Groups and social norms also exert influence over our behavior. Oftentimes, social processes influence our behavior through unwritten rules that define acceptable and unacceptable behavior in society. Our understanding of groups and social norms is learned through the process of socialization. What we learn about the groups and society to which we belong affects our behavior and influences our perceptions and interactions with others. The content in this category covers how the presence of others, group decision-making processes, social norms, and socialization shape our behavior._
 
 - **How the Presence of Others Affects Individual Behavior** (PSY)
   - Social facilitation
@@ -1485,7 +1509,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Agents of socialization (e.g., the family, mass media, peers, workplace)
 
 #### 7C. Attitude and behavior change
-*Learning is a relatively permanent change in behavior brought about by experience. There are a number of different types of learning, which include habituation as well as associative, observational, and social learning. Although people can learn new behaviors and change their attitudes, psychological, environmental, and*
+
+_Learning is a relatively permanent change in behavior brought about by experience. There are a number of different types of learning, which include habituation as well as associative, observational, and social learning. Although people can learn new behaviors and change their attitudes, psychological, environmental, and_
 
 - **Habituation and Dishabituation** (PSY)
 - **Associative Learning** (PSY)
@@ -1518,7 +1543,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC8 (20% of section) — Psychological, sociocultural, and biological factors influence the way we think about ourselves and others, as well as how we interact with others.
 
 #### 8A. Self-identity
-*The self refers to the thoughts and beliefs we have about ourselves. Our notion of the self is complex and multifaceted. It includes gender, racial, and ethnic identities, as well as beliefs about our ability to accomplish tasks and exert control over different situations. Our notion of the self develops over time and is shaped by a variety of factors, including society, culture, individuals and groups, and our unique experiences. How we view ourselves influences our perceptions of others and, by extension, our interactions with them. The content in this category covers the notions of self- concept and identity, along with the role of self- esteem, self-efficacy, and locus of control in the development of self-concept. Identity formation,*
+
+_The self refers to the thoughts and beliefs we have about ourselves. Our notion of the self is complex and multifaceted. It includes gender, racial, and ethnic identities, as well as beliefs about our ability to accomplish tasks and exert control over different situations. Our notion of the self develops over time and is shaped by a variety of factors, including society, culture, individuals and groups, and our unique experiences. How we view ourselves influences our perceptions of others and, by extension, our interactions with them. The content in this category covers the notions of self- concept and identity, along with the role of self- esteem, self-efficacy, and locus of control in the development of self-concept. Identity formation,_
 
 - **control in self-concept and self-identity** (PSY)
   - Different types of identities (e.g., race/ethnicity, gender, age, sexual orientation, class)
@@ -1530,7 +1556,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Influence of culture and socialization on identity formation
 
 #### 8B. Social thinking
-*Social thinking refers to the ways we view others and our environment, as well as how we interpret others’ behaviors. A variety of factors ― personality, environment, and culture ― factor into the beliefs and attitudes we develop. Our beliefs and attitudes about others and the environment also shape the way we interact with each other. To interact with others, we need to interpret different aspects of a situation, including our perception of ourselves, the behavior of others, and the environment. The content in this category covers our attitudes about others and how those attitudes develop, including how perceptions of culture and environment affect attributions of behavior. It also covers how our attitudes about different groups ― prejudice, stereotypes, stigma, and ethnocentrism ― may influence our interactions with group members.*
+
+_Social thinking refers to the ways we view others and our environment, as well as how we interpret others’ behaviors. A variety of factors ― personality, environment, and culture ― factor into the beliefs and attitudes we develop. Our beliefs and attitudes about others and the environment also shape the way we interact with each other. To interact with others, we need to interpret different aspects of a situation, including our perception of ourselves, the behavior of others, and the environment. The content in this category covers our attitudes about others and how those attitudes develop, including how perceptions of culture and environment affect attributions of behavior. It also covers how our attitudes about different groups ― prejudice, stereotypes, stigma, and ethnocentrism ― may influence our interactions with group members._
 
 - **Attributing Behavior to Persons or Situations** (PSY)
   - Attributional processes (e.g., fundamental attribution error, role of culture in attributions)
@@ -1550,7 +1577,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Stereotype threat
 
 #### 8C. Social interactions
-*Humans are social beings by nature. Though the sentiment is simple, the actions and processes underlying and shaping our social interactions are not. The changing nature of social interaction is important for understanding the mechanisms and processes through which people interact with each other, both individually and within groups. A variety of factors ―*
+
+_Humans are social beings by nature. Though the sentiment is simple, the actions and processes underlying and shaping our social interactions are not. The changing nature of social interaction is important for understanding the mechanisms and processes through which people interact with each other, both individually and within groups. A variety of factors ―_
 
 - **Elements of Social Interaction** (PSY, SOC)
   - Status (SOC)
@@ -1600,7 +1628,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC9 (15% of section) — Cultural and social differences influence well-being.
 
 #### 9A. Understanding social structure
-*Social structure organizes all human societies. Elements of social structure include social institutions and culture. These elements are linked in a variety of ways and shape our experiences and interactions with others ― a process that is reciprocal. The content in this category provides a foundation for understanding social structure and the various forms of interactions within and among societies. It includes theoretical approaches to studying society and social groups, specific social institutions relevant to student preparation for medical school, and the construct of culture.*
+
+_Social structure organizes all human societies. Elements of social structure include social institutions and culture. These elements are linked in a variety of ways and shape our experiences and interactions with others ― a process that is reciprocal. The content in this category provides a foundation for understanding social structure and the various forms of interactions within and among societies. It includes theoretical approaches to studying society and social groups, specific social institutions relevant to student preparation for medical school, and the construct of culture._
 
 - **Theoretical Approaches** (SOC)
   - Microsociology vs. macrosociology
@@ -1648,7 +1677,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
   - Transmission and diffusion (SOC)
 
 #### 9B. Demographic characteristics and processes
-*To understand the structure of a society, it is important to understand the demographic characteristics and processes that define it. Knowledge of the demographic structure of societies and an understanding of how societies change help us comprehend the distinct processes and mechanisms through which social interaction occurs.*
+
+_To understand the structure of a society, it is important to understand the demographic characteristics and processes that define it. Knowledge of the demographic structure of societies and an understanding of how societies change help us comprehend the distinct processes and mechanisms through which social interaction occurs._
 
 - **Demographic Structure of Society** (PSY, SOC)
   - Age
@@ -1691,7 +1721,8 @@ These cut across all science content. They map directly onto our scoring: Skill 
 ### FC10 (5% of section) — Social stratification and access to resources influence well-being.
 
 #### 10A. Social inequality
-*Barriers to access to institutional resources exist for the segment of the population that is disenfranchised or lacks power within a given society. Barriers to access might include language, geographic location, socioeconomic status, immigration status, and racial/ethnic identity. Institutionalized racism and discrimination are also factors that prevent some groups from obtaining equal access to resources. An understanding of the barriers to access to institutional resources, informed by perspectives such as social justice, is essential to address health and health care disparities. The content in this category covers spatial inequality, the structure and patterns of social class, and health disparities in relation to class, race/ethnicity, and gender.*
+
+_Barriers to access to institutional resources exist for the segment of the population that is disenfranchised or lacks power within a given society. Barriers to access might include language, geographic location, socioeconomic status, immigration status, and racial/ethnic identity. Institutionalized racism and discrimination are also factors that prevent some groups from obtaining equal access to resources. An understanding of the barriers to access to institutional resources, informed by perspectives such as social justice, is essential to address health and health care disparities. The content in this category covers spatial inequality, the structure and patterns of social class, and health disparities in relation to class, race/ethnicity, and gender._
 
 - **Spatial Inequality** (SOC)
   - Residential segregation
@@ -1723,4 +1754,4 @@ These cut across all science content. They map directly onto our scoring: Skill 
 
 ## Section CARS — Critical Analysis and Reasoning Skills
 
-*Pure reasoning. No memorizable content; entirely passage-based comprehension and analysis. Content generation here means sourcing/authoring passages and reasoning items, not facts.*
+_Pure reasoning. No memorizable content; entirely passage-based comprehension and analysis. Content generation here means sourcing/authoring passages and reasoning items, not facts._

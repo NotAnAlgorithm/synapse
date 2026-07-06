@@ -9,7 +9,7 @@
 //! mastery; EDGES are the directed prerequisite links from the derived
 //! `concept_edges` table (`from` is a prerequisite of `to`).
 //!
-//! `search` scopes the NODES only (e.g. `deck:Synapse`, empty = whole
+//! `search` scopes the NODES only (e.g. `deck:MCAT`, empty = whole
 //! collection). The prerequisite graph itself is global, so an edge is emitted
 //! only when BOTH of its endpoints survived the node scope — this keeps the
 //! rendered graph self-consistent (no dangling edges to concepts the scope

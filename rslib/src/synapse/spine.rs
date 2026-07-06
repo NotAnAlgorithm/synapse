@@ -3,22 +3,23 @@
 
 //! AAMC MCAT content spine — the single source of truth for concept identity.
 //!
-//! Reads the tracked spine at `data/mcat/mcat_content_spine.json` (the same file
-//! the content team and the card assembler use) at compile time via
+//! Reads the tracked spine at `data/mcat/mcat_content_spine.json` (the same
+//! file the content team and the card assembler use) at compile time via
 //! [`include_str!`]. Each topic is assigned a canonical concept tag of the form
-//! `concept::<section>::<category>::<topic>`, e.g. `concept::BB::1A::amino_acids`,
-//! where `<section>` is the AAMC section (BB/CP/PS), `<category>` the
-//! content-category code (1A, 4C, …), and `<topic>` a slug of the topic id
-//! (slugged to match the card assembler, so generated cards and spine-derived
-//! nodes share the exact same tag).
+//! `concept::<section>::<category>::<topic>`, e.g.
+//! `concept::BB::1A::amino_acids`, where `<section>` is the AAMC section
+//! (BB/CP/PS), `<category>` the content-category code (1A, 4C, …), and
+//! `<topic>` a slug of the topic id (slugged to match the card assembler, so
+//! generated cards and spine-derived nodes share the exact same tag).
 //!
 //! Exposed as:
 //! - [`all_topics`] — every topic, used to build the coverage expected-set;
-//! - [`seed_edges`] — the authored prerequisite graph as `(from, to)` tag pairs,
-//!   where `from` is a PREREQUISITE of `to`. Topic `prerequisites` in the JSON
-//!   (if any) are authored as topic ids and resolved to canonical tags here.
-//!   The authored prerequisite edges have been removed pending research, so this
-//!   currently yields no edges; the machinery remains for when they return.
+//! - [`seed_edges`] — the authored prerequisite graph as `(from, to)` tag
+//!   pairs, where `from` is a PREREQUISITE of `to`. Topic `prerequisites` in
+//!   the JSON (if any) are authored as topic ids and resolved to canonical tags
+//!   here. The authored prerequisite edges have been removed pending research,
+//!   so this currently yields no edges; the machinery remains for when they
+//!   return.
 
 use std::collections::HashMap;
 use std::sync::OnceLock;
@@ -111,14 +112,20 @@ fn topic_slug(topic_id: &str) -> String {
     out
 }
 
-/// The canonical concept tag for a topic: `concept::<section>::<category>::<slug>`.
+/// The canonical concept tag for a topic:
+/// `concept::<section>::<category>::<slug>`.
 fn topic_tag(section: &str, category: &str, topic_id: &str) -> String {
-    format!("concept::{}::{}::{}", section, category, topic_slug(topic_id))
+    format!(
+        "concept::{}::{}::{}",
+        section,
+        category,
+        topic_slug(topic_id)
+    )
 }
 
 fn build() -> Vec<Topic> {
-    let raw: RawSpine = serde_json::from_str(SPINE_JSON)
-        .expect("data/mcat/mcat_content_spine.json is valid JSON");
+    let raw: RawSpine =
+        serde_json::from_str(SPINE_JSON).expect("data/mcat/mcat_content_spine.json is valid JSON");
 
     struct Pending {
         section: String,
@@ -176,10 +183,11 @@ pub(crate) fn all_topics() -> &'static [Topic] {
     TOPICS.get_or_init(build)
 }
 
-/// The authored prerequisite graph as `(prerequisite_tag, dependent_tag)` pairs.
+/// The authored prerequisite graph as `(prerequisite_tag, dependent_tag)`
+/// pairs.
 ///
-/// For every topic `T` and every `p` in `T.prerequisites`, yields `(p, T.tag)` —
-/// i.e. `from` = prerequisite, `to` = dependent.
+/// For every topic `T` and every `p` in `T.prerequisites`, yields `(p, T.tag)`
+/// — i.e. `from` = prerequisite, `to` = dependent.
 pub(crate) fn seed_edges() -> Vec<(String, String)> {
     let mut edges = Vec::new();
     for topic in all_topics() {
@@ -223,10 +231,65 @@ mod test {
     }
 
     #[test]
-    fn seed_edges_are_prereq_to_dependent_pairs() {
-        // Authored prerequisite edges have been removed pending research, so the
-        // spine currently declares no prerequisites and seed_edges() is empty.
-        // The resolution machinery is retained for when the edges return.
-        assert!(seed_edges().is_empty());
+    fn seed_edges_are_well_formed() {
+        use std::collections::HashSet;
+
+        // Every edge endpoint must resolve to a real spine topic, and no topic
+        // may be its own prerequisite. Count-agnostic: valid whether the
+        // prerequisite graph is empty (pending research) or fully populated.
+        let tags: HashSet<&str> = all_topics().iter().map(|t| t.tag.as_str()).collect();
+        for (from, to) in seed_edges() {
+            assert_ne!(
+                from, to,
+                "self-edge (topic is its own prerequisite): {from}"
+            );
+            assert!(
+                tags.contains(from.as_str()),
+                "prerequisite tag not in spine: {from}"
+            );
+            assert!(
+                tags.contains(to.as_str()),
+                "dependent tag not in spine: {to}"
+            );
+        }
+    }
+
+    #[test]
+    fn prerequisite_graph_is_acyclic() {
+        use std::collections::HashMap;
+        use std::collections::HashSet;
+        use std::collections::VecDeque;
+
+        // Kahn's algorithm: a directed graph is acyclic iff a topological order
+        // reaches every node. Guards the FIRe invariant that prerequisites form
+        // a DAG (trickle-down credit must not loop).
+        let edges = seed_edges();
+        let mut adj: HashMap<&str, Vec<&str>> = HashMap::new();
+        let mut indeg: HashMap<&str, usize> = HashMap::new();
+        let mut nodes: HashSet<&str> = HashSet::new();
+        for (from, to) in &edges {
+            adj.entry(from.as_str()).or_default().push(to.as_str());
+            *indeg.entry(to.as_str()).or_insert(0) += 1;
+            indeg.entry(from.as_str()).or_insert(0);
+            nodes.insert(from.as_str());
+            nodes.insert(to.as_str());
+        }
+        let mut queue: VecDeque<&str> = indeg
+            .iter()
+            .filter(|(_, &d)| d == 0)
+            .map(|(n, _)| *n)
+            .collect();
+        let mut visited = 0usize;
+        while let Some(n) = queue.pop_front() {
+            visited += 1;
+            for &m in adj.get(n).map(Vec::as_slice).unwrap_or(&[]) {
+                let entry = indeg.get_mut(m).expect("indegree entry exists");
+                *entry -= 1;
+                if *entry == 0 {
+                    queue.push_back(m);
+                }
+            }
+        }
+        assert_eq!(visited, nodes.len(), "prerequisite graph contains a cycle");
     }
 }

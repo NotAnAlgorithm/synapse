@@ -11,4 +11,4 @@ container. See GraphPage.svelte for the visualization itself.
     import GraphPage from "./GraphPage.svelte";
 </script>
 
-<GraphPage initialSearch="deck:Synapse" />
+<GraphPage initialSearch="deck:MCAT" />

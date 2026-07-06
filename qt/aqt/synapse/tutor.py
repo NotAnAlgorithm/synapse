@@ -441,11 +441,7 @@ class SynapseTutorDialog(QDialog):
 
 def _escape_html(text: str) -> str:
     """Minimal HTML escaping for transcript text."""
-    return (
-        text.replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-    )
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 # --- The dismissible at-miss affordance --------------------------------------

@@ -450,7 +450,12 @@ mod test {
 
         // A RECALL (Basic) card for the SAME concept, all Again. It must NOT
         // drag the concept's application accuracy down (F2 excludes recall).
-        let recall_cid = add_card(&mut col, &basic, "recall", &["concept::BB::1A::amino_acids"]);
+        let recall_cid = add_card(
+            &mut col,
+            &basic,
+            "recall",
+            &["concept::BB::1A::amino_acids"],
+        );
         add_review(&mut col, recall_cid, b + 10, false);
         add_review(&mut col, recall_cid, b + 20, false);
 
@@ -478,7 +483,12 @@ mod test {
         let app = application_notetype(&mut col);
 
         let amino = add_card(&mut col, &app, "a", &["concept::BB::1A::amino_acids"]);
-        let kin = add_card(&mut col, &app, "k", &["concept::CP::4A::translational_motion"]);
+        let kin = add_card(
+            &mut col,
+            &app,
+            "k",
+            &["concept::CP::4A::translational_motion"],
+        );
         let b = base_ms();
         for i in 0..3 {
             add_review(&mut col, amino, b + i, true);

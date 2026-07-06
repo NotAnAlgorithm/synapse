@@ -377,6 +377,14 @@ impl<'a> Context<'a> {
         self.prepare_note(&mut note, &ctx.notetype)?;
         self.col.add_note_only_undoable(&mut note)?;
         self.add_cards(&mut cards, &note, ctx.deck_id, ctx.notetype)?;
+        // Synapse: the low-level add path above bypasses the per-note concept
+        // projection refresh that Collection::add_note performs, so refresh it
+        // here now that the note's cards exist. Otherwise imported cards never
+        // enter `card_concepts` and are invisible to the concept
+        // graph/coverage/dashboard. No-op for notes without `concept::` tags.
+        self.col
+            .storage
+            .refresh_card_concepts_for_note(note.id, &note.tags)?;
 
         if ctx.dupes.is_empty() {
             log.new.push(note.into_log_note());
@@ -422,6 +430,11 @@ impl<'a> Context<'a> {
                 update_result.update(DuplicateUpdateResult::Update(dupe));
             }
             self.add_cards(&mut cards, &note, ctx.deck_id, ctx.notetype.clone())?;
+            // Keep the concept projection in step with the updated tags (see
+            // the note in `add_note`).
+            self.col
+                .storage
+                .refresh_card_concepts_for_note(note.id, &note.tags)?;
         }
         update_result.log(log);
 
@@ -729,6 +742,32 @@ mod test {
         let progress = col.new_progress_handler();
         data.import(&mut col, progress).unwrap();
         assert_eq!(col.storage.notes_table_len(), 2);
+    }
+
+    #[test]
+    fn import_refreshes_concept_projection() {
+        // Regression: the importer's low-level add path bypasses the per-note
+        // concept-projection refresh, so imported concept-tagged cards used to
+        // never enter `card_concepts` and were invisible to the concept graph.
+        // They must now appear as nodes.
+        let mut col = Collection::new();
+        let mut data = ForeignData::with_defaults();
+        data.notes.push(ForeignNote {
+            fields: vec![Some("front".into()), Some("back".into())],
+            tags: Some(vec!["concept::BB::1A::amino_acids".to_string()]),
+            ..Default::default()
+        });
+
+        let progress = col.new_progress_handler();
+        data.import(&mut col, progress).unwrap();
+
+        let resp = col.concept_graph("").unwrap();
+        assert!(
+            resp.nodes
+                .iter()
+                .any(|n| n.concept == "concept::BB::1A::amino_acids"),
+            "imported concept-tagged card should appear as a concept-graph node",
+        );
     }
 
     #[test]

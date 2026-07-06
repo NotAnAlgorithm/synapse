@@ -11,4 +11,4 @@ container. See SynapsePage.svelte for the dashboard itself.
     import SynapsePage from "./SynapsePage.svelte";
 </script>
 
-<SynapsePage initialSearch="deck:Synapse" />
+<SynapsePage initialSearch="deck:MCAT" />

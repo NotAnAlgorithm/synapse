@@ -143,56 +143,30 @@ mod test {
     fn seed_edges_load_and_are_queryable() -> Result<()> {
         let col = Collection::new();
 
-        // The production spine seed is now empty (authored edges removed pending
-        // research); build the edges this test needs directly:
-        //   amino_acids -> protein_structure
-        //   amino_acids -> enzyme_structure_and_function
-        //   protein_structure -> enzyme_structure_and_function
-        add_test_concept_edge(
-            &col,
-            "concept::BB::1A::amino_acids",
-            "concept::BB::1A::protein_structure",
+        // The spine's authored prerequisite graph is loaded on migration.
+        assert_eq!(
+            col.storage.all_concept_edges()?.len(),
+            crate::synapse::spine::seed_edges().len()
         );
-        add_test_concept_edge(
-            &col,
-            "concept::BB::1A::amino_acids",
-            "concept::BB::1A::enzyme_structure_and_function",
-        );
-        add_test_concept_edge(
-            &col,
-            "concept::BB::1A::protein_structure",
-            "concept::BB::1A::enzyme_structure_and_function",
-        );
-
-        // The three edges just added are all present.
-        assert_eq!(col.storage.all_concept_edges()?.len(), 3);
 
         let amino = col
             .storage
             .get_concept_id_by_tag("concept::BB::1A::amino_acids")?
             .unwrap();
-        let enzyme = col
-            .storage
-            .get_concept_id_by_tag("concept::BB::1A::enzyme_structure_and_function")?
-            .unwrap();
         let structure = col
             .storage
             .get_concept_id_by_tag("concept::BB::1A::protein_structure")?
             .unwrap();
+        let enzyme = col
+            .storage
+            .get_concept_id_by_tag("concept::BB::1A::enzyme_structure_and_function")?
+            .unwrap();
 
-        // enzyme_structure_and_function depends on both amino_acids and
-        // protein_structure.
-        let prereqs = col.storage.get_prerequisites(enzyme)?;
-        assert!(prereqs.contains(&amino));
-        assert!(prereqs.contains(&structure));
-
-        // amino_acids is a prerequisite of both enzyme_structure_and_function
-        // and protein_structure (its dependents), but has no prerequisites of
-        // its own.
-        assert!(col.storage.get_prerequisites(amino)?.is_empty());
-        let dependents = col.storage.get_dependents(amino)?;
-        assert!(dependents.contains(&enzyme));
-        assert!(dependents.contains(&structure));
+        // Seed edges resolve to queryable prerequisite relations along the chain
+        // amino_acids -> protein_structure -> enzyme_structure_and_function.
+        assert!(col.storage.get_prerequisites(structure)?.contains(&amino));
+        assert!(col.storage.get_prerequisites(enzyme)?.contains(&structure));
+        assert!(col.storage.get_dependents(amino)?.contains(&structure));
 
         Ok(())
     }
@@ -200,10 +174,10 @@ mod test {
     #[test]
     fn rebuild_is_idempotent() -> Result<()> {
         let col = Collection::new();
-        // With an empty seed, rebuild inserts nothing; it must still be a no-op
-        // when run repeatedly.
+        // The seed graph is loaded on migration; rebuilding must be a no-op
+        // (INSERT OR IGNORE), leaving the edge set unchanged.
         let before = col.storage.all_concept_edges()?;
-        assert!(before.is_empty());
+        assert_eq!(before.len(), crate::synapse::spine::seed_edges().len());
         col.storage.rebuild_concept_edges_from_seed()?;
         let after = col.storage.all_concept_edges()?;
         assert_eq!(before, after);

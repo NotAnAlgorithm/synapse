@@ -62,6 +62,10 @@
                                     "id": "1A.amino-acids",
                                     "name": "Amino Acids",
                                     "disciplines": ["BC", "OC"],
+                                    "prerequisites": [
+                                        "5A.acid-base-equilibria",
+                                        "5D.amino-acids-peptides-proteins"
+                                    ],
                                     "subtopics": [
                                         "Description",
                                         "Absolute configuration at the α position",
@@ -79,6 +83,10 @@
                                     "id": "1A.protein-structure",
                                     "name": "Protein Structure",
                                     "disciplines": ["BIO", "BC", "OC"],
+                                    "prerequisites": [
+                                        "1A.amino-acids",
+                                        "5B.liquid-phase-intermolecular-forces"
+                                    ],
                                     "subtopics": [
                                         "Structure",
                                         "1° structure of proteins",
@@ -98,6 +106,7 @@
                                     "id": "1A.nonenzymatic-protein-function",
                                     "name": "Nonenzymatic Protein Function",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": ["1A.protein-structure"],
                                     "subtopics": [
                                         "Binding (BC)",
                                         "Immune system",
@@ -108,6 +117,7 @@
                                     "id": "1A.enzyme-structure-and-function",
                                     "name": "Enzyme Structure and Function",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": ["1A.protein-structure"],
                                     "subtopics": [
                                         "Function of enzymes in catalyzing biological reactions",
                                         "Enzyme classification by reaction type",
@@ -126,6 +136,10 @@
                                     "id": "1A.control-of-enzyme-activity",
                                     "name": "Control of Enzyme Activity",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": [
+                                        "1A.enzyme-structure-and-function",
+                                        "5E.rate-processes-in-chemical-reactions-kinetics-and-"
+                                    ],
                                     "subtopics": [
                                         "Kinetics",
                                         "General (catalysis)",
@@ -155,6 +169,9 @@
                                     "id": "1B.nucleic-acid-structure-and-function",
                                     "name": "Nucleic Acid Structure and Function",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": [
+                                        "5D.nucleotides-and-nucleic-acids"
+                                    ],
                                     "subtopics": [
                                         "Description",
                                         "Nucleotides and nucleosides",
@@ -170,6 +187,9 @@
                                     "id": "1B.dna-replication",
                                     "name": "DNA Replication",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.nucleic-acid-structure-and-function"
+                                    ],
                                     "subtopics": [
                                         "Mechanism of replication: separation of strands, specific coupling of free nucleic acids",
                                         "Semiconservative nature of replication",
@@ -182,6 +202,7 @@
                                     "id": "1B.repair-of-dna",
                                     "name": "Repair of DNA",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": ["1B.dna-replication"],
                                     "subtopics": [
                                         "Repair during replication",
                                         "Repair of mutations"
@@ -191,6 +212,9 @@
                                     "id": "1B.genetic-code",
                                     "name": "Genetic Code",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.nucleic-acid-structure-and-function"
+                                    ],
                                     "subtopics": [
                                         "Central Dogma: DNA → RNA → protein",
                                         "The triplet code",
@@ -205,6 +229,7 @@
                                     "id": "1B.transcription",
                                     "name": "Transcription",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": ["1B.genetic-code"],
                                     "subtopics": [
                                         "Transfer RNA (tRNA); ribosomal RNA (rRNA)",
                                         "Mechanism of transcription",
@@ -217,6 +242,10 @@
                                     "id": "1B.translation",
                                     "name": "Translation",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1A.protein-structure",
+                                        "1B.transcription"
+                                    ],
                                     "subtopics": [
                                         "Roles of mRNA, tRNA, rRNA",
                                         "Role and structure of ribosomes",
@@ -228,6 +257,10 @@
                                     "id": "1B.eukaryotic-chromosome-organization",
                                     "name": "Eukaryotic Chromosome Organization",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.nucleic-acid-structure-and-function",
+                                        "1B.translation"
+                                    ],
                                     "subtopics": [
                                         "Chromosomal proteins",
                                         "Single copy vs. repetitive DNA",
@@ -240,6 +273,7 @@
                                     "id": "1B.control-of-gene-expression-in-prokaryotes",
                                     "name": "Control of Gene Expression in Prokaryotes",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": ["1B.transcription"],
                                     "subtopics": [
                                         "Operon Concept, Jacob-Monod Model",
                                         "Gene repression in bacteria",
@@ -250,6 +284,10 @@
                                     "id": "1B.control-of-gene-expression-in-eukaryotes",
                                     "name": "Control of Gene Expression in Eukaryotes",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.eukaryotic-chromosome-organization",
+                                        "1B.transcription"
+                                    ],
                                     "subtopics": [
                                         "Transcriptional regulation",
                                         "DNA binding proteins, transcription factors",
@@ -265,6 +303,10 @@
                                     "id": "1B.recombinant-dna-and-biotechnology",
                                     "name": "Recombinant DNA and Biotechnology",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.dna-replication",
+                                        "1B.transcription"
+                                    ],
                                     "subtopics": [
                                         "Gene cloning",
                                         "Restriction enzymes",
@@ -294,12 +336,19 @@
                                     "id": "1C.evidence-that-dna-is-genetic-material",
                                     "name": "Evidence That DNA Is Genetic Material",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.nucleic-acid-structure-and-function"
+                                    ],
                                     "subtopics": []
                                 },
                                 {
                                     "id": "1C.mendelian-concepts",
                                     "name": "Mendelian Concepts",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1C.evidence-that-dna-is-genetic-material",
+                                        "1C.meiosis-and-other-factors-affecting-genetic-variab"
+                                    ],
                                     "subtopics": [
                                         "Phenotype and genotype",
                                         "Gene",
@@ -319,6 +368,10 @@
                                     "id": "1C.meiosis-and-other-factors-affecting-genetic-variab",
                                     "name": "Meiosis and Other Factors Affecting Genetic Variability",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.dna-replication",
+                                        "2C.mitosis"
+                                    ],
                                     "subtopics": [
                                         "Significance of meiosis",
                                         "Important differences between meiosis and mitosis",
@@ -348,6 +401,10 @@
                                     "id": "1C.analytic-methods",
                                     "name": "Analytic Methods",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1C.meiosis-and-other-factors-affecting-genetic-variab",
+                                        "1C.mendelian-concepts"
+                                    ],
                                     "subtopics": [
                                         "Hardy-Weinberg Principle",
                                         "Testcross (Backcross; concepts of parental, F1, and F2 generations)",
@@ -359,6 +416,11 @@
                                     "id": "1C.evolution",
                                     "name": "Evolution",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1C.analytic-methods",
+                                        "1C.meiosis-and-other-factors-affecting-genetic-variab",
+                                        "1C.mendelian-concepts"
+                                    ],
                                     "subtopics": [
                                         "Natural selection",
                                         "Fitness concept",
@@ -386,6 +448,10 @@
                                     "id": "1D.principles-of-bioenergetics",
                                     "name": "Principles of Bioenergetics",
                                     "disciplines": ["BC", "GC"],
+                                    "prerequisites": [
+                                        "5E.energy-changes-in-chemical-reactions-thermochemist",
+                                        "5E.rate-processes-in-chemical-reactions-kinetics-and-"
+                                    ],
                                     "subtopics": [
                                         "Bioenergetics/thermodynamics",
                                         "Free energy/K eq",
@@ -409,6 +475,7 @@
                                     "id": "1D.carbohydrates",
                                     "name": "Carbohydrates",
                                     "disciplines": ["BC", "OC"],
+                                    "prerequisites": ["5D.carbohydrates"],
                                     "subtopics": [
                                         "Description",
                                         "Nomenclature and classification, common names",
@@ -425,6 +492,10 @@
                                     "id": "1D.glycolysis-gluconeogenesis-and-the-pentose-phospha",
                                     "name": "Glycolysis, Gluconeogenesis, and the Pentose Phosphate Pathway",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": [
+                                        "1D.carbohydrates",
+                                        "1D.principles-of-bioenergetics"
+                                    ],
                                     "subtopics": [
                                         "Glycolysis (aerobic), substrates and products",
                                         "Feeder pathways: glycogen, starch metabolism",
@@ -438,6 +509,10 @@
                                     "id": "1D.principles-of-metabolic-regulation",
                                     "name": "Principles of Metabolic Regulation",
                                     "disciplines": ["BC"],
+                                    "prerequisites": [
+                                        "1A.control-of-enzyme-activity",
+                                        "1D.glycolysis-gluconeogenesis-and-the-pentose-phospha"
+                                    ],
                                     "subtopics": [
                                         "Regulation of metabolic pathways (BIO, BC)",
                                         "Maintenance of a dynamic steady state",
@@ -452,6 +527,10 @@
                                     "id": "1D.citric-acid-cycle",
                                     "name": "Citric Acid Cycle",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": [
+                                        "1D.glycolysis-gluconeogenesis-and-the-pentose-phospha",
+                                        "1D.principles-of-bioenergetics"
+                                    ],
                                     "subtopics": [
                                         "Acetyl-CoA production (BC)",
                                         "Reactions of the cycle, substrates and products",
@@ -463,6 +542,10 @@
                                     "id": "1D.metabolism-of-fatty-acids-and-proteins",
                                     "name": "Metabolism of Fatty Acids and Proteins",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": [
+                                        "1D.citric-acid-cycle",
+                                        "5D.lipids"
+                                    ],
                                     "subtopics": [
                                         "Description of fatty acids (BC)",
                                         "Digestion, mobilization, and transport of fats",
@@ -478,12 +561,19 @@
                                     "id": "1D.polysaccharides",
                                     "name": "polysaccharides",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1D.metabolism-of-fatty-acids-and-proteins"
+                                    ],
                                     "subtopics": ["Metabolism of proteins (BIO)"]
                                 },
                                 {
                                     "id": "1D.oxidative-phosphorylation",
                                     "name": "Oxidative Phosphorylation",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": [
+                                        "1D.citric-acid-cycle",
+                                        "1D.principles-of-bioenergetics"
+                                    ],
                                     "subtopics": [
                                         "Electron transport chain and oxidative phosphorylation, substrates and products, general features of the pathway",
                                         "Electron transfer in mitochondria",
@@ -501,6 +591,11 @@
                                     "id": "1D.hormonal-regulation-and-integration-of-metabolism",
                                     "name": "Hormonal Regulation and Integration of Metabolism",
                                     "disciplines": ["BC"],
+                                    "prerequisites": [
+                                        "1D.principles-of-metabolic-regulation",
+                                        "3A.endocrine-system-hormones-and-their-sources",
+                                        "3A.endocrine-system-mechanisms-of-hormone-action"
+                                    ],
                                     "subtopics": [
                                         "Higher-level integration of hormone structure and function",
                                         "Tissue-specific metabolism",
@@ -531,6 +626,12 @@
                                     "id": "2A.plasma-membrane",
                                     "name": "Plasma Membrane",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": [
+                                        "1A.protein-structure",
+                                        "3A.lipids",
+                                        "5B.liquid-phase-intermolecular-forces",
+                                        "5D.lipids"
+                                    ],
                                     "subtopics": [
                                         "General function in cell containment",
                                         "Composition of membranes",
@@ -562,6 +663,10 @@
                                     "id": "2A.membrane-bound-organelles-and-defining-characteris",
                                     "name": "Membrane-Bound Organelles and Defining Characteristics of Eukaryotic Cells",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.plasma-membrane",
+                                        "2B.cell-theory"
+                                    ],
                                     "subtopics": [
                                         "Defining characteristics of eukaryotic cells: membrane-bound nucleus, presence of organelles, mitotic division",
                                         "Nucleus",
@@ -587,6 +692,9 @@
                                     "id": "2A.cytoskeleton",
                                     "name": "Cytoskeleton",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.membrane-bound-organelles-and-defining-characteris"
+                                    ],
                                     "subtopics": [
                                         "General function in cell support and movement",
                                         "Microfilaments: composition and role in cleavage and contractility",
@@ -600,6 +708,10 @@
                                     "id": "2A.tissues-formed-from-eukaryotic-cells",
                                     "name": "Tissues Formed From Eukaryotic Cells",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.membrane-bound-organelles-and-defining-characteris",
+                                        "2A.plasma-membrane"
+                                    ],
                                     "subtopics": [
                                         "Epithelial cells",
                                         "Connective tissue cells"
@@ -626,6 +738,7 @@
                                     "id": "2B.classification-and-structure-of-prokaryotic-cells",
                                     "name": "Classification and Structure of Prokaryotic Cells",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": ["2B.cell-theory"],
                                     "subtopics": [
                                         "Prokaryotic domains",
                                         "Archaea",
@@ -644,6 +757,9 @@
                                     "id": "2B.growth-and-physiology-of-prokaryotic-cells",
                                     "name": "Growth and Physiology of Prokaryotic Cells",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2B.classification-and-structure-of-prokaryotic-cells"
+                                    ],
                                     "subtopics": [
                                         "Reproduction by fission",
                                         "High degree of genetic adaptability, acquisition of antibiotic resistance",
@@ -657,6 +773,10 @@
                                     "id": "2B.genetics-of-prokaryotic-cells",
                                     "name": "Genetics of Prokaryotic Cells",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.recombinant-dna-and-biotechnology",
+                                        "2B.classification-and-structure-of-prokaryotic-cells"
+                                    ],
                                     "subtopics": [
                                         "Existence of plasmids, extragenomic DNA",
                                         "Transformation: incorporation into bacterial genome of DNA fragments from external medium",
@@ -668,6 +788,7 @@
                                     "id": "2B.virus-structure",
                                     "name": "Virus Structure",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": ["1B.translation"],
                                     "subtopics": [
                                         "General structural characteristics (nucleic acid and protein, enveloped and nonenveloped)",
                                         "Lack organelles and nucleus",
@@ -680,6 +801,11 @@
                                     "id": "2B.viral-life-cycle",
                                     "name": "Viral Life Cycle",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.dna-replication",
+                                        "1B.translation",
+                                        "2B.virus-structure"
+                                    ],
                                     "subtopics": [
                                         "Self-replicating biological units that must reproduce within specific host cell",
                                         "Generalized phage and animal virus life cycles",
@@ -703,6 +829,10 @@
                                     "id": "2C.mitosis",
                                     "name": "Mitosis",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.cytoskeleton",
+                                        "2A.membrane-bound-organelles-and-defining-characteris"
+                                    ],
                                     "subtopics": [
                                         "Mitotic process: prophase, metaphase, anaphase, telophase, interphase",
                                         "Mitotic structures",
@@ -720,12 +850,20 @@
                                     "id": "2C.biosignaling",
                                     "name": "Biosignaling",
                                     "disciplines": ["BC"],
+                                    "prerequisites": [
+                                        "1A.protein-structure",
+                                        "3A.nernst-equation-biosignaling"
+                                    ],
                                     "subtopics": ["Oncogenes, apoptosis"]
                                 },
                                 {
                                     "id": "2C.reproductive-system",
                                     "name": "Reproductive System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1C.meiosis-and-other-factors-affecting-genetic-variab",
+                                        "2C.mitosis"
+                                    ],
                                     "subtopics": [
                                         "Gametogenesis by meiosis",
                                         "Ovum and sperm",
@@ -739,6 +877,10 @@
                                     "id": "2C.embryogenesis",
                                     "name": "Embryogenesis",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2C.mitosis",
+                                        "2C.reproductive-system"
+                                    ],
                                     "subtopics": [
                                         "Stages of early development (order and general features of each)",
                                         "Fertilization",
@@ -757,6 +899,10 @@
                                     "id": "2C.mechanisms-of-development",
                                     "name": "Mechanisms of Development",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1B.control-of-gene-expression-in-eukaryotes",
+                                        "2C.embryogenesis"
+                                    ],
                                     "subtopics": [
                                         "Cell specialization",
                                         "Determination",
@@ -793,6 +939,7 @@
                                     "id": "3A.nervous-system-structure-and-function",
                                     "name": "Nervous System: Structure and Function",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": ["3A.nerve-cell"],
                                     "subtopics": [
                                         "Major functions",
                                         "High-level control and integration of body systems",
@@ -810,6 +957,13 @@
                                     "id": "3A.nerve-cell",
                                     "name": "Nerve Cell",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.plasma-membrane",
+                                        "3A.electrochemistry",
+                                        "3A.nernst-equation-biosignaling",
+                                        "4C.circuit-elements",
+                                        "4C.electrostatics"
+                                    ],
                                     "subtopics": [
                                         "Cell body: site of nucleus, organelles",
                                         "Dendrites: branched extensions of cell body",
@@ -830,6 +984,10 @@
                                     "id": "3A.electrochemistry",
                                     "name": "Electrochemistry",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "4C.lorentz-force-electrochemistry",
+                                        "5A.acid-base-equilibria"
+                                    ],
                                     "subtopics": [
                                         "Concentration cell: direction of electron flow,"
                                     ]
@@ -838,6 +996,7 @@
                                     "id": "3A.nernst-equation-biosignaling",
                                     "name": "Nernst equation Biosignaling",
                                     "disciplines": ["BC"],
+                                    "prerequisites": ["2A.plasma-membrane"],
                                     "subtopics": [
                                         "Gated ion channels",
                                         "Voltage gated",
@@ -850,6 +1009,10 @@
                                     "id": "3A.lipids",
                                     "name": "Lipids",
                                     "disciplines": ["BC", "OC"],
+                                    "prerequisites": [
+                                        "5D.carboxylic-acids",
+                                        "5D.lipids"
+                                    ],
                                     "subtopics": [
                                         "Description; structure",
                                         "Steroids",
@@ -860,6 +1023,9 @@
                                     "id": "3A.endocrine-system-hormones-and-their-sources",
                                     "name": "Endocrine System: Hormones and Their Sources",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "3A.nervous-system-structure-and-function"
+                                    ],
                                     "subtopics": [
                                         "Function of endocrine system: specific chemical control at cell, tissue, and organ level",
                                         "Definitions of endocrine gland, hormone",
@@ -872,6 +1038,10 @@
                                     "id": "3A.endocrine-system-mechanisms-of-hormone-action",
                                     "name": "Endocrine System: Mechanisms of Hormone Action",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "3A.endocrine-system-hormones-and-their-sources",
+                                        "3A.lipids"
+                                    ],
                                     "subtopics": [
                                         "Cellular mechanisms of hormone action",
                                         "Transport of hormones: blood supply",
@@ -892,6 +1062,10 @@
                                     "id": "3B.respiratory-system",
                                     "name": "Respiratory System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "4B.gas-phase"
+                                    ],
                                     "subtopics": [
                                         "General function",
                                         "Gas exchange, thermoregulation",
@@ -914,6 +1088,12 @@
                                     "id": "3B.2-circulatory-system",
                                     "name": "2 Circulatory System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3A.endocrine-system-mechanisms-of-hormone-action",
+                                        "3A.nervous-system-structure-and-function",
+                                        "4B.fluids"
+                                    ],
                                     "subtopics": [
                                         "Functions: circulation of oxygen, nutrients, hormones, ions and fluids, removal of metabolic waste",
                                         "Role in thermoregulation",
@@ -945,6 +1125,7 @@
                                     "id": "3B.lymphatic-system",
                                     "name": "Lymphatic System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": ["3B.2-circulatory-system"],
                                     "subtopics": [
                                         "Structure of lymphatic system",
                                         "Major functions",
@@ -958,6 +1139,11 @@
                                     "id": "3B.immune-system",
                                     "name": "Immune System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1A.nonenzymatic-protein-function",
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3B.lymphatic-system"
+                                    ],
                                     "subtopics": [
                                         "Innate (nonspecific) vs. adaptive (specific) immunity",
                                         "Adaptive immune system cells",
@@ -984,6 +1170,11 @@
                                     "id": "3B.digestive-system",
                                     "name": "Digestive System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1A.enzyme-structure-and-function",
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3A.endocrine-system-mechanisms-of-hormone-action"
+                                    ],
                                     "subtopics": [
                                         "Ingestion",
                                         "Saliva as lubrication and source of enzymes",
@@ -1026,6 +1217,11 @@
                                     "id": "3B.excretory-system",
                                     "name": "Excretory System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.plasma-membrane",
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3A.endocrine-system-mechanisms-of-hormone-action"
+                                    ],
                                     "subtopics": [
                                         "Roles in homeostasis",
                                         "Blood pressure",
@@ -1056,6 +1252,10 @@
                                     "id": "3B.reproductive-system",
                                     "name": "Reproductive System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2C.reproductive-system",
+                                        "3A.endocrine-system-mechanisms-of-hormone-action"
+                                    ],
                                     "subtopics": [
                                         "Male and female reproductive structures and their functions",
                                         "Gonads",
@@ -1072,6 +1272,11 @@
                                     "id": "3B.muscle-system",
                                     "name": "Muscle System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3A.nerve-cell",
+                                        "3B.specialized-cell-muscle-cell"
+                                    ],
                                     "subtopics": [
                                         "Important functions",
                                         "Support: mobility",
@@ -1097,6 +1302,10 @@
                                     "id": "3B.specialized-cell-muscle-cell",
                                     "name": "Specialized Cell ― Muscle Cell",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "1A.nonenzymatic-protein-function",
+                                        "2A.cytoskeleton"
+                                    ],
                                     "subtopics": [
                                         "Structural characteristics of striated, smooth, and cardiac muscle",
                                         "Abundant mitochondria in red muscle cells: ATP source",
@@ -1110,6 +1319,10 @@
                                     "id": "3B.skeletal-system",
                                     "name": "Skeletal System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3A.endocrine-system-mechanisms-of-hormone-action"
+                                    ],
                                     "subtopics": [
                                         "Functions",
                                         "Structural rigidity and support",
@@ -1131,6 +1344,10 @@
                                     "id": "3B.skin-system",
                                     "name": "Skin System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3A.endocrine-system-mechanisms-of-hormone-action"
+                                    ],
                                     "subtopics": [
                                         "Structure",
                                         "Layer differentiation, cell types",
@@ -1193,6 +1410,7 @@
                                     "id": "4A.force",
                                     "name": "Force",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4A.translational-motion"],
                                     "subtopics": [
                                         "Newton’s First Law, inertia",
                                         "Newton’s Second Law (F = ma)",
@@ -1205,6 +1423,7 @@
                                     "id": "4A.equilibrium",
                                     "name": "Equilibrium",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4A.force"],
                                     "subtopics": [
                                         "Vector analysis of forces acting on a point object",
                                         "Torques, lever arms"
@@ -1214,6 +1433,7 @@
                                     "id": "4A.work",
                                     "name": "Work",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4A.force"],
                                     "subtopics": [
                                         "Work done by a constant force: W = Fd cosθ",
                                         "Mechanical advantage",
@@ -1225,6 +1445,10 @@
                                     "id": "4A.energy-of-point-object-systems",
                                     "name": "Energy of Point Object Systems",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": [
+                                        "4A.translational-motion",
+                                        "4A.work"
+                                    ],
                                     "subtopics": [
                                         "Kinetic Energy: KE = ½mv2; units",
                                         "Potential Energy",
@@ -1238,6 +1462,10 @@
                                     "id": "4A.periodic-motion",
                                     "name": "Periodic Motion",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": [
+                                        "4A.energy-of-point-object-systems",
+                                        "4A.force"
+                                    ],
                                     "subtopics": [
                                         "Amplitude, frequency, phase",
                                         "Transverse and longitudinal waves: wavelength and propagation speed"
@@ -1255,6 +1483,10 @@
                                     "id": "4B.fluids",
                                     "name": "Fluids",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": [
+                                        "4A.energy-of-point-object-systems",
+                                        "4A.force"
+                                    ],
                                     "subtopics": [
                                         "Density, specific gravity",
                                         "Buoyancy, Archimedes’ Principle",
@@ -1273,6 +1505,10 @@
                                     "id": "4B.circulatory-system",
                                     "name": "Circulatory System",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.tissues-formed-from-eukaryotic-cells",
+                                        "3B.2-circulatory-system"
+                                    ],
                                     "subtopics": [
                                         "Arterial and venous systems; pressure and flow characteristics"
                                     ]
@@ -1281,6 +1517,10 @@
                                     "id": "4B.gas-phase",
                                     "name": "Gas Phase",
                                     "disciplines": ["GC", "PHY"],
+                                    "prerequisites": [
+                                        "4A.energy-of-point-object-systems",
+                                        "4E.stoichiometry"
+                                    ],
                                     "subtopics": [
                                         "Absolute temperature, K, Kelvin scale",
                                         "Pressure, simple mercury barometer",
@@ -1299,6 +1539,7 @@
                                     "id": "4B.constant-pressure",
                                     "name": "constant pressure",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4B.gas-phase"],
                                     "subtopics": [
                                         "Boltzmann’s Constant (PHY)",
                                         "Deviation of real gas behavior from Ideal Gas Law",
@@ -1320,6 +1561,10 @@
                                     "id": "4C.electrostatics",
                                     "name": "Electrostatics",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": [
+                                        "4A.energy-of-point-object-systems",
+                                        "4A.force"
+                                    ],
                                     "subtopics": [
                                         "Charge, conductors, charge conservation",
                                         "Insulators",
@@ -1334,6 +1579,7 @@
                                     "id": "4C.circuit-elements",
                                     "name": "Circuit Elements",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4C.electrostatics"],
                                     "subtopics": [
                                         "Current I = ΔQ/Δt, sign conventions, units",
                                         "Electromotive force, voltage",
@@ -1358,6 +1604,7 @@
                                     "id": "4C.magnetism",
                                     "name": "Magnetism",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4A.force", "4C.electrostatics"],
                                     "subtopics": [
                                         "Definition of magnetic field B",
                                         "Motion of charged particles in magnetic fields;"
@@ -1367,6 +1614,11 @@
                                     "id": "4C.lorentz-force-electrochemistry",
                                     "name": "Lorentz force Electrochemistry",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "4C.circuit-elements",
+                                        "4E.stoichiometry",
+                                        "5E.formation"
+                                    ],
                                     "subtopics": [
                                         "Electrolytic cell",
                                         "Electrolysis",
@@ -1389,6 +1641,10 @@
                                     "id": "4C.specialized-cell-nerve-cell",
                                     "name": "Specialized Cell ― Nerve Cell",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "2A.plasma-membrane",
+                                        "3A.nerve-cell"
+                                    ],
                                     "subtopics": [
                                         "Myelin sheath, Schwann cells, insulation of axon",
                                         "Nodes of Ranvier: propagation of nerve impulse along axon"
@@ -1406,6 +1662,7 @@
                                     "id": "4D.sound",
                                     "name": "Sound",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4A.periodic-motion"],
                                     "subtopics": [
                                         "Production of sound",
                                         "Relative speed of sound in solids, liquids, and gases",
@@ -1422,6 +1679,10 @@
                                     "id": "4D.light-electromagnetic-radiation",
                                     "name": "Light, Electromagnetic Radiation",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": [
+                                        "4A.periodic-motion",
+                                        "4C.magnetism"
+                                    ],
                                     "subtopics": [
                                         "Concept of Interference; Young’s double-slit experiment",
                                         "Thin films, diffraction grating, single-slit diffraction",
@@ -1438,6 +1699,11 @@
                                     "id": "4D.molecular-structure-and-absorption-spectra",
                                     "name": "Molecular Structure and Absorption Spectra",
                                     "disciplines": ["OC"],
+                                    "prerequisites": [
+                                        "4D.light-electromagnetic-radiation",
+                                        "5B.covalent-bond",
+                                        "5D.aldehydes-and-ketones"
+                                    ],
                                     "subtopics": [
                                         "Infrared region",
                                         "Intramolecular vibrations and rotations",
@@ -1457,6 +1723,9 @@
                                     "id": "4D.geometrical-optics",
                                     "name": "Geometrical Optics",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": [
+                                        "4D.light-electromagnetic-radiation"
+                                    ],
                                     "subtopics": [
                                         "Reflection from plane surface: angle of incidence equals angle of reflection",
                                         "Refraction, refractive index n; Snell’s law: n sin θ 1 1 = n sin θ 2 2",
@@ -1487,6 +1756,7 @@
                                     "id": "4E.atomic-nucleus",
                                     "name": "Atomic Nucleus",
                                     "disciplines": ["PHY", "GC"],
+                                    "prerequisites": ["4E.electronic-structure"],
                                     "subtopics": [
                                         "Atomic number, atomic weight",
                                         "Neutrons, protons, isotopes",
@@ -1502,6 +1772,9 @@
                                     "id": "4E.electronic-structure",
                                     "name": "Electronic Structure",
                                     "disciplines": ["PHY", "GC"],
+                                    "prerequisites": [
+                                        "4D.light-electromagnetic-radiation"
+                                    ],
                                     "subtopics": [
                                         "Orbital structure of hydrogen atom, principal quantum number n, number of electrons per"
                                     ]
@@ -1510,6 +1783,7 @@
                                     "id": "4E.orbital",
                                     "name": "orbital",
                                     "disciplines": ["GC"],
+                                    "prerequisites": ["4E.electronic-structure"],
                                     "subtopics": [
                                         "Ground state, excited states",
                                         "Absorption and emission line spectra",
@@ -1526,6 +1800,7 @@
                                     "id": "4E.the-periodic-table-classification-of-elements-into",
                                     "name": "The Periodic Table ― Classification of Elements Into Groups by Electronic Structure",
                                     "disciplines": ["GC"],
+                                    "prerequisites": ["4E.orbital"],
                                     "subtopics": [
                                         "Alkali metals",
                                         "Alkaline earth metals: their chemical characteristics",
@@ -1541,6 +1816,10 @@
                                     "id": "4E.the-periodic-table-variations-of-chemical-properti",
                                     "name": "The Periodic Table ― Variations of Chemical Properties with Group and Row",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "4E.orbital",
+                                        "4E.the-periodic-table-classification-of-elements-into"
+                                    ],
                                     "subtopics": [
                                         "Valence electrons",
                                         "First and second ionization energy",
@@ -1560,6 +1839,10 @@
                                     "id": "4E.stoichiometry",
                                     "name": "Stoichiometry",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "4E.the-periodic-table-variations-of-chemical-properti",
+                                        "5B.covalent-bond"
+                                    ],
                                     "subtopics": [
                                         "Molecular weight",
                                         "Empirical vs. molecular formula",
@@ -1597,6 +1880,10 @@
                                     "id": "5A.acid-base-equilibria",
                                     "name": "Acid-Base Equilibria",
                                     "disciplines": ["GC", "BC"],
+                                    "prerequisites": [
+                                        "5A.ions-in-solutions",
+                                        "5E.rate-processes-in-chemical-reactions-kinetics-and-"
+                                    ],
                                     "subtopics": [
                                         "Brønsted-Lowry definition of acid, base",
                                         "Ionization of water",
@@ -1618,6 +1905,7 @@
                                     "id": "5A.ions-in-solutions",
                                     "name": "Ions in Solutions",
                                     "disciplines": ["GC", "BC"],
+                                    "prerequisites": ["4E.stoichiometry"],
                                     "subtopics": [
                                         "Anion, cation: common names, formulas, and charges for familiar ions (e.g., NH + ammonium, 4 PO 3– phosphate, SO 2– sulfate) 4 4",
                                         "Hydration, the hydronium ion"
@@ -1627,6 +1915,11 @@
                                     "id": "5A.solubility",
                                     "name": "Solubility",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "5A.acid-base-equilibria",
+                                        "5A.ions-in-solutions",
+                                        "5E.rate-processes-in-chemical-reactions-kinetics-and-"
+                                    ],
                                     "subtopics": [
                                         "Units of concentration (e.g., molarity)",
                                         "Solubility product constant; the equilibrium expression K sp",
@@ -1640,6 +1933,10 @@
                                     "id": "5A.titration",
                                     "name": "Titration",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "4E.stoichiometry",
+                                        "5A.acid-base-equilibria"
+                                    ],
                                     "subtopics": [
                                         "Indicators",
                                         "Neutralization",
@@ -1659,6 +1956,10 @@
                                     "id": "5B.covalent-bond",
                                     "name": "Covalent Bond",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "4E.electronic-structure",
+                                        "4E.the-periodic-table-variations-of-chemical-properti"
+                                    ],
                                     "subtopics": [
                                         "Lewis electron dot formulas",
                                         "Resonance structures",
@@ -1690,6 +1991,7 @@
                                     "id": "5B.liquid-phase-intermolecular-forces",
                                     "name": "Liquid Phase ― Intermolecular Forces",
                                     "disciplines": ["GC"],
+                                    "prerequisites": ["5B.covalent-bond"],
                                     "subtopics": [
                                         "Hydrogen bonding",
                                         "Dipole Interactions",
@@ -1708,6 +2010,11 @@
                                     "id": "5C.separations-and-purifications",
                                     "name": "Separations and Purifications",
                                     "disciplines": ["OC", "BC"],
+                                    "prerequisites": [
+                                        "1A.amino-acids",
+                                        "5B.covalent-bond",
+                                        "5B.liquid-phase-intermolecular-forces"
+                                    ],
                                     "subtopics": [
                                         "Extraction: distribution of solute between two immiscible solvents",
                                         "Distillation",
@@ -1724,6 +2031,10 @@
                                     "id": "5C.proteins",
                                     "name": "proteins",
                                     "disciplines": ["BC"],
+                                    "prerequisites": [
+                                        "1A.protein-structure",
+                                        "5C.separations-and-purifications"
+                                    ],
                                     "subtopics": [
                                         "Electrophoresis",
                                         "Quantitative analysis",
@@ -1746,6 +2057,7 @@
                                     "id": "5D.nucleotides-and-nucleic-acids",
                                     "name": "Nucleotides and Nucleic Acids",
                                     "disciplines": ["BC", "BIO"],
+                                    "prerequisites": ["5B.covalent-bond"],
                                     "subtopics": [
                                         "Nucleotides and nucleosides: composition",
                                         "Sugar phosphate backbone",
@@ -1759,6 +2071,11 @@
                                     "id": "5D.amino-acids-peptides-proteins",
                                     "name": "Amino Acids, Peptides, Proteins",
                                     "disciplines": ["OC", "BC"],
+                                    "prerequisites": [
+                                        "5A.acid-base-equilibria",
+                                        "5D.aldehydes-and-ketones",
+                                        "5D.carboxylic-acids"
+                                    ],
                                     "subtopics": [
                                         "Amino acids: description",
                                         "Absolute configuration at the α position",
@@ -1784,6 +2101,10 @@
                                     "id": "5D.the-three-dimensional-protein-structure",
                                     "name": "The Three-Dimensional Protein Structure",
                                     "disciplines": ["BC"],
+                                    "prerequisites": [
+                                        "5B.liquid-phase-intermolecular-forces",
+                                        "5D.amino-acids-peptides-proteins"
+                                    ],
                                     "subtopics": [
                                         "Conformational stability",
                                         "Hydrophobic interactions",
@@ -1796,12 +2117,19 @@
                                     "id": "5D.nonenzymatic-protein-function",
                                     "name": "Nonenzymatic Protein Function",
                                     "disciplines": ["BC"],
+                                    "prerequisites": [
+                                        "5D.the-three-dimensional-protein-structure"
+                                    ],
                                     "subtopics": ["Binding", "Immune system", "Motor"]
                                 },
                                 {
                                     "id": "5D.lipids",
                                     "name": "Lipids",
                                     "disciplines": ["BC", "OC"],
+                                    "prerequisites": [
+                                        "5D.acid-derivatives-anhydrides-amides-esters",
+                                        "5D.carboxylic-acids"
+                                    ],
                                     "subtopics": [
                                         "Description, types",
                                         "Storage",
@@ -1821,6 +2149,10 @@
                                     "id": "5D.carbohydrates",
                                     "name": "Carbohydrates",
                                     "disciplines": ["OC"],
+                                    "prerequisites": [
+                                        "5D.alcohols",
+                                        "5D.aldehydes-and-ketones"
+                                    ],
                                     "subtopics": [
                                         "Description",
                                         "Nomenclature and classification, common names",
@@ -1837,6 +2169,11 @@
                                     "id": "5D.aldehydes-and-ketones",
                                     "name": "Aldehydes and Ketones",
                                     "disciplines": ["OC"],
+                                    "prerequisites": [
+                                        "5A.acid-base-equilibria",
+                                        "5B.covalent-bond",
+                                        "5D.alcohols"
+                                    ],
                                     "subtopics": [
                                         "Description",
                                         "Nomenclature",
@@ -1861,6 +2198,11 @@
                                     "id": "5D.alcohols",
                                     "name": "Alcohols",
                                     "disciplines": ["OC"],
+                                    "prerequisites": [
+                                        "5A.acid-base-equilibria",
+                                        "5B.covalent-bond",
+                                        "5B.liquid-phase-intermolecular-forces"
+                                    ],
                                     "subtopics": [
                                         "Description",
                                         "Nomenclature",
@@ -1876,6 +2218,10 @@
                                     "id": "5D.carboxylic-acids",
                                     "name": "Carboxylic Acids",
                                     "disciplines": ["OC"],
+                                    "prerequisites": [
+                                        "5A.acid-base-equilibria",
+                                        "5D.aldehydes-and-ketones"
+                                    ],
                                     "subtopics": [
                                         "Description",
                                         "Nomenclature",
@@ -1892,6 +2238,10 @@
                                     "id": "5D.acid-derivatives-anhydrides-amides-esters",
                                     "name": "Acid Derivatives (Anhydrides, Amides, Esters)",
                                     "disciplines": ["OC"],
+                                    "prerequisites": [
+                                        "5D.aldehydes-and-ketones",
+                                        "5D.carboxylic-acids"
+                                    ],
                                     "subtopics": [
                                         "Description",
                                         "Nomenclature",
@@ -1911,6 +2261,10 @@
                                     "id": "5D.phenols",
                                     "name": "Phenols",
                                     "disciplines": ["OC", "BC"],
+                                    "prerequisites": [
+                                        "5B.covalent-bond",
+                                        "5D.carboxylic-acids"
+                                    ],
                                     "subtopics": [
                                         "Oxidation and reduction (e.g., hydroquinones, ubiquinones): biological 2e– redox centers"
                                     ]
@@ -1919,6 +2273,7 @@
                                     "id": "5D.polycyclic-and-heterocyclic-aromatic-compounds",
                                     "name": "Polycyclic and Heterocyclic Aromatic Compounds",
                                     "disciplines": ["OC", "BC"],
+                                    "prerequisites": ["5B.covalent-bond"],
                                     "subtopics": ["Biological aromatic heterocycles"]
                                 }
                             ]
@@ -1933,6 +2288,10 @@
                                     "id": "5E.enzymes",
                                     "name": "Enzymes",
                                     "disciplines": ["BC", "BIO"],
+                                    "prerequisites": [
+                                        "5D.amino-acids-peptides-proteins",
+                                        "5E.rate-processes-in-chemical-reactions-kinetics-and-"
+                                    ],
                                     "subtopics": [
                                         "Classification by reaction type",
                                         "Mechanism",
@@ -1955,6 +2314,9 @@
                                     "id": "5E.principles-of-bioenergetics",
                                     "name": "Principles of Bioenergetics",
                                     "disciplines": ["BC"],
+                                    "prerequisites": [
+                                        "5E.energy-changes-in-chemical-reactions-thermochemist"
+                                    ],
                                     "subtopics": [
                                         "Bioenergetics/thermodynamics",
                                         "Free energy, K eq",
@@ -1972,6 +2334,11 @@
                                     "id": "5E.energy-changes-in-chemical-reactions-thermochemist",
                                     "name": "Energy Changes in Chemical Reactions ― Thermochemistry, Thermodynamics",
                                     "disciplines": ["GC", "PHY"],
+                                    "prerequisites": [
+                                        "4A.energy-of-point-object-systems",
+                                        "4A.work",
+                                        "4E.stoichiometry"
+                                    ],
                                     "subtopics": [
                                         "Thermodynamic system – state function",
                                         "Zeroth Law – concept of temperature",
@@ -1983,6 +2350,9 @@
                                     "id": "5E.curve",
                                     "name": "curve",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": [
+                                        "5E.energy-changes-in-chemical-reactions-thermochemist"
+                                    ],
                                     "subtopics": [
                                         "Second Law – concept of entropy",
                                         "Entropy as a measure of “disorder”",
@@ -1999,6 +2369,10 @@
                                     "id": "5E.formation",
                                     "name": "formation",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "5E.curve",
+                                        "5E.energy-changes-in-chemical-reactions-thermochemist"
+                                    ],
                                     "subtopics": [
                                         "Free energy: G (GC)",
                                         "Spontaneous reactions and ΔG° (GC)",
@@ -2011,6 +2385,10 @@
                                     "id": "5E.rate-processes-in-chemical-reactions-kinetics-and-",
                                     "name": "Rate Processes in Chemical Reactions ― Kinetics and Equilibrium",
                                     "disciplines": ["GC"],
+                                    "prerequisites": [
+                                        "4E.stoichiometry",
+                                        "5E.formation"
+                                    ],
                                     "subtopics": [
                                         "Reaction rate",
                                         "Dependence of reaction rate on concentration of reactants",
@@ -2060,6 +2438,10 @@
                                     "id": "6A.sensory-processing",
                                     "name": "Sensory Processing",
                                     "disciplines": ["PSY", "BIO"],
+                                    "prerequisites": [
+                                        "3A.nerve-cell",
+                                        "7A.biological-bases-of-behavior"
+                                    ],
                                     "subtopics": [
                                         "Sensation",
                                         "Threshold",
@@ -2076,6 +2458,10 @@
                                     "id": "6A.vision",
                                     "name": "Vision",
                                     "disciplines": ["PSY", "BIO"],
+                                    "prerequisites": [
+                                        "4D.geometrical-optics",
+                                        "6A.sensory-processing"
+                                    ],
                                     "subtopics": [
                                         "Structure and function of the eye",
                                         "Visual processing",
@@ -2088,6 +2474,10 @@
                                     "id": "6A.hearing",
                                     "name": "Hearing",
                                     "disciplines": ["PSY", "BIO"],
+                                    "prerequisites": [
+                                        "4D.sound",
+                                        "6A.sensory-processing"
+                                    ],
                                     "subtopics": [
                                         "Structure and function of the ear",
                                         "Auditory processing (e.g., auditory pathways in the brain)",
@@ -2098,6 +2488,7 @@
                                     "id": "6A.other-senses",
                                     "name": "Other Senses",
                                     "disciplines": ["PSY", "BIO"],
+                                    "prerequisites": ["6A.sensory-processing"],
                                     "subtopics": [
                                         "Somatosensation (e.g., pain perception)",
                                         "Taste (e.g., taste buds (chemoreceptors) that detect specific chemicals)",
@@ -2113,6 +2504,7 @@
                                     "id": "6A.perception",
                                     "name": "Perception",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["6A.sensory-processing"],
                                     "subtopics": [
                                         "Bottom-up/top-down processing",
                                         "Perceptual organization (e.g., depth, form, motion, constancy)",
@@ -2131,6 +2523,7 @@
                                     "id": "6B.attention",
                                     "name": "Attention",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["6A.perception"],
                                     "subtopics": [
                                         "Selective attention",
                                         "Divided attention"
@@ -2140,6 +2533,7 @@
                                     "id": "6B.cognition",
                                     "name": "Cognition",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["6A.perception", "6B.memory"],
                                     "subtopics": [
                                         "Information-processing model",
                                         "Cognitive development",
@@ -2163,6 +2557,9 @@
                                     "id": "6B.consciousness",
                                     "name": "Consciousness",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "7A.biological-bases-of-behavior"
+                                    ],
                                     "subtopics": [
                                         "States of consciousness",
                                         "Alertness (PSY, BIO)",
@@ -2182,6 +2579,10 @@
                                     "id": "6B.memory",
                                     "name": "Memory",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "6B.attention",
+                                        "7C.associative-learning"
+                                    ],
                                     "subtopics": [
                                         "Encoding",
                                         "Process of encoding information",
@@ -2207,6 +2608,10 @@
                                     "id": "6B.and-learning",
                                     "name": "and learning",
                                     "disciplines": ["PSY", "BIO"],
+                                    "prerequisites": [
+                                        "6B.memory",
+                                        "7A.biological-bases-of-behavior"
+                                    ],
                                     "subtopics": [
                                         "Neural plasticity",
                                         "Memory and learning",
@@ -2217,6 +2622,7 @@
                                     "id": "6B.language",
                                     "name": "Language",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["6B.cognition"],
                                     "subtopics": [
                                         "Theories of language development (e.g., learning, nativist, interactionist)",
                                         "Influence of language on cognition",
@@ -2235,6 +2641,10 @@
                                     "id": "6C.emotion",
                                     "name": "Emotion",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "6B.cognition",
+                                        "7A.biological-bases-of-behavior"
+                                    ],
                                     "subtopics": [
                                         "Three components of emotion (i.e., cognitive, physiological, behavioral)",
                                         "Universal emotions (i.e., fear, anger, happiness, surprise, joy, disgust, sadness)",
@@ -2254,6 +2664,7 @@
                                     "id": "6C.stress",
                                     "name": "Stress",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["6B.cognition", "6C.emotion"],
                                     "subtopics": [
                                         "The nature of stress",
                                         "Appraisal",
@@ -2289,6 +2700,11 @@
                                     "id": "7A.biological-bases-of-behavior",
                                     "name": "Biological Bases of Behavior",
                                     "disciplines": ["PSY", "BIO"],
+                                    "prerequisites": [
+                                        "3A.nerve-cell",
+                                        "3A.nervous-system-structure-and-function",
+                                        "7A.the-central-nervous-system"
+                                    ],
                                     "subtopics": [
                                         "The nervous system",
                                         "Neurons (e.g., the reflex arc)",
@@ -2309,6 +2725,9 @@
                                     "id": "7A.behavior",
                                     "name": "behavior",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "7A.biological-bases-of-behavior"
+                                    ],
                                     "subtopics": [
                                         "Influence of neurotransmitters on behavior (PSY)",
                                         "The endocrine system",
@@ -2332,6 +2751,11 @@
                                     "id": "7A.personality",
                                     "name": "Personality",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "6B.cognition",
+                                        "7A.biological-bases-of-behavior",
+                                        "7C.associative-learning"
+                                    ],
                                     "subtopics": [
                                         "Theories of personality",
                                         "Psychoanalytic perspective",
@@ -2347,6 +2771,12 @@
                                     "id": "7A.psychological-disorders",
                                     "name": "Psychological Disorders",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "6B.cognition",
+                                        "6C.emotion",
+                                        "6C.stress",
+                                        "7A.biological-bases-of-behavior"
+                                    ],
                                     "subtopics": [
                                         "Understanding psychological disorders",
                                         "Biomedical vs. biopsychosocial approaches",
@@ -2374,12 +2804,19 @@
                                     "id": "7A.the-central-nervous-system",
                                     "name": "the central nervous system",
                                     "disciplines": ["BIO"],
+                                    "prerequisites": [
+                                        "3A.nervous-system-structure-and-function"
+                                    ],
                                     "subtopics": []
                                 },
                                 {
                                     "id": "7A.motivation",
                                     "name": "Motivation",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "6C.emotion",
+                                        "7C.associative-learning"
+                                    ],
                                     "subtopics": [
                                         "Factors that influence motivation",
                                         "Instinct",
@@ -2397,6 +2834,10 @@
                                     "id": "7A.attitudes",
                                     "name": "Attitudes",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "6B.cognition",
+                                        "7C.associative-learning"
+                                    ],
                                     "subtopics": [
                                         "Components of attitudes (i.e., cognitive, affective, behavioral)",
                                         "The link between attitudes and behavior",
@@ -2417,6 +2858,9 @@
                                     "id": "7B.how-the-presence-of-others-affects-individual-beha",
                                     "name": "How the Presence of Others Affects Individual Behavior",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "8C.elements-of-social-interaction"
+                                    ],
                                     "subtopics": [
                                         "Social facilitation",
                                         "Deindividuation",
@@ -2432,6 +2876,9 @@
                                     "id": "7B.group-decision-making-processes",
                                     "name": "Group Decision-Making Processes",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": [
+                                        "7B.how-the-presence-of-others-affects-individual-beha"
+                                    ],
                                     "subtopics": [
                                         "Group polarization (PSY)",
                                         "Groupthink"
@@ -2441,6 +2888,10 @@
                                     "id": "7B.normative-and-nonnormative-behavior",
                                     "name": "Normative and Nonnormative Behavior",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": [
+                                        "7B.socialization",
+                                        "9A.theoretical-approaches"
+                                    ],
                                     "subtopics": [
                                         "Social norms (PSY, SOC)",
                                         "Sanctions (SOC)",
@@ -2455,6 +2906,7 @@
                                     "id": "7B.socialization",
                                     "name": "Socialization",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": ["9A.culture"],
                                     "subtopics": [
                                         "Agents of socialization (e.g., the family, mass media, peers, workplace)"
                                     ]
@@ -2477,6 +2929,10 @@
                                     "id": "7C.associative-learning",
                                     "name": "Associative Learning",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "7A.biological-bases-of-behavior",
+                                        "7C.habituation-and-dishabituation"
+                                    ],
                                     "subtopics": [
                                         "Classical conditioning (PSY, BIO)",
                                         "Neutral, conditioned, and unconditioned stimuli",
@@ -2496,6 +2952,7 @@
                                     "id": "7C.bio-observational-learning",
                                     "name": "BIO) Observational Learning",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["7C.associative-learning"],
                                     "subtopics": [
                                         "Modeling",
                                         "Biological processes that affect observational learning",
@@ -2508,6 +2965,10 @@
                                     "id": "7C.theories-of-attitude-and-behavior-change",
                                     "name": "Theories of Attitude and Behavior Change",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "7A.attitudes",
+                                        "7C.associative-learning"
+                                    ],
                                     "subtopics": [
                                         "Elaboration likelihood model",
                                         "Social cognitive theory",
@@ -2537,6 +2998,10 @@
                                     "id": "8A.control-in-self-concept-and-self-identity",
                                     "name": "control in self-concept and self-identity",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": [
+                                        "7B.socialization",
+                                        "8A.formation-of-identity"
+                                    ],
                                     "subtopics": [
                                         "Different types of identities (e.g., race/ethnicity, gender, age, sexual orientation, class)"
                                     ]
@@ -2545,6 +3010,10 @@
                                     "id": "8A.formation-of-identity",
                                     "name": "Formation of Identity",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": [
+                                        "7B.socialization",
+                                        "8C.elements-of-social-interaction"
+                                    ],
                                     "subtopics": [
                                         "Theories of identity development (e.g., gender, moral, psychosexual, social)",
                                         "Influence of social factors on identity formation",
@@ -2575,6 +3044,10 @@
                                     "id": "8B.prejudice-and-bias",
                                     "name": "Prejudice and Bias",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": [
+                                        "7A.attitudes",
+                                        "8B.attributing-behavior-to-persons-or-situations"
+                                    ],
                                     "subtopics": [
                                         "Processes that contribute to prejudice",
                                         "Power, prestige, and class (SOC)",
@@ -2590,6 +3063,7 @@
                                     "id": "8B.processes-related-to-stereotypes",
                                     "name": "Processes Related to Stereotypes",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["8B.prejudice-and-bias"],
                                     "subtopics": [
                                         "Self-fulfilling prophecy",
                                         "Stereotype threat"
@@ -2607,6 +3081,7 @@
                                     "id": "8C.elements-of-social-interaction",
                                     "name": "Elements of Social Interaction",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": ["7B.socialization", "9A.culture"],
                                     "subtopics": [
                                         "Status (SOC)",
                                         "Types of status (e.g., achieved, ascribed)",
@@ -2635,6 +3110,9 @@
                                     "id": "8C.approach",
                                     "name": "approach)",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": [
+                                        "8C.elements-of-social-interaction"
+                                    ],
                                     "subtopics": [
                                         "Verbal and nonverbal communication",
                                         "Animal signals and communication (PSY, BIO)"
@@ -2644,6 +3122,7 @@
                                     "id": "8C.social-behavior",
                                     "name": "Social Behavior",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["6C.emotion", "7A.motivation"],
                                     "subtopics": [
                                         "Attraction",
                                         "Aggression",
@@ -2662,6 +3141,10 @@
                                     "id": "8C.discrimination",
                                     "name": "Discrimination",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": [
+                                        "8B.prejudice-and-bias",
+                                        "8C.elements-of-social-interaction"
+                                    ],
                                     "subtopics": [
                                         "Individual vs. institutional discrimination (SOC)",
                                         "The relationship between prejudice and discrimination",
@@ -2672,6 +3155,7 @@
                                     "id": "8C.discrimination-content-categories",
                                     "name": "discrimination Content Categories",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": ["8C.discrimination"],
                                     "subtopics": [
                                         "Category 9A focuses on the link between social structures and human interactions.",
                                         "Category 9B focuses on the demographic characteristics and processes that define a society. demographic backgrounds influence their perception of health and disease, the health care team, and therapeutic interventions. With these building blocks, medical students will be able to learn about the ways patients’ social and"
@@ -2711,6 +3195,10 @@
                                     "id": "9A.social-institutions",
                                     "name": "Social Institutions",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": [
+                                        "8C.elements-of-social-interaction",
+                                        "9A.theoretical-approaches"
+                                    ],
                                     "subtopics": [
                                         "Education",
                                         "Hidden curriculum",
@@ -2727,6 +3215,7 @@
                                     "id": "9A.abuse-spousal-abuse",
                                     "name": "abuse, spousal abuse)",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": ["9A.social-institutions"],
                                     "subtopics": [
                                         "Religion",
                                         "Religiosity",
@@ -2748,6 +3237,7 @@
                                     "id": "9A.culture",
                                     "name": "Culture",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": ["9A.theoretical-approaches"],
                                     "subtopics": [
                                         "Elements of culture (e.g., beliefs, language, rituals, symbols, values)",
                                         "Material vs. symbolic culture (SOC)",
@@ -2773,6 +3263,10 @@
                                     "id": "9B.demographic-structure-of-society",
                                     "name": "Demographic Structure of Society",
                                     "disciplines": ["PSY", "SOC"],
+                                    "prerequisites": [
+                                        "9A.social-institutions",
+                                        "9A.theoretical-approaches"
+                                    ],
                                     "subtopics": [
                                         "Age",
                                         "Aging and the life course",
@@ -2796,6 +3290,11 @@
                                     "id": "9B.demographic-shifts-and-social-change",
                                     "name": "Demographic Shifts and Social Change",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": [
+                                        "10A.social-class",
+                                        "9A.social-institutions",
+                                        "9B.demographic-structure-of-society"
+                                    ],
                                     "subtopics": [
                                         "Theories of demographic change (e.g., Malthusian theory and demographic transition)",
                                         "Population growth and decline (e.g., population projections, population pyramids)",
@@ -2838,6 +3337,7 @@
                                     "id": "10A.spatial-inequality",
                                     "name": "Spatial Inequality",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": ["10A.social-class"],
                                     "subtopics": [
                                         "Residential segregation",
                                         "Neighborhood safety and violence",
@@ -2848,6 +3348,10 @@
                                     "id": "10A.social-class",
                                     "name": "Social Class",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": [
+                                        "9A.social-institutions",
+                                        "9A.theoretical-approaches"
+                                    ],
                                     "subtopics": [
                                         "Aspects of social stratification",
                                         "Social class and socioeconomic status",
@@ -2871,6 +3375,10 @@
                                     "id": "10A.health-disparities",
                                     "name": "Health Disparities",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": [
+                                        "10A.social-class",
+                                        "9B.demographic-structure-of-society"
+                                    ],
                                     "subtopics": [
                                         "(e.g., class, gender, and race inequalities in health)"
                                     ]
@@ -2879,6 +3387,10 @@
                                     "id": "10A.health-care-disparities",
                                     "name": "Health Care Disparities",
                                     "disciplines": ["SOC"],
+                                    "prerequisites": [
+                                        "10A.health-disparities",
+                                        "9A.social-institutions"
+                                    ],
                                     "subtopics": [
                                         "(e.g., class, gender, and race inequalities in health care)"
                                     ]

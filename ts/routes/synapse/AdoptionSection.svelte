@@ -29,7 +29,7 @@ whether to mount this section.
     import WithAdoptionStats from "./WithAdoptionStats.svelte";
 
     interface Props {
-        /** Scope filter passed to the backend (e.g. "deck:Synapse"). */
+        /** Scope filter passed to the backend (e.g. "deck:MCAT"). */
         search: string;
     }
 

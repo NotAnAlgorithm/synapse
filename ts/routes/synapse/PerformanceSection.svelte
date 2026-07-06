@@ -36,7 +36,7 @@ Pure presentation over the `conceptPerformance` RPC.
     import WithConceptPerformance from "./WithConceptPerformance.svelte";
 
     interface Props {
-        /** Scope filter passed to the backend (e.g. "deck:Synapse"). */
+        /** Scope filter passed to the backend (e.g. "deck:MCAT"). */
         search: string;
     }
 

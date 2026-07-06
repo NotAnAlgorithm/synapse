@@ -348,7 +348,10 @@ mod test {
         let bundle = &resp.bundles[0];
 
         let focus = bundle.focus.as_ref().expect("focus present");
-        assert_eq!(focus.concept, "concept::BB::1A::enzyme_structure_and_function");
+        assert_eq!(
+            focus.concept,
+            "concept::BB::1A::enzyme_structure_and_function"
+        );
         assert_eq!(focus.section, "BB");
         assert!(focus.has_cards);
         assert_eq!(focus.card_count, 1);

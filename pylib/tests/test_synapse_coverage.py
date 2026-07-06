@@ -48,7 +48,7 @@ def test_coverage_reports_covered_and_gaps() -> None:
     try:
         provision.provision(col)
 
-        resp = col._backend.concept_coverage(search="deck:Synapse")
+        resp = col._backend.concept_coverage(search="deck:MCAT")
 
         # The spine is the expected set, and the demo seeds some of it: 161
         # topics across the 3 AAMC sections (BB/CP/PS) and 31 content categories.

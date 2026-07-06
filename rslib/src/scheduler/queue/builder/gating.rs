@@ -198,11 +198,7 @@ mod test {
 
         let mut prereq_ids = Vec::new();
         for _ in 0..prereq_cards {
-            prereq_ids.push(col.add_tagged_card(
-                &recall,
-                "concept::BB::1A::amino_acids",
-                deck.id,
-            ));
+            prereq_ids.push(col.add_tagged_card(&recall, "concept::BB::1A::amino_acids", deck.id));
         }
         col.add_tagged_card(&application, "concept::BB::1A::protein_structure", deck.id);
         crate::storage::concept::edges::add_test_concept_edge(
