@@ -33,10 +33,12 @@ Non-obvious backend behaviours worth calling out:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 import anki.collection
 from anki import deck_config_pb2
+from anki.collection import ImportCsvRequest
 from anki.decks import DeckConfigId, DeckId, UpdateDeckConfigs
 from anki.models import NotetypeId
 
@@ -492,14 +494,18 @@ def _apply_synapse_config(config: DeckConfig.Config, opts: SynapseOptions) -> No
     switched on) so that re-provisioning with a feature *unchecked* actually
     turns it back off on the preset.
     """
-    # RANDOM gather/sort/review ordering avoids subject-blocking so mixed
-    # concepts interleave. Verify enum names against proto/anki/deck_config.proto.
+    # New cards are introduced in CURRICULUM order: gather by LOWEST_POSITION so
+    # the positions written by Collection.reposition_new_cards_by_curriculum
+    # (prerequisite-depth -> difficulty -> impact) decide which new cards surface
+    # first, building up the graph as foundations are mastered. NO_SORT preserves
+    # that position order; interleave_by_concept (below) still spreads the day's
+    # selected cards across concepts/types for within-session variety, and
+    # review_order stays RANDOM. Verify enum names against
+    # proto/anki/deck_config.proto.
     config.new_card_gather_priority = (
-        _Config.NewCardGatherPriority.NEW_CARD_GATHER_PRIORITY_RANDOM_NOTES
+        _Config.NewCardGatherPriority.NEW_CARD_GATHER_PRIORITY_LOWEST_POSITION
     )
-    config.new_card_sort_order = (
-        _Config.NewCardSortOrder.NEW_CARD_SORT_ORDER_RANDOM_NOTE_THEN_TEMPLATE
-    )
+    config.new_card_sort_order = _Config.NewCardSortOrder.NEW_CARD_SORT_ORDER_NO_SORT
     config.review_order = _Config.ReviewCardOrder.REVIEW_CARD_ORDER_RANDOM
     config.desired_retention = SYNAPSE_DESIRED_RETENTION
     # M1-B: concept + question-type interleaving (spreads consecutive cards
@@ -738,6 +744,44 @@ def seed_item_notes(
     return added
 
 
+# --- Step 5: bundled demo decks (TSV import) ---------------------------------
+
+# The demo decks live under the repo's data/ dir. provision.py is at
+# qt/aqt/synapse/provision.py, so the repo root is parents[3].
+DEMO_CONTENT_DIR = Path(__file__).resolve().parents[3] / "data" / "mcat"
+DEMO_CONTENT_TSVS = ("mcat_demo_cards.tsv", "mcat_practice_questions.tsv")
+
+
+def import_demo_content(col: anki.collection.Collection) -> int:
+    """Import the bundled MCAT demo decks (memorization cards + practice
+    questions) via the TSV importer, when demo content is requested.
+
+    Idempotent: if any demo card is already present (tag ``synapse::demo-content``)
+    it does nothing, so re-provisioning never duplicates. Missing files are
+    skipped so a checkout without the data dir still provisions. Returns the
+    number of card rows imported.
+
+    Each TSV carries a ``#deck column`` (routing rows to MCAT::BB/CP/PS and
+    MCAT::Practice) and ``concept::`` tags, so the Rust import path reorders the
+    imported new cards into curriculum order automatically.
+    """
+    if col.find_cards("tag:synapse::demo-content"):
+        return 0
+    total = 0
+    for name in DEMO_CONTENT_TSVS:
+        path = DEMO_CONTENT_DIR / name
+        if not path.exists():
+            continue
+        metadata = col.get_csv_metadata(str(path), None)
+        col.import_csv(ImportCsvRequest(path=str(path), metadata=metadata))
+        total += sum(
+            1
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line and not line.startswith("#")
+        )
+    return total
+
+
 def is_provisioned(col: anki.collection.Collection) -> bool:
     """True once the Synapse environment exists (gates auto-provision).
 
@@ -834,9 +878,18 @@ def provision_with_options(
         practice_did = practice_deck_id(col)
         notes_added = seed_notes(col, notetype_id, practice_did)
         item_notes_added = seed_item_notes(col, item_notetype_ids, practice_did)
+        # Also import the bundled demo decks (the ~7.8k memorization cards +
+        # ~200 practice questions) so "install demo content" yields a full deck,
+        # not just the handful of hand-seeded notes.
+        demo_cards_imported = import_demo_content(col)
     else:
         notes_added = 0
         item_notes_added = 0
+        demo_cards_imported = 0
+
+    # Make the MCAT deck the current/default deck (replacing whatever small demo
+    # deck was previously selected) so the app opens onto it.
+    col.decks.set_current(deck_id)
 
     # M3-E: the adoption "Effort" panel (points + streak; generic collection
     # config read by stats::adoption).
@@ -862,5 +915,6 @@ def provision_with_options(
         "config_id": int(config_id),
         "notes_added": notes_added,
         "item_notes_added": item_notes_added,
+        "demo_cards_imported": demo_cards_imported,
         "fsrs": opts.enable_fsrs,
     }

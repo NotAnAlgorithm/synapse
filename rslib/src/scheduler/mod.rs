@@ -9,6 +9,7 @@ use crate::prelude::*;
 pub mod answering;
 pub mod bury_and_suspend;
 pub(crate) mod congrats;
+pub(crate) mod curriculum;
 pub(crate) mod filtered;
 pub mod fsrs;
 pub mod governor;

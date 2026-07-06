@@ -42,12 +42,22 @@ impl ForeignData {
             self.update_config(col)?;
             let mut ctx = Context::new(&self, col)?;
             ctx.import_foreign_notetypes(self.notetypes)?;
-            ctx.import_foreign_notes(
+            let log = ctx.import_foreign_notes(
                 self.notes,
                 &self.global_tags,
                 &self.updated_tags,
                 &mut progress,
-            )
+            )?;
+            // Synapse: introduce imported concept-tagged cards in curriculum
+            // order (prerequisite depth -> difficulty -> impact) so a deck
+            // imported at setup builds up basic-first. No-op for non-Synapse
+            // imports (no concept-tagged notes were collected).
+            if !ctx.synapse_card_ids.is_empty() {
+                let ids = std::mem::take(&mut ctx.synapse_card_ids);
+                ctx.col
+                    .reposition_cards_by_curriculum_in_place(&ids, ctx.usn)?;
+            }
+            Ok(log)
         })
     }
 
@@ -81,6 +91,9 @@ struct Context<'a> {
     card_gen_ctxs: HashMap<(NotetypeId, DeckId), CardGenContext<Arc<Notetype>>>,
     existing_checksums: ExistingChecksums,
     existing_guids: HashMap<String, NoteId>,
+    /// Synapse: new-card ids of imported concept-tagged notes, repositioned into
+    /// curriculum order once the import completes (see [`ForeignData::import`]).
+    synapse_card_ids: Vec<CardId>,
 }
 
 struct DeckIdsByNameOrId {
@@ -215,6 +228,7 @@ impl<'a> Context<'a> {
             card_gen_ctxs: HashMap::new(),
             existing_checksums,
             existing_guids,
+            synapse_card_ids: Vec::new(),
         })
     }
 
@@ -385,6 +399,15 @@ impl<'a> Context<'a> {
         self.col
             .storage
             .refresh_card_concepts_for_note(note.id, &note.tags)?;
+        // Synapse: remember this note's new cards so the import can reposition
+        // them into curriculum order at the end (only concept-tagged notes).
+        if note.tags.iter().any(|t| t.starts_with("concept::")) {
+            let ids = self
+                .col
+                .storage
+                .all_card_ids_of_note_in_template_order(note.id)?;
+            self.synapse_card_ids.extend(ids);
+        }
 
         if ctx.dupes.is_empty() {
             log.new.push(note.into_log_note());

@@ -25,19 +25,24 @@ use std::collections::HashMap;
 use super::QueueBuilder;
 use crate::prelude::*;
 
-/// Notetype-name prefix marking an application-style item.
+/// Tags marking a card as an application/practice item — the kind gated behind
+/// prerequisite mastery. Recall cards (which carry `MCAT::difficulty::*`, or no
+/// difficulty tag) are never gated and always flow through.
 ///
-/// This is the same question-type heuristic the interleaving pass uses (see
-/// `builder::interleave::is_application_notetype`). It is replicated here as a
-/// one-liner rather than shared, to keep that module untouched; both derive
-/// from the M1 provisioning convention where application items live under the
-/// `MCAT ` notetype namespace. Keep the two in sync.
-const APPLICATION_NOTETYPE_PREFIX: &str = "MCAT ";
+/// Classifying by TAG rather than notetype is deliberate: recall *and*
+/// application content share the "MCAT Application" notetype in the provisioned
+/// demo, so the notetype name cannot tell them apart. The generation pipeline
+/// tags application questions with `MCAT::practice` + `MCAT::app-difficulty::N`;
+/// recall cards get `MCAT::difficulty::*`. (The interleave pass still uses the
+/// coarser notetype-name heuristic — that only affects cosmetic spreading, not
+/// what is withheld.)
+const APPLICATION_PRACTICE_TAG: &str = "MCAT::practice";
+const APPLICATION_DIFFICULTY_PREFIX: &str = "MCAT::app-difficulty::";
 
-/// Heuristic: application-style notetypes are those whose name begins with
-/// `MCAT `. Everything else (Basic, Cloze, ...) is treated as recall.
-fn is_application_notetype(name: &str) -> bool {
-    name.starts_with(APPLICATION_NOTETYPE_PREFIX)
+/// Whether a note's tags mark it as an application/practice item.
+fn note_is_application(tags: &[String]) -> bool {
+    tags.iter()
+        .any(|t| t == APPLICATION_PRACTICE_TAG || t.starts_with(APPLICATION_DIFFICULTY_PREFIX))
 }
 
 impl QueueBuilder {
@@ -51,12 +56,12 @@ impl QueueBuilder {
         }
 
         // Identify the application-type new cards; only these are gate
-        // candidates. Notetype names are cached so repeated notetypes cost a
-        // single lookup.
-        let mut notetype_is_app: HashMap<NotetypeId, bool> = HashMap::new();
+        // candidates. Classifications are cached by note id so sibling cards
+        // (which share a note) cost a single lookup.
+        let mut note_is_app: HashMap<NoteId, bool> = HashMap::new();
         let mut candidate_card_ids: Vec<CardId> = Vec::new();
         for card in &self.new {
-            if self.new_card_is_application(col, card.note_id, &mut notetype_is_app)? {
+            if self.new_card_is_application(col, card.note_id, &mut note_is_app)? {
                 candidate_card_ids.push(card.id);
             }
         }
@@ -75,29 +80,24 @@ impl QueueBuilder {
         Ok(())
     }
 
-    /// Whether the new card on `note_id` uses an application-style notetype.
+    /// Whether the new card on `note_id` is an application/practice item, per
+    /// its tags. Cached by note id.
     fn new_card_is_application(
         &self,
         col: &mut Collection,
         note_id: NoteId,
-        notetype_is_app: &mut HashMap<NotetypeId, bool>,
+        note_is_app: &mut HashMap<NoteId, bool>,
     ) -> Result<bool> {
-        // A missing note shouldn't happen for a gathered card; treat it as
-        // non-application (never gated) rather than failing the build.
-        let Some(note) = col.storage.get_note_without_fields(note_id)? else {
-            return Ok(false);
-        };
-        let notetype_id = note.notetype_id;
-        if let Some(is_app) = notetype_is_app.get(&notetype_id) {
+        if let Some(is_app) = note_is_app.get(&note_id) {
             return Ok(*is_app);
         }
-        let name = col
-            .storage
-            .get_notetype(notetype_id)?
-            .map(|nt| nt.name)
-            .unwrap_or_default();
-        let is_app = is_application_notetype(&name);
-        notetype_is_app.insert(notetype_id, is_app);
+        // A missing note shouldn't happen for a gathered card; treat it as
+        // non-application (never gated) rather than failing the build.
+        let is_app = match col.storage.get_note_without_fields(note_id)? {
+            Some(note) => note_is_application(&note.tags),
+            None => false,
+        };
+        note_is_app.insert(note_id, is_app);
         Ok(is_app)
     }
 }
@@ -113,13 +113,17 @@ mod test {
     use crate::tests::DeckAdder;
 
     #[test]
-    fn application_notetype_heuristic() {
-        // Mirrors builder::interleave::is_application_notetype's contract.
-        assert!(is_application_notetype("MCAT Application"));
-        assert!(is_application_notetype("MCAT Data Snippet"));
-        assert!(!is_application_notetype("Basic"));
-        assert!(!is_application_notetype("Cloze"));
-        assert!(!is_application_notetype("MCAT")); // no trailing space
+    fn application_tag_heuristic() {
+        // Application items are classified by tag, not notetype.
+        assert!(note_is_application(&["MCAT::practice".to_string()]));
+        assert!(note_is_application(&[
+            "concept::BB::1A::x".to_string(),
+            "MCAT::app-difficulty::2".to_string(),
+        ]));
+        // Recall cards (a difficulty tag, or none) are not application.
+        assert!(!note_is_application(&["MCAT::difficulty::easy".to_string()]));
+        assert!(!note_is_application(&["concept::BB::1A::x".to_string()]));
+        assert!(!note_is_application(&[]));
     }
 
     impl Collection {
@@ -132,11 +136,11 @@ mod test {
             nt
         }
 
-        /// Add one new card tagged `tag`, using `nt`, in `deck`; return its id.
-        fn add_tagged_card(&mut self, nt: &Notetype, tag: &str, deck: DeckId) -> CardId {
+        /// Add one new card with `tags`, using `nt`, in `deck`; return its id.
+        fn add_tagged_card(&mut self, nt: &Notetype, tags: &[&str], deck: DeckId) -> CardId {
             let mut note = nt.new_note();
             note.set_field(0, "q").unwrap();
-            note.tags = vec![tag.to_string()];
+            note.tags = tags.iter().map(|t| t.to_string()).collect();
             self.add_note(&mut note, deck).unwrap();
             self.storage
                 .all_card_ids_of_note_in_template_order(note.id)
@@ -198,9 +202,13 @@ mod test {
 
         let mut prereq_ids = Vec::new();
         for _ in 0..prereq_cards {
-            prereq_ids.push(col.add_tagged_card(&recall, "concept::BB::1A::amino_acids", deck.id));
+            prereq_ids.push(col.add_tagged_card(&recall, &["concept::BB::1A::amino_acids"], deck.id));
         }
-        col.add_tagged_card(&application, "concept::BB::1A::protein_structure", deck.id);
+        col.add_tagged_card(
+            &application,
+            &["concept::BB::1A::protein_structure", "MCAT::app-difficulty::2"],
+            deck.id,
+        );
         crate::storage::concept::edges::add_test_concept_edge(
             col,
             "concept::BB::1A::amino_acids",
@@ -240,8 +248,12 @@ mod test {
         let recall = col.add_gating_notetype("Basic Recall");
         let application = col.add_gating_notetype("MCAT Application");
         // Unmastered prerequisite present...
-        col.add_tagged_card(&recall, "concept::BB::1A::amino_acids", deck.id);
-        col.add_tagged_card(&application, "concept::BB::1A::protein_structure", deck.id);
+        col.add_tagged_card(&recall, &["concept::BB::1A::amino_acids"], deck.id);
+        col.add_tagged_card(
+            &application,
+            &["concept::BB::1A::protein_structure", "MCAT::app-difficulty::2"],
+            deck.id,
+        );
         // ...but with gating off the application card still appears.
         assert_eq!(col.queue_application_card_count(deck.id), 1);
         Ok(())

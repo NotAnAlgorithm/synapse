@@ -213,9 +213,11 @@ class SynapseSetupDialog(QDialog):
         def on_success(summary: dict[str, Any]) -> None:
             added = summary.get("notes_added", 0)
             item_added = summary.get("item_notes_added", 0)
+            imported = summary.get("demo_cards_imported", 0)
+            extra = f" + {imported} imported card(s)" if imported else ""
             tooltip(
                 f"Synapse ready — features applied, "
-                f"{added + item_added} demo note(s) added",
+                f"{added + item_added} demo note(s) added{extra}",
                 parent=mw,
             )
             # Reflect new deck / notetypes / config in the main window.

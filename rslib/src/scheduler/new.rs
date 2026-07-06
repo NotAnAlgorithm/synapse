@@ -225,7 +225,7 @@ impl Collection {
         })
     }
 
-    fn sort_cards_inner(
+    pub(crate) fn sort_cards_inner(
         &mut self,
         cids: &[CardId],
         starting_from: u32,
