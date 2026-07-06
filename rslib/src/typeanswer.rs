@@ -55,7 +55,8 @@ trait DiffTrait {
 
     // Entry Point
     fn to_html(&self) -> String {
-        if self.get_typed() == self.get_expected() {
+        // A case-only difference counts as correct (see fold_case).
+        if fold_case(self.get_typed()) == fold_case(self.get_expected()) {
             format_typeans!(format!(
                 "<span class=typeGood>{}</span>",
                 htmlescape::encode_minimal(&self.get_expected_original())
@@ -72,13 +73,20 @@ trait DiffTrait {
     }
 
     fn to_tokens(&self) -> DiffTokens {
-        let mut matcher = SequenceMatcher::new(self.get_typed(), self.get_expected());
+        let typed = self.get_typed();
+        let expected = self.get_expected();
+        // Diff case-insensitively so the right letters in a different case are
+        // not flagged as wrong, but slice the ORIGINAL characters for display.
+        // fold_case is 1:1, so opcode indices stay valid for the un-folded arrays.
+        let typed_fold = fold_case(typed);
+        let expected_fold = fold_case(expected);
+        let mut matcher = SequenceMatcher::new(typed_fold.as_slice(), expected_fold.as_slice());
         let mut typed_tokens = Vec::new();
         let mut expected_tokens = Vec::new();
 
         for opcode in matcher.get_opcodes() {
-            let typed_slice = slice(self.get_typed(), opcode.first_start, opcode.first_end);
-            let expected_slice = slice(self.get_expected(), opcode.second_start, opcode.second_end);
+            let typed_slice = slice(typed, opcode.first_start, opcode.first_end);
+            let expected_slice = slice(expected, opcode.second_start, opcode.second_end);
 
             match opcode.tag.as_str() {
                 "equal" => {
@@ -115,6 +123,17 @@ fn normalize(string: &str) -> Vec<char> {
 
 fn slice(chars: &[char], start: usize, end: usize) -> String {
     chars[start..end].iter().collect()
+}
+
+/// Lowercase each character to a single representative so the diff treats a
+/// case-only difference as a match, while the original characters are still
+/// what gets rendered. Using the first char of the Unicode lowercase mapping
+/// keeps this 1:1, so indices stay aligned with the un-folded arrays.
+fn fold_case(chars: &[char]) -> Vec<char> {
+    chars
+        .iter()
+        .map(|c| c.to_lowercase().next().unwrap_or(*c))
+        .collect()
 }
 
 fn strip_expected(expected: &str) -> String {
@@ -301,11 +320,13 @@ mod test {
     fn tokens() {
         let ctx = Diff::new("¿Y ahora qué vamos a hacer?", "y ahora qe vamosa hacer");
         let output = ctx.to_tokens();
+        // Case-insensitive: typed "y" matches expected "Y", so only "¿" is
+        // inserted (not "¿Y") and the matched run reads as good.
         assert_eq!(
             output.typed_tokens,
             vec![
-                bad("y"),
-                good(" ahora q"),
+                missing("-"),
+                good("y ahora q"),
                 bad("e"),
                 good(" vamos"),
                 missing("-"),
@@ -316,8 +337,8 @@ mod test {
         assert_eq!(
             output.expected_tokens,
             vec![
-                missing("¿Y"),
-                good(" ahora q"),
+                missing("¿"),
+                good("Y ahora q"),
                 missing("ué"),
                 good(" vamos"),
                 missing(" "),
@@ -373,6 +394,26 @@ mod test {
             ),
         );
         ctx.to_tokens();
+    }
+
+    #[test]
+    fn case_only_difference_is_correct() {
+        // Typing the right letters in a different case must not read as wrong.
+        assert_eq!(
+            Diff::new("Positive", "positive").to_html(),
+            "<code id=typeans><span class=typeGood>Positive</span></code>"
+        );
+        assert_eq!(
+            compare_answer("ATP", "atp", true),
+            "<code id=typeans><span class=typeGood>ATP</span></code>"
+        );
+        // A genuine error is still flagged; the case-matching letters stay good.
+        let ctx = Diff::new("Km", "kn");
+        assert_eq!(ctx.to_tokens().typed_tokens, vec![good("k"), bad("n")]);
+        assert_eq!(
+            ctx.to_tokens().expected_tokens,
+            vec![good("K"), missing("m")]
+        );
     }
 
     #[test]
