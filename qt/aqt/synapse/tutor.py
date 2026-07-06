@@ -1,13 +1,15 @@
 # Copyright: Ankitects Pty Ltd and contributors
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
-"""State-grounded Socratic tutor (PRD C2).
+"""State-grounded conversational Socratic tutor (PRD C2).
 
 When a student answers an MCAT-family item *Again* (ease 1), we treat the miss
 as a knowledge gap and *proactively but unobtrusively* offer a Socratic tutor
 grounded in (a) the item's verified ``Explanation`` and (b) the student's
-per-concept mastery map. The tutor never reveals the answer; it surfaces the
-weak *prerequisite* behind the mistake (see notes/M3_tutor_design.md §1, §3, §4).
+per-concept mastery map. The tutor is a real, multi-turn conversation: the
+student can ask follow-up questions and clarifications, and the tutor answers
+using the prior conversation *and* the live card state (whether the answer side
+has been flipped/revealed in the reviewer). See notes/M3_tutor_design.md §1, §3.
 
 Design constraints (M2 §1-2, M3 §5.1 "degrade cleanly"):
 
@@ -15,18 +17,21 @@ Design constraints (M2 §1-2, M3 §5.1 "degrade cleanly"):
   student-state bundle from local read-models (``concept_mastery`` RPC + the
   note's ``Explanation`` field) and POSTs it to the hosted service over HTTPS
   via :mod:`aqt.synapse.service_client`.
+* The service is **stateless per turn**: the client carries the whole
+  conversation and re-sends it on every turn (``messages`` in the payload).
 * The base study loop **never depends on the tutor**. The affordance is
   dismissible and non-blocking; if the service is not configured or a call
   fails, we degrade to a quiet "tutor unavailable" state and the review
   continues (the mint path from the same miss is 100% local and unaffected).
-* All HTTPS is BLOCKING, so both the bundle assembly (a local RPC read) and the
-  tutor call run off the UI thread through ``QueryOp``.
+* All HTTPS is BLOCKING, so both the bundle assembly (a local RPC read) and
+  every tutor turn run off the UI thread through ``QueryOp``.
 
 Public entry points (wired by ``aqt.synapse.__init__`` — the integrator owns
 all menu/hook wiring; this module never touches ``__init__`` or the hooks):
 
-* :func:`open_tutor_for_card` ``(mw, card) -> None`` — assemble the bundle for a
-  card and open the tutor panel with the first turn.
+* :func:`open_tutor_for_card` ``(mw, card) -> None`` — assemble the grounding
+  context for a card, open the conversational panel, and auto-request the
+  opening turn.
 * :func:`offer_tutor_at_miss` ``(mw, card, ease) -> None`` — on an ``ease == 1``
   miss of an MCAT-family note (and only when the service is configured), show a
   dismissible affordance that opens the tutor for that card.
@@ -74,6 +79,15 @@ _MCAT_NOTETYPES: frozenset[str] = frozenset(
 # uses, so the tutor and the dashboard agree on the numbers (M3 §2.2).
 _MASTERY_SEARCH = f'deck:"{SYNAPSE_DECK_NAME}"'
 
+# Field-name candidates mapping across the MCAT notetypes (provision.py):
+#   * MCAT Application:    Stem / Answer / Explanation
+#   * MCAT Which-Principle: Stem / Answer / Explanation
+#   * MCAT Data-Snippet:   Question / Answer / Explanation
+#   * MCAT Explain-Why:    Prompt / (no Answer) / ModelAnswer
+_QUESTION_FIELDS: tuple[str, ...] = ("Stem", "Question", "Prompt")
+_ANSWER_FIELDS: tuple[str, ...] = ("Answer", "ModelAnswer")
+_EXPLANATION_FIELDS: tuple[str, ...] = ("Explanation", "ModelAnswer")
+
 
 # --- Bundle assembly (pure, runs on the collection thread) -------------------
 
@@ -88,14 +102,9 @@ def _concept_tags(note: Note) -> list[str]:
     return [t for t in note.tags if t.startswith("concept::")]
 
 
-def _explanation_of(note: Note) -> str:
-    """The item's verified explanation -- the tutor's answer-side grounding.
-
-    Prefers the ``Explanation`` field (MCAT Application + the typed-answer item
-    notetypes); falls back to ``ModelAnswer`` (Explain-Why). Empty when neither
-    is present -- the tutor then has nothing to ground on and is skipped.
-    """
-    for field in ("Explanation", "ModelAnswer"):
+def _first_field(note: Note, candidates: tuple[str, ...]) -> str:
+    """First non-empty value among ``candidates`` present on the note, else ""."""
+    for field in candidates:
         if field in note:
             text = note[field].strip()
             if text:
@@ -103,15 +112,35 @@ def _explanation_of(note: Note) -> str:
     return ""
 
 
-def _answer_of(note: Note) -> str:
-    """The item's short answer, for the SERVER's giveaway post-check ONLY.
+def _explanation_of(note: Note) -> str:
+    """The item's verified explanation -- the tutor's answer-side grounding.
 
-    Never used to prompt the model (the tutor is grounded in the explanation,
-    not the answer); passed only so the service can reject a turn that echoes it.
+    Prefers the ``Explanation`` field (MCAT Application + the typed-answer item
+    notetypes); falls back to ``ModelAnswer`` (Explain-Why). Empty when neither
+    is present -- the tutor then has nothing to ground on and is skipped.
     """
-    if "Answer" in note:
-        return note["Answer"].strip()
-    return ""
+    return _first_field(note, _EXPLANATION_FIELDS)
+
+
+def _question_of(note: Note) -> str:
+    """The item's question/stem, sent to the tutor as context.
+
+    Maps across the MCAT notetypes: ``Stem`` (Application, Which-Principle),
+    ``Question`` (Data-Snippet), ``Prompt`` (Explain-Why). Best-effort context
+    only; empty is fine (the tutor still grounds on the explanation).
+    """
+    return _first_field(note, _QUESTION_FIELDS)
+
+
+def _answer_of(note: Note) -> str:
+    """The item's correct answer.
+
+    Server-side, the answer is placed in the prompt ONLY when the card is
+    revealed; otherwise it is used solely for the giveaway post-check. Maps
+    ``Answer`` (Application, Which-Principle, Data-Snippet) and ``ModelAnswer``
+    (Explain-Why). Empty when neither is present.
+    """
+    return _first_field(note, _ANSWER_FIELDS)
 
 
 def _state_of(state: Any) -> dict[str, Any]:
@@ -153,14 +182,16 @@ def _bundle_for_concept(bundle: Any) -> dict[str, Any]:
     }
 
 
-def _assemble_bundle(col: Collection, note_id: NoteId) -> dict[str, Any] | None:
-    """Collection-thread body: build the ``{concept, item_explanation, ...}`` payload.
+def _assemble_context(col: Collection, note_id: NoteId) -> dict[str, Any] | None:
+    """Collection-thread body: build the grounding context for the tutor thread.
 
     Re-fetches the note by id on the collection thread (matching ``mint.py``'s
     discipline of not carrying a UI-thread note into the background op). Returns
-    ``None`` when there is nothing to ground on (no concept tag, or no
-    explanation text) so the caller can degrade quietly instead of firing an
-    ungroundable request.
+    the *thread-invariant* grounding fields (concept, explanation, question,
+    answer, mastery bundle); the per-turn ``card_revealed`` flag and ``messages``
+    are added by the caller at send time. Returns ``None`` when there is nothing
+    to ground on (no concept tag, or no explanation text) so the caller can
+    degrade quietly instead of firing an ungroundable request.
     """
     note = col.get_note(note_id)
     concepts = _concept_tags(note)
@@ -177,94 +208,36 @@ def _assemble_bundle(col: Collection, note_id: NoteId) -> dict[str, Any] | None:
     return {
         "concept": concepts[0],
         "item_explanation": explanation,
-        "answer": _answer_of(note),
+        "item_question": _question_of(note),
+        "item_answer": _answer_of(note),
         "mastery_bundle": _bundle_for_concept(primary) if primary is not None else {},
     }
 
 
-# --- Turn extraction ---------------------------------------------------------
+# --- Reply extraction --------------------------------------------------------
 
 
-def _turns_from_response(data: dict[str, Any]) -> list[str]:
-    """Pull assistant turn text(s) out of the tutor response.
+def _reply_from_response(data: dict[str, Any]) -> str:
+    """Pull the assistant reply text out of a tutor turn response.
 
-    Accepts the primary ``{turns: [{role, content}, ...]}`` shape and the
-    alternative ``{reply: "..."}`` shape (M3 §3.1 / task spec)."""
+    The endpoint returns ``{reply: "..."}``; also accept the legacy
+    ``{turns: [{role, content}, ...]}`` shape defensively, taking the last
+    assistant turn.
+    """
+    reply = data.get("reply")
+    if isinstance(reply, str) and reply.strip():
+        return reply.strip()
+
     turns = data.get("turns")
-    texts: list[str] = []
     if isinstance(turns, list):
-        for turn in turns:
+        for turn in reversed(turns):
             if isinstance(turn, dict):
                 content = turn.get("content")
                 if isinstance(content, str) and content.strip():
-                    texts.append(content.strip())
+                    return content.strip()
             elif isinstance(turn, str) and turn.strip():
-                texts.append(turn.strip())
-    reply = data.get("reply")
-    if not texts and isinstance(reply, str) and reply.strip():
-        texts.append(reply.strip())
-    return texts
-
-
-# --- The tutor panel (read-only dialogue) ------------------------------------
-
-
-class SynapseTutorDialog(QDialog):
-    """A native, read-only panel showing the tutor's Socratic turn(s).
-
-    Deliberately a plain ``QDialog`` (not a webview): the turns are supplied by
-    the caller after the off-thread service call, so no in-panel API access is
-    needed. A follow-up input could be added later; M3 ships read-only (§4).
-    """
-
-    def __init__(
-        self,
-        mw: aqt.main.AnkiQt,
-        concept: str,
-        turns: list[str],
-        surfaced_prerequisite: str | None = None,
-    ) -> None:
-        QDialog.__init__(self, mw, Qt.WindowType.Window)
-        self.mw = mw
-        mw.garbage_collect_on_dialog_finish(self)
-        self.setWindowTitle("Synapse Tutor")
-        self.setMinimumWidth(460)
-        disable_help_button(self)
-        self._build_ui(concept, turns, surfaced_prerequisite)
-        restoreGeom(self, GEOM_KEY)
-
-    def _build_ui(
-        self, concept: str, turns: list[str], surfaced_prerequisite: str | None
-    ) -> None:
-        layout = QVBoxLayout()
-
-        heading = QLabel(f"Tutor — {_concept_label(concept)}")
-        font = heading.font()
-        font.setBold(True)
-        heading.setFont(font)
-        layout.addWidget(heading)
-
-        if surfaced_prerequisite:
-            hint = QLabel(f"Likely gap: {_concept_label(surfaced_prerequisite)}")
-            hint.setWordWrap(True)
-            hint.setEnabled(False)  # muted, description-style
-            layout.addWidget(hint)
-
-        body = QTextBrowser()
-        body.setOpenExternalLinks(False)
-        body.setPlainText("\n\n".join(turns))
-        body.setMinimumHeight(200)
-        layout.addWidget(body)
-
-        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)  # type: ignore[arg-type]
-        qconnect(buttons.rejected, self.reject)
-        layout.addWidget(buttons)
-
-        self.setLayout(layout)
-
-    def reject(self) -> None:
-        saveGeom(self, GEOM_KEY)
-        QDialog.reject(self)
+                return turn.strip()
+    return ""
 
 
 def _concept_label(tag: str) -> str:
@@ -272,6 +245,207 @@ def _concept_label(tag: str) -> str:
     parts = [p for p in tag.split("::") if p]
     leaf = parts[-1] if parts else tag
     return leaf.replace("_", " ").strip() or tag
+
+
+# --- The conversational tutor panel ------------------------------------------
+
+
+class SynapseTutorDialog(QDialog):
+    """A non-modal, conversational Socratic tutor panel.
+
+    A scrollable transcript of alternating student / tutor turns plus a
+    multi-line input and Send button. Deliberately a plain ``QDialog`` (not a
+    webview): every turn is a client-shell HTTPS call assembled here and run off
+    the UI thread via ``QueryOp``, so no in-panel API access is needed.
+
+    Non-modal (a ``Window``) so the student can flip the card behind the panel
+    and then ask about the revealed answer -- which is why ``card_revealed`` is
+    read *fresh from the live reviewer* on every send (see :meth:`_send`).
+    """
+
+    def __init__(
+        self,
+        mw: aqt.main.AnkiQt,
+        context: dict[str, Any],
+    ) -> None:
+        QDialog.__init__(self, mw, Qt.WindowType.Window)
+        self.mw = mw
+        # Thread-invariant grounding fields (concept, explanation, question,
+        # answer, mastery bundle). card_revealed + messages are added per turn.
+        self._context = context
+        # The conversation so far (excludes the system prompt), carried to the
+        # stateless server on every turn.
+        self._history: list[dict[str, str]] = []
+        # Guards against overlapping requests while one turn is in flight.
+        self._in_flight = False
+        mw.garbage_collect_on_dialog_finish(self)
+        self.setWindowTitle("Synapse Tutor")
+        self.setMinimumWidth(480)
+        self.setMinimumHeight(420)
+        disable_help_button(self)
+        self._build_ui()
+        restoreGeom(self, GEOM_KEY)
+
+    # --- UI construction -----------------------------------------------------
+
+    def _build_ui(self) -> None:
+        layout = QVBoxLayout()
+
+        concept = str(self._context.get("concept", ""))
+        heading = QLabel(f"Tutor — {_concept_label(concept)}")
+        font = heading.font()
+        font.setBold(True)
+        heading.setFont(font)
+        layout.addWidget(heading)
+
+        # Scrollable transcript. QTextBrowser wraps long text and scrolls; we
+        # append richly-formatted turns via _append_turn.
+        self._transcript = QTextBrowser()
+        self._transcript.setOpenExternalLinks(False)
+        self._transcript.setMinimumHeight(260)
+        layout.addWidget(self._transcript, 1)
+
+        # Multi-line input + Send. Ctrl+Return sends (see eventFilter).
+        self._input = QPlainTextEdit()
+        self._input.setPlaceholderText(
+            "Ask a follow-up question…  (Ctrl+Enter to send)"
+        )
+        self._input.setMinimumHeight(64)
+        self._input.setMaximumHeight(140)
+        self._input.installEventFilter(self)
+        layout.addWidget(self._input)
+
+        button_row = QHBoxLayout()
+        button_row.addStretch(1)
+        self._send_button = QPushButton("Send")
+        qconnect(self._send_button.clicked, self._send)
+        button_row.addWidget(self._send_button)
+        layout.addLayout(button_row)
+
+        self.setLayout(layout)
+
+    # --- Transcript rendering ------------------------------------------------
+
+    def _append_turn(self, role: str, text: str) -> None:
+        """Append one turn to the transcript with readable, wrapped styling."""
+        speaker = "You" if role == "user" else "Tutor"
+        colour = "#2b6cb0" if role == "user" else "#2f855a"
+        # Escape so user/tutor text can't inject markup; keep newlines readable.
+        safe = _escape_html(text).replace("\n", "<br>")
+        block = (
+            f'<p style="margin:0 0 12px 0;">'
+            f'<b style="color:{colour};">{speaker}:</b> '
+            f'<span style="white-space:pre-wrap;">{safe}</span>'
+            f"</p>"
+        )
+        self._transcript.append(block)
+        # Keep the newest turn in view.
+        bar = self._transcript.verticalScrollBar()
+        if bar is not None:
+            bar.setValue(bar.maximum())
+
+    def _set_busy(self, busy: bool) -> None:
+        """Disable/enable the input + Send while a request is in flight."""
+        self._in_flight = busy
+        self._input.setEnabled(not busy)
+        self._send_button.setEnabled(not busy)
+        self._send_button.setText("Sending…" if busy else "Send")
+        if not busy:
+            self._input.setFocus()
+
+    # --- Input handling ------------------------------------------------------
+
+    def eventFilter(self, obj: QObject | None, event: QEvent | None) -> bool:
+        """Ctrl+Return (or Ctrl+Enter) in the input box sends the turn."""
+        if (
+            obj is self._input
+            and isinstance(event, QKeyEvent)
+            and event.type() == QEvent.Type.KeyPress
+        ):
+            key = event.key()
+            mods = event.modifiers()
+            is_return = key in (Qt.Key.Key_Return, Qt.Key.Key_Enter)
+            if is_return and (mods & Qt.KeyboardModifier.ControlModifier):
+                self._send()
+                return True
+        return QDialog.eventFilter(self, obj, event)
+
+    # --- Turn dispatch -------------------------------------------------------
+
+    def request_opening_turn(self) -> None:
+        """Fire the proactive opening turn (empty conversation)."""
+        self._dispatch()
+
+    def _send(self) -> None:
+        """Send the student's typed message as the next turn."""
+        if self._in_flight:
+            return
+        text = self._input.toPlainText().strip()
+        if not text:
+            return
+        self._input.clear()
+        self._history.append({"role": "user", "content": text})
+        self._append_turn("user", text)
+        self._dispatch()
+
+    def _dispatch(self) -> None:
+        """Assemble the payload (with FRESH card state) and call the tutor.
+
+        Runs the blocking HTTPS turn off the UI thread via ``QueryOp``. The
+        conversation is carried in full (stateless server); ``card_revealed`` is
+        read fresh from the live reviewer each time so a student who flips the
+        card behind this non-modal panel gets an answer-aware reply.
+        """
+        self._set_busy(True)
+
+        mw = self.mw
+        # Read card state FRESH from the live reviewer on every turn.
+        card_revealed = (
+            getattr(getattr(mw, "reviewer", None), "state", None) == "answer"
+        )
+        payload: dict[str, Any] = dict(self._context)
+        payload["card_revealed"] = card_revealed
+        # Snapshot the history so the background op does not race a later edit.
+        payload["messages"] = list(self._history)
+
+        def op(col: Collection) -> dict[str, Any]:
+            return service_client.tutor_turn(col, payload)
+
+        QueryOp(parent=self, op=op, success=self._on_turn).failure(
+            self._on_turn_failure
+        ).run_in_background()
+
+    def _on_turn(self, response: dict[str, Any]) -> None:
+        self._set_busy(False)
+        reply = _reply_from_response(response)
+        if not reply:
+            tooltip("The tutor had no guidance to offer", parent=self.mw)
+            return
+        self._history.append({"role": "assistant", "content": reply})
+        self._append_turn("assistant", reply)
+
+    def _on_turn_failure(self, exc: Exception) -> None:
+        # Best-effort: the base loop never depends on the tutor (M3 §5.1).
+        self._set_busy(False)
+        if isinstance(exc, service_client.ServiceNotConfigured):
+            tooltip("Synapse tutor is not configured", parent=self.mw)
+        else:
+            tooltip("Tutor unavailable right now", parent=self.mw)
+
+    # --- Geometry ------------------------------------------------------------
+
+    def reject(self) -> None:
+        saveGeom(self, GEOM_KEY)
+        QDialog.reject(self)
+
+
+def _escape_html(text: str) -> str:
+    """Minimal HTML escaping for transcript text."""
+    return (
+        text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
 
 
 # --- The dismissible at-miss affordance --------------------------------------
@@ -344,11 +518,18 @@ class _TutorOfferBanner(QWidget):
 # --- Public entry points -----------------------------------------------------
 
 
-def open_tutor_for_card(mw: aqt.main.AnkiQt, card: Card) -> None:
-    """Assemble the state bundle for ``card`` and open the tutor panel.
+# Keep the most-recent tutor panel alive across the QueryOp callbacks (a local
+# would be garbage-collected the moment open_tutor_for_card returns, closing the
+# non-modal panel instantly).
+_active_dialog: SynapseTutorDialog | None = None
 
-    Runs the (local) bundle assembly and the (network) tutor call off the UI
-    thread via ``QueryOp``. Degrades quietly if the service is off or errors.
+
+def open_tutor_for_card(mw: aqt.main.AnkiQt, card: Card) -> None:
+    """Assemble the grounding context for ``card`` and open the tutor panel.
+
+    Runs the (local) context assembly off the UI thread via ``QueryOp``, then
+    opens the non-modal conversational panel and auto-requests the opening turn.
+    Degrades quietly if the service is off or errors.
     """
     if not service_client.is_configured(mw.col):
         tooltip("Synapse tutor is not configured", parent=mw)
@@ -360,32 +541,21 @@ def open_tutor_for_card(mw: aqt.main.AnkiQt, card: Card) -> None:
     note_id = note.id
 
     def op(col: Collection) -> dict[str, Any] | None:
-        # Assemble the bundle (local RPC read) then call the tutor (HTTPS). Both
-        # are off the UI thread here.
-        bundle = _assemble_bundle(col, note_id)
-        if bundle is None:
-            return None
-        response = service_client.tutor_turn(col, bundle)
-        # Carry the concept through for the panel heading.
-        response["_concept"] = bundle["concept"]
-        return response
+        # Local RPC read only; the tutor turns themselves are fired from the
+        # panel (each off the UI thread via its own QueryOp).
+        return _assemble_context(col, note_id)
 
-    def on_success(response: dict[str, Any] | None) -> None:
-        if response is None:
+    def on_success(context: dict[str, Any] | None) -> None:
+        global _active_dialog
+        if context is None:
             tooltip("Nothing for the tutor to work with here", parent=mw)
             return
-        concept = str(response.get("_concept", ""))
-        turns = _turns_from_response(response)
-        if not turns:
-            tooltip("The tutor had no guidance to offer", parent=mw)
-            return
-        surfaced = response.get("surfaced_prerequisite")
-        SynapseTutorDialog(
-            mw,
-            concept,
-            turns,
-            surfaced if isinstance(surfaced, str) else None,
-        ).show()
+        dialog = SynapseTutorDialog(mw, context)
+        _active_dialog = dialog
+        dialog.show()
+        dialog.activateWindow()
+        # Auto-fire the proactive opening turn (empty conversation).
+        dialog.request_opening_turn()
 
     def on_failure(exc: Exception) -> None:
         # Best-effort: the base loop never depends on the tutor (M3 §5.1).
@@ -395,7 +565,7 @@ def open_tutor_for_card(mw: aqt.main.AnkiQt, card: Card) -> None:
             tooltip("Tutor unavailable right now", parent=mw)
 
     QueryOp(parent=mw, op=op, success=on_success).failure(on_failure).with_progress(
-        "Asking the Synapse tutor..."
+        "Preparing the Synapse tutor..."
     ).run_in_background()
 
 
