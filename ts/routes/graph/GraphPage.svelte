@@ -64,8 +64,12 @@ libraries (strict CSP).
     // search input is added, promote this to `$state` and bind it.
     const search = $derived(initialSearch);
 
-    const WIDTH = 900;
-    const HEIGHT = 620;
+    // Canvas size in CSS px. Tracked (not constant) so the layout fills — and
+    // re-centres within — the actual available area, adapting to window/screen
+    // resizes. Seeded with sensible defaults until the ResizeObserver below
+    // measures the real element.
+    let width = $state(900);
+    let height = $state(620);
     const NODE_RADIUS = 11;
     // Keep the arrowhead clear of the target node's circle.
     const ARROW_GAP = NODE_RADIUS + 3;
@@ -83,6 +87,7 @@ libraries (strict CSP).
     }
 
     let svgEl: SVGSVGElement | null = $state(null);
+    let wrapEl: HTMLDivElement | null = $state(null);
 
     // --- data loading --------------------------------------------------------
     // Loaded directly here (rather than via a data-loader wrapper) so the force
@@ -165,11 +170,14 @@ libraries (strict CSP).
                 "link",
                 forceLink<GraphNode, GraphLink>(links)
                     .id((n) => n.id)
-                    .distance(90)
+                    .distance(60)
                     .strength(0.6),
             )
-            .force("charge", forceManyBody().strength(-320))
-            .force("center", forceCenter(WIDTH / 2, HEIGHT / 2))
+            // Gentler repulsion with a capped range keeps the graph a compact
+            // cluster instead of flinging nodes to the edges of the (now larger,
+            // adaptive) canvas.
+            .force("charge", forceManyBody().strength(-180).distanceMax(320))
+            .force("center", forceCenter(width / 2, height / 2))
             .force(
                 "collide",
                 forceCollide<GraphNode>().radius((n) => radiusFor(n) + 6),
@@ -214,6 +222,37 @@ libraries (strict CSP).
             svg.on(".zoom", null);
             zoomBehavior = null;
         };
+    });
+
+    // Track the rendered canvas size so the SVG's coordinate space matches its
+    // pixel size 1:1 and the layout uses the real available area. Re-measures on
+    // any element/window resize.
+    $effect(() => {
+        if (!wrapEl) {
+            return;
+        }
+        const observer = new ResizeObserver((entries) => {
+            const rect = entries[0]?.contentRect;
+            if (rect && rect.width > 0 && rect.height > 0) {
+                width = Math.round(rect.width);
+                height = Math.round(rect.height);
+            }
+        });
+        observer.observe(wrapEl);
+        return () => observer.disconnect();
+    });
+
+    // Keep the centring force aligned with the current canvas size and nudge the
+    // simulation so the graph glides back to centre after a resize. Runs on size
+    // changes; a freshly built simulation is already centred by buildSimulation.
+    $effect(() => {
+        const cx = width / 2;
+        const cy = height / 2;
+        if (!simulation) {
+            return;
+        }
+        simulation.force("center", forceCenter(cx, cy));
+        simulation.alpha(0.3).restart();
     });
 
     // Node dragging: (re)bound whenever the node set changes (via
@@ -408,7 +447,7 @@ libraries (strict CSP).
             </p>
         </TitledContainer>
     {:else}
-        <TitledContainer title="Concept graph">
+        <TitledContainer title="Concept graph" class="graph-card">
             <div class="toolbar">
                 <p class="muted small">
                     Each node is a concept, coloured by Memory (red = weak, green =
@@ -419,11 +458,11 @@ libraries (strict CSP).
                 <button class="reset" onclick={resetView}>Reset view</button>
             </div>
 
-            <div class="canvas-wrap">
+            <div class="canvas-wrap" bind:this={wrapEl}>
                 <svg
                     bind:this={svgEl}
                     class="graph"
-                    viewBox="0 0 {WIDTH} {HEIGHT}"
+                    viewBox="0 0 {width} {height}"
                     role="img"
                     aria-label="Concept prerequisite graph"
                 >
@@ -613,7 +652,21 @@ libraries (strict CSP).
     :global(.graph-page) {
         gap: 1em;
         padding: 1em;
-        max-width: 1100px;
+        // Fill the whole window instead of a fixed-width column so the graph can
+        // use the full dialog. `min-height` (not `height`) sidesteps the
+        // Container's `.container-fluid { height: 100% }` rule; `box-sizing`
+        // keeps the padding inside the viewport (no scrollbar).
+        min-height: 100dvh;
+        box-sizing: border-box;
+    }
+
+    // The graph card grows to fill the page; its content (toolbar + canvas) is a
+    // flex column so the canvas takes all the remaining height.
+    :global(.graph-card) {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
     }
 
     .muted {
@@ -621,7 +674,7 @@ libraries (strict CSP).
     }
 
     .small {
-        font-size: 0.85em;
+        font-size: 0.92em;
     }
 
     code {
@@ -660,12 +713,18 @@ libraries (strict CSP).
     .canvas-wrap {
         position: relative;
         width: 100%;
+        // Take all the height the graph card leaves after the title + toolbar,
+        // with a usable floor on very short windows (the page scrolls below it).
+        // A window/screen resize changes this box and triggers a re-measure +
+        // re-centre (ResizeObserver).
+        flex: 1;
+        min-height: 360px;
     }
 
     svg.graph {
         width: 100%;
-        height: auto;
-        aspect-ratio: 900 / 620;
+        height: 100%;
+        display: block;
         border: 1px solid var(--border-subtle);
         border-radius: var(--border-radius-medium, 10px);
         background: var(--canvas);
@@ -714,7 +773,7 @@ libraries (strict CSP).
     }
 
     .node-label {
-        font-size: 11px;
+        font-size: 13px;
         fill: var(--fg);
         pointer-events: none;
         text-transform: capitalize;
