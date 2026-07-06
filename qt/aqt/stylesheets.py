@@ -127,10 +127,12 @@ class CustomStyles:
         return f"""
     QMenuBar {{
         border-bottom: 1px solid {tm.var(colors.BORDER_SUBTLE)};
+        padding: 2px 4px;
+        font-size: 14px;
     }}
     QMenuBar::item {{
         background-color: transparent;
-        padding: 2px 4px;
+        padding: 5px 10px;
         border-radius: {tm.var(props.BORDER_RADIUS)};
     }}
     QMenuBar::item:selected {{
@@ -140,10 +142,11 @@ class CustomStyles:
         background-color: {tm.var(colors.CANVAS_OVERLAY)};
         border: 1px solid {tm.var(colors.BORDER_SUBTLE)};
         padding: 4px;
+        font-size: 14px;
     }}
     QMenu::item {{
         background-color: transparent;
-        padding: 3px 14px;
+        padding: 5px 16px;
         margin-bottom: 4px;
     }}
     QMenu::item:selected {{

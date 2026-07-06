@@ -10,7 +10,7 @@ options-driven provisioning in :mod:`aqt.synapse.provision`.
 It is shown two ways (wired in ``aqt.synapse.__init__``):
 
 * as a **first-run wizard** the first time an unprovisioned profile loads, and
-* on demand from Tools > "Synapse: Set up..." (re-openable any time).
+* on demand from Synapse > "Set Up..." (re-openable any time).
 
 The checkboxes come pre-checked with the recommended defaults, which mirror
 :class:`~aqt.synapse.provision.SynapseOptions`' field defaults, so clicking OK
@@ -92,7 +92,7 @@ class SynapseSetupDialog(QDialog):
         intro = QLabel(
             "Choose which Synapse features to turn on. The recommended options "
             "are pre-selected; you can reopen this wizard any time from "
-            "Tools > “Synapse: Set up…”."
+            "Synapse > “Set Up…”."
         )
         intro.setWordWrap(True)
         layout.addWidget(intro)

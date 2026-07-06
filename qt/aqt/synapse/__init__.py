@@ -27,59 +27,73 @@ if TYPE_CHECKING:
 def init(mw: aqt.main.AnkiQt) -> None:
     """Wire the Synapse desktop UX into a running main window.
 
-    Adds a Tools-menu group ("Synapse: Set up...", "Synapse Dashboard",
-    "Synapse Coverage" and "Synapse Graph") and installs the error-driven
-    card-minting hooks. All submodules are imported lazily so that a bare
-    ``import aqt.synapse`` never pulls in Qt.
+    Adds a dedicated top-level "Synapse" menu (Dashboard, Coverage, Graph,
+    Generate Practice, Set Exam Date, Set Up, Service & Sync) and installs the
+    error-driven card-minting hooks. All submodules are imported lazily so that
+    a bare ``import aqt.synapse`` never pulls in Qt.
     """
-    from aqt.qt import QAction, qconnect
+    from aqt.qt import QAction, QMenu, qconnect
 
     from . import dashboard, mint
 
-    # --- Tools menu -----------------------------------------------------------
-    menu = mw.form.menuTools
-    menu.addSeparator()
+    # --- Synapse menu ---------------------------------------------------------
+    # A dedicated top-level "Synapse" menu, inserted just before "Tools", so
+    # every Synapse feature lives in one obvious place instead of being buried
+    # among the rest of the Tools menu. Items are grouped with separators:
+    # visualisations, then study actions, then setup/config.
+    menu = QMenu("&Synapse", mw)
+    # Keep a reference alive and expose it to add-ons the same way as menuTools.
+    mw.form.menuSynapse = menu
+    mw.form.menubar.insertMenu(mw.form.menuTools.menuAction(), menu)
 
-    setup_action = QAction("Synapse: Set up...", mw)
-    qconnect(setup_action.triggered, lambda: _show_setup(mw))
-    menu.addAction(setup_action)
-
-    dashboard_action = QAction("Synapse Dashboard", mw)
+    dashboard_action = QAction("Dashboard", mw)
     qconnect(dashboard_action.triggered, lambda: dashboard.show_dashboard(mw))
     menu.addAction(dashboard_action)
 
-    coverage_action = QAction("Synapse Coverage", mw)
+    coverage_action = QAction("Coverage", mw)
     qconnect(coverage_action.triggered, lambda: dashboard.show_coverage(mw))
     menu.addAction(coverage_action)
 
-    graph_action = QAction("Synapse Graph", mw)
+    graph_action = QAction("Graph", mw)
     qconnect(graph_action.triggered, lambda: dashboard.show_graph(mw))
     menu.addAction(graph_action)
 
-    exam_date_action = QAction("Synapse: Set Exam Date...", mw)
-    qconnect(exam_date_action.triggered, lambda: _set_exam_date(mw))
-    menu.addAction(exam_date_action)
+    menu.addSeparator()
 
-    generate_action = QAction("Synapse: Generate practice...", mw)
+    generate_action = QAction("Generate Practice...", mw)
     qconnect(generate_action.triggered, lambda: _generate_practice(mw))
     menu.addAction(generate_action)
 
-    settings_action = QAction("Synapse: Service & Sync...", mw)
+    exam_date_action = QAction("Set Exam Date...", mw)
+    qconnect(exam_date_action.triggered, lambda: _set_exam_date(mw))
+    menu.addAction(exam_date_action)
+
+    menu.addSeparator()
+
+    setup_action = QAction("Set Up...", mw)
+    qconnect(setup_action.triggered, lambda: _show_setup(mw))
+    menu.addAction(setup_action)
+
+    settings_action = QAction("Service && Sync...", mw)
     qconnect(settings_action.triggered, lambda: _show_service_settings(mw))
     menu.addAction(settings_action)
 
     # --- Mint hooks -----------------------------------------------------------
     mint.install_hooks()
 
-    # --- First-run setup wizard -----------------------------------------------
-    # The first time an unprovisioned profile loads we open the setup wizard so
-    # the user can choose which features to enable, instead of silently
-    # provisioning behind their back. Gated on is_provisioned so it triggers
-    # only once; if no GUI can be shown it falls back to silent default
-    # provisioning (see _first_run_setup).
+    # --- Setup wizard on profile open -----------------------------------------
+    # Show the setup wizard whenever a profile is created or entered, so the user
+    # can choose which features to enable. Hooked to profile_did_open rather than
+    # collection_did_load: the latter fires *before* the main window is shown
+    # during startup, so mw.isVisible() was False and we always fell through to
+    # silent provisioning -- leaving the wizard reachable only via the manual
+    # action. profile_did_open fires after the window is shown and on every
+    # profile open/switch. Gated on is_provisioned so an already set-up profile
+    # is never nagged; falls back to silent provisioning when no window can be
+    # shown (see _first_run_setup).
     from aqt import gui_hooks
 
-    gui_hooks.collection_did_load.append(_first_run_setup)
+    gui_hooks.profile_did_open.append(_first_run_setup)
 
     # Post-answer AI offers: the tutor at a miss, generation at mastery (see
     # _on_answer_ai_offers). Self-gate on an MCAT note + a configured service, so
@@ -92,14 +106,14 @@ def init(mw: aqt.main.AnkiQt) -> None:
 
 
 def _show_setup(mw: aqt.main.AnkiQt) -> None:
-    """Open the Synapse setup wizard (re-openable from the Tools menu)."""
+    """Open the Synapse setup wizard (re-openable from the Synapse menu)."""
     from . import setup
 
     setup.show_setup(mw)
 
 
 def _generate_practice(mw: aqt.main.AnkiQt) -> None:
-    """Manual grounded-generation flow (Tools menu)."""
+    """Manual grounded-generation flow (Synapse menu)."""
     from . import generate
 
     generate.pick_concept_and_generate(mw)
@@ -224,17 +238,28 @@ def _set_exam_date(mw: aqt.main.AnkiQt) -> None:
     QueryOp(parent=mw, op=op, success=on_success).run_in_background()
 
 
-def _first_run_setup(col: anki.collection.Collection) -> None:
-    """Open the setup wizard on first collection load, once per profile.
+def _first_run_setup() -> None:
+    """Open the setup wizard whenever a profile is created or entered.
 
-    Idempotent and defensive: skips if already provisioned, and never lets a
-    failure break startup (the manual "Synapse: Set up..." action remains).
+    Hooked to ``profile_did_open`` (fires after the main window is shown, and on
+    every profile open/switch — including a freshly created profile), so the
+    wizard actually appears instead of only being reachable from the manual
+    "Set Up..." action.
+
+    Idempotent and defensive: skips if the profile is already provisioned (so an
+    established profile is never nagged on entry), and never lets a failure break
+    startup (the manual Synapse > "Set Up..." action always remains).
 
     Preferred path is the interactive wizard so the user chooses their features.
-    If a GUI cannot be shown (no visible main window — e.g. a headless / import
-    context), we fall back to silent default provisioning so the environment is
-    still set up. The is_provisioned gate keeps this to a single run.
+    If no window can be shown (e.g. a hidden-window automated context), we fall
+    back to silent default provisioning so the environment is still set up.
     """
+    from aqt import mw
+
+    if mw is None or mw.col is None:
+        return
+    col = mw.col
+
     from . import provision
 
     try:
@@ -244,10 +269,8 @@ def _first_run_setup(col: anki.collection.Collection) -> None:
         print(f"Synapse: first-run check failed: {exc}")
         return
 
-    from aqt import mw
-
-    # No usable main window -> can't show a dialog; provision silently instead.
-    if mw is None or not mw.isVisible():
+    # No visible main window -> can't show a dialog; provision silently instead.
+    if not mw.isVisible():
         _silent_default_provision(col)
         return
 
