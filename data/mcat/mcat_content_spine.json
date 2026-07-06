@@ -79,6 +79,7 @@
                                     "id": "1A.protein-structure",
                                     "name": "Protein Structure",
                                     "disciplines": ["BIO", "BC", "OC"],
+                                    "prerequisites": ["1A.amino-acids"],
                                     "subtopics": [
                                         "Structure",
                                         "1° structure of proteins",
@@ -108,6 +109,7 @@
                                     "id": "1A.enzyme-structure-and-function",
                                     "name": "Enzyme Structure and Function",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": ["1A.amino-acids", "1A.protein-structure"],
                                     "subtopics": [
                                         "Function of enzymes in catalyzing biological reactions",
                                         "Enzyme classification by reaction type",
@@ -126,6 +128,7 @@
                                     "id": "1A.control-of-enzyme-activity",
                                     "name": "Control of Enzyme Activity",
                                     "disciplines": ["BIO", "BC"],
+                                    "prerequisites": ["1A.enzyme-structure-and-function"],
                                     "subtopics": [
                                         "Kinetics",
                                         "General (catalysis)",
@@ -1225,6 +1228,7 @@
                                     "id": "4A.energy-of-point-object-systems",
                                     "name": "Energy of Point Object Systems",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4A.force"],
                                     "subtopics": [
                                         "Kinetic Energy: KE = ½mv2; units",
                                         "Potential Energy",
@@ -1334,6 +1338,7 @@
                                     "id": "4C.circuit-elements",
                                     "name": "Circuit Elements",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4C.electrostatics"],
                                     "subtopics": [
                                         "Current I = ΔQ/Δt, sign conventions, units",
                                         "Electromotive force, voltage",
@@ -1457,6 +1462,7 @@
                                     "id": "4D.geometrical-optics",
                                     "name": "Geometrical Optics",
                                     "disciplines": ["PHY"],
+                                    "prerequisites": ["4A.energy-of-point-object-systems"],
                                     "subtopics": [
                                         "Reflection from plane surface: angle of incidence equals angle of reflection",
                                         "Refraction, refractive index n; Snell’s law: n sin θ 1 1 = n sin θ 2 2",
@@ -2113,6 +2119,7 @@
                                     "id": "6A.perception",
                                     "name": "Perception",
                                     "disciplines": ["PSY"],
+                                    "prerequisites": ["6A.sensory-processing"],
                                     "subtopics": [
                                         "Bottom-up/top-down processing",
                                         "Perceptual organization (e.g., depth, form, motion, constancy)",
