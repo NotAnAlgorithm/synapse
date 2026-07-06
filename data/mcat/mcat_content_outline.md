@@ -1,0 +1,1726 @@
+# MCAT Content Outline — Structured Spine (Synapse)
+
+*Derived from AAMC — What's on the MCAT Exam? (official content outline). Extracted 2026-07-03.*
+
+This is the backbone for the Synapse knowledge graph and the AAMC coverage checker. Every card and question the app creates is tagged to a node in this tree (section → foundational concept → content category → topic), plus one of the four reasoning skills below.
+
+**Scale:** 4 sections · 10 foundational concepts · 31 content categories · 161 topics · 1,385 subtopics.
+
+## Scientific Inquiry and Reasoning Skills (SIRS)
+
+These cut across all science content. They map directly onto our scoring: Skill 1 is recall (the **Memory** score); Skills 2–4 are application and reasoning (the **Performance** score). Tag every science item with a SIRS skill and the scoring routes itself.
+
+- **SIRS1 — Knowledge of Scientific Concepts and Principles** (→ *memory*): Recognize, identify, recall, or define concepts and their relationships across the natural, behavioral, and social sciences; read them in words, graphs, tables, diagrams, or formulas.
+- **SIRS2 — Scientific Reasoning and Problem-Solving** (→ *performance*): Use scientific knowledge to solve problems: make predictions, evaluate the credibility of explanations, judge cause-and-effect arguments, and draw conclusions from models and observations.
+- **SIRS3 — Reasoning About the Design and Execution of Research** (→ *performance*): Reason about scientific methodology: pose testable hypotheses, evaluate sampling, manipulation and control of variables, measurement, confounds, research limitations, and research ethics.
+- **SIRS4 — Data-Based and Statistical Reasoning** (→ *performance*): Reason with data: interpret tables, graphs, and charts; use central tendency and dispersion; reason about random and systematic error and uncertainty; and draw inferences about associations and causation.
+
+## Disciplines
+
+**BIO** = Biology, **BC** = Biochemistry, **OC** = Organic Chemistry, **GC** = General Chemistry, **PHY** = Physics, **PSY** = Psychology, **SOC** = Sociology
+
+---
+
+## Section BB — Biological and Biochemical Foundations of Living Systems
+
+### FC1 (55% of section) — Biomolecules have unique properties that determine how they contribute to the structure and function of cells and how they participate in the processes necessary to maintain life.
+
+#### 1A. Structure and function of proteins and their constituent amino acids
+*Macromolecules formed from amino acids adopt well- defined, three-dimensional structures with chemical properties that are responsible for their participation in virtually every process occurring within and between cells. The three-dimensional structure of proteins is a direct consequence of the nature of the covalently bonded sequence of amino acids, their chemical and physical properties, and the way the whole assembly interacts with water.*
+
+- **Amino Acids** (BC, OC)
+  - Description
+  - Absolute configuration at the α position
+  - Amino acids as dipolar ions
+  - Classifications
+  - Acidic or basic
+  - Hydrophobic or hydrophilic
+  - Reactions
+  - Sulfur linkage for cysteine and cystine
+  - Peptide linkage: polypeptides and proteins
+  - Hydrolysis
+- **Protein Structure** (BIO, BC, OC)
+  - Structure
+  - 1° structure of proteins
+  - 2° structure of proteins
+  - 3° structure of proteins; role of proline, cystine, hydrophobic bonding
+  - 4° structure of proteins (BIO, BC)
+  - Conformational stability
+  - Denaturing and folding
+  - Hydrophobic interactions
+  - Solvation layer (entropy) (BC)
+  - Separation techniques
+  - Isoelectric point
+  - Electrophoresis
+- **Nonenzymatic Protein Function** (BIO, BC)
+  - Binding (BC)
+  - Immune system
+  - Motors
+- **Enzyme Structure and Function** (BIO, BC)
+  - Function of enzymes in catalyzing biological reactions
+  - Enzyme classification by reaction type
+  - Reduction of activation energy
+  - Substrates and enzyme specificity
+  - Active Site Model
+  - Induced-Fit Model
+  - Mechanism of catalysis
+  - Cofactors
+  - Coenzymes
+  - Water-soluble vitamins
+  - Effects of local conditions on enzyme activity
+- **Control of Enzyme Activity** (BIO, BC)
+  - Kinetics
+  - General (catalysis)
+  - Michaelis-Menten
+  - Cooperativity
+  - Feedback regulation
+  - Inhibition ― types
+  - Competitive
+  - Noncompetitive
+  - Mixed (BC)
+  - Uncompetitive (BC)
+  - Regulatory enzymes
+  - Allosteric enzymes
+  - Covalently modified enzymes
+  - Zymogen
+
+#### 1B. Transmission of genetic information from the gene to the protein
+*Biomolecules and biomolecular assemblies interact in specific, highly regulated ways to transfer sequence information between biopolymers in living organisms. By storing and transferring biological information, DNA and RNA enable living organisms to reproduce their complex components from one generation to the next. The nucleotide monomers of these biopolymers, being joined by phosphodiester linkages, form a polynucleotide molecule with a “backbone” composed of repeating sugar-phosphate units and “appendages” of nitrogenous bases. The unique sequence of bases in each gene provides specific information to the cell. DNA molecules are composed of two polynucleotides that spiral around an imaginary axis, forming a double helix. The two polynucleotides are held together by hydrogen bonds between the paired bases and van der Waals interactions between the stacked bases. The pairing between the bases of two polynucleotides is very specific, and its complementarity allows for a precise replication of the DNA molecule. The DNA inherited by an organism leads to specific traits by dictating the synthesis of the biomolecules (RNA molecules and proteins) involved in protein synthesis. While every cell in a multicellular organism inherits the same DNA, its expression is precisely*
+
+- **Nucleic Acid Structure and Function** (BIO, BC)
+  - Description
+  - Nucleotides and nucleosides
+  - Sugar phosphate backbone
+  - Pyrimidine, purine residues
+  - Deoxyribonucleic acid (DNA): double helix, Watson-Crick model of DNA structure
+  - Base pairing specificity: A with T, G with C
+  - Function in transmission of genetic information
+  - DNA denaturation, reannealing, hybridization
+- **DNA Replication** (BIO)
+  - Mechanism of replication: separation of strands, specific coupling of free nucleic acids
+  - Semiconservative nature of replication
+  - Specific enzymes involved in replication
+  - Origins of replication, multiple origins in eukaryotes
+  - Replicating the ends of DNA molecules
+- **Repair of DNA** (BIO)
+  - Repair during replication
+  - Repair of mutations
+- **Genetic Code** (BIO)
+  - Central Dogma: DNA → RNA → protein
+  - The triplet code
+  - Codon-anticodon relationship
+  - Degenerate code, wobble pairing
+  - Missense, nonsense codons
+  - Initiation, termination codons
+  - Messenger RNA (mRNA)
+- **Transcription** (BIO)
+  - Transfer RNA (tRNA); ribosomal RNA (rRNA)
+  - Mechanism of transcription
+  - mRNA processing in eukaryotes, introns, exons
+  - Ribozymes, spliceosomes, small nuclear ribonucleoproteins (snRNPs), small nuclear RNAs (snRNAs)
+  - Functional and evolutionary importance of introns
+- **Translation** (BIO)
+  - Roles of mRNA, tRNA, rRNA
+  - Role and structure of ribosomes
+  - Initiation, termination co-factors
+  - Post-translational modification of proteins
+- **Eukaryotic Chromosome Organization** (BIO)
+  - Chromosomal proteins
+  - Single copy vs. repetitive DNA
+  - Supercoiling
+  - Heterochromatin vs. euchromatin
+  - Telomeres, centromeres
+- **Control of Gene Expression in Prokaryotes** (BIO)
+  - Operon Concept, Jacob-Monod Model
+  - Gene repression in bacteria
+  - Positive control in bacteria
+- **Control of Gene Expression in Eukaryotes** (BIO)
+  - Transcriptional regulation
+  - DNA binding proteins, transcription factors
+  - Gene amplification and duplication
+  - Post-transcriptional control, basic concept of splicing (introns, exons)
+  - Cancer as a failure of normal cellular controls, oncogenes, tumor suppressor genes
+  - Regulation of chromatin structure
+  - DNA methylation
+  - Role of noncoding RNAs
+- **Recombinant DNA and Biotechnology** (BIO)
+  - Gene cloning
+  - Restriction enzymes
+  - DNA libraries
+  - Generation of cDNA
+  - Hybridization
+  - Expressing cloned genes
+  - Polymerase chain reaction
+  - Gel electrophoresis and Southern blotting
+  - DNA sequencing
+  - Analyzing gene expression
+  - Determining gene function
+  - Stem cells
+  - Practical applications of DNA technology: medical applications, human gene therapy, pharmaceuticals, forensic evidence, environmental cleanup, agriculture
+  - Safety and ethics of DNA technology
+
+#### 1C. Transmission of heritable information from generation to generation and the processes that increase genetic diversity
+*The information necessary to direct life functions is contained within discrete nucleotide sequences transmitted from generation to generation by mechanisms that, by nature of their various processes, provide the raw materials for evolution by increasing genetic diversity. Specific sequences of deoxyribonucleic acids store and transfer the heritable information necessary for the continuation of life from one generation to the next. These sequences, called genes ― being part of longer DNA molecules ― are*
+
+- **Evidence That DNA Is Genetic Material** (BIO)
+- **Mendelian Concepts** (BIO)
+  - Phenotype and genotype
+  - Gene
+  - Locus
+  - Allele: single and multiple
+  - Homozygosity and heterozygosity
+  - Wild-type
+  - Recessiveness
+  - Complete dominance
+  - Co-dominance
+  - Incomplete dominance, leakage, penetrance, expressivity
+  - Hybridization: viability
+  - Gene pool
+- **Meiosis and Other Factors Affecting Genetic Variability** (BIO)
+  - Significance of meiosis
+  - Important differences between meiosis and mitosis
+  - Segregation of genes
+  - Independent assortment
+  - Linkage
+  - Recombination
+  - Single crossovers
+  - Double crossovers
+  - Synaptonemal complex
+  - Tetrad
+  - Sex-linked characteristics
+  - Very few genes on Y chromosome
+  - Sex determination
+  - Cytoplasmic/extranuclear inheritance
+  - Mutation
+  - General concept of mutation — error in DNA sequence
+  - Types of mutations: random, translation error, transcription error, base substitution, inversion, addition, deletion, translocation, mispairing
+  - Advantageous vs. deleterious mutation
+  - Inborn errors of metabolism
+  - Relationship of mutagens to carcinogens
+  - Genetic drift
+  - Synapsis or crossing-over mechanism for increasing genetic diversity
+- **Analytic Methods** (BIO)
+  - Hardy-Weinberg Principle
+  - Testcross (Backcross; concepts of parental, F1, and F2 generations)
+  - Gene mapping: crossover frequencies
+  - Biometry: statistical methods
+- **Evolution** (BIO)
+  - Natural selection
+  - Fitness concept
+  - Selection by differential reproduction
+  - Concepts of natural and group selection
+  - Evolutionary success as increase in percentage representation in the gene pool of the next generation
+  - Speciation
+  - Polymorphism
+  - Adaptation and specialization
+  - Inbreeding
+  - Outbreeding
+  - Bottlenecks
+  - Evolutionary time as measured by gradual random changes in genome
+
+#### 1D. Principles of bioenergetics and fuel molecule metabolism
+*Living things harness energy from fuel molecules in a controlled manner that sustains all the processes responsible for maintaining life. Cell maintenance and growth is energetically costly. Cells harness the energy stored in fuel molecules, such as carbohydrates and fatty acids, and convert it into smaller units of chemical potential known as adenosine triphosphate (ATP). The hydrolysis of ATP provides a ready source of energy for cells that can be coupled to other chemical processes that make them thermodynamically favorable. Fuel molecule mobilization, transport, and storage are regulated according to the needs of the organism. The content in this category covers the principles of bioenergetics and fuel molecule catabolism. Details of oxidative phosphorylation including the role of chemiosmotic coupling and biological electron transfer reactions are covered, as are the general features of fatty acid and glucose metabolism. Additionally,*
+
+- **Principles of Bioenergetics** (BC, GC)
+  - Bioenergetics/thermodynamics
+  - Free energy/K eq
+  - Equilibrium constant
+  - Relationship of the equilibrium constant and ΔG°
+  - Concentration
+  - Le Châtelier’s Principle
+  - Endothermic and exothermic reactions
+  - Free energy: G
+  - Spontaneous reactions and ΔG°
+  - Phosphoryl group transfers and ATP
+  - ATP hydrolysis ΔG << 0
+  - ATP group transfers
+  - Biological oxidation-reduction
+  - Half-reactions
+  - Soluble electron carriers
+  - Flavoproteins
+- **Carbohydrates** (BC, OC)
+  - Description
+  - Nomenclature and classification, common names
+  - Absolute configuration
+  - Cyclic structure and conformations of hexoses
+  - Epimers and anomers
+  - Hydrolysis of the glycoside linkage
+  - Monosaccharides
+  - Disaccharides
+  - Polysaccharides
+- **Glycolysis, Gluconeogenesis, and the Pentose Phosphate Pathway** (BIO, BC)
+  - Glycolysis (aerobic), substrates and products
+  - Feeder pathways: glycogen, starch metabolism
+  - Fermentation (anaerobic glycolysis)
+  - Gluconeogenesis (BC)
+  - Pentose phosphate pathway (BC)
+  - Net molecular and energetic results of respiration processes
+- **Principles of Metabolic Regulation** (BC)
+  - Regulation of metabolic pathways (BIO, BC)
+  - Maintenance of a dynamic steady state
+  - Regulation of glycolysis and gluconeogenesis
+  - Metabolism of glycogen
+  - Regulation of glycogen synthesis and breakdown
+  - Allosteric and hormonal control
+  - Analysis of metabolic control
+- **Citric Acid Cycle** (BIO, BC)
+  - Acetyl-CoA production (BC)
+  - Reactions of the cycle, substrates and products
+  - Regulation of the cycle
+  - Net molecular and energetic results of respiration processes
+- **Metabolism of Fatty Acids and Proteins** (BIO, BC)
+  - Description of fatty acids (BC)
+  - Digestion, mobilization, and transport of fats
+  - Oxidation of fatty acids
+  - Saturated fats
+  - Unsaturated fats
+  - Ketone bodies (BC)
+  - Anabolism of fats (BIO)
+  - Nontemplate synthesis: biosynthesis of lipids and
+- **polysaccharides** (BIO)
+  - Metabolism of proteins (BIO)
+- **Oxidative Phosphorylation** (BIO, BC)
+  - Electron transport chain and oxidative phosphorylation, substrates and products, general features of the pathway
+  - Electron transfer in mitochondria
+  - NADH, NADPH
+  - Flavoproteins
+  - Cytochromes
+  - ATP synthase, chemiosmotic coupling
+  - Proton motive force
+  - Net molecular and energetic results of respiration processes
+  - Regulation of oxidative phosphorylation
+  - Mitochondria, apoptosis, oxidative stress (BC)
+- **Hormonal Regulation and Integration of Metabolism** (BC)
+  - Higher-level integration of hormone structure and function
+  - Tissue-specific metabolism
+  - Hormonal regulation of fuel metabolism
+  - Obesity and regulation of body mass Content Categories
+  - Category 2A focuses on the assemblies of molecules, cells, and groups of cells within single cellular and multicellular organisms that function to execute the processes necessary to maintain life.
+  - Category 2B focuses on the structure, growth, physiology, and genetics of prokaryotes and the structure and life cycles of viruses.
+  - Category 2C focuses on the processes of cell and nuclear division and the mechanisms governing cell differentiation and specialization. and organs that carry out essential biochemical and physiological functions. With these building blocks, medical students will be able to learn how cells grow and integrate to form tissues
+
+### FC2 (20% of section) — Highly organized assemblies of molecules, cells, and organs interact to carry out the functions of living organisms.
+
+#### 2A. Assemblies of molecules, cells, and groups of cells within single cellular and multicellular organisms
+*The processes necessary to maintain life are executed by assemblies of molecules, cells, and groups of cells, all of which are organized into highly specific structures as determined by the unique properties of their component molecules. The processes necessary to maintain life require that cells create and maintain internal environments within the cytoplasm and*
+
+- **Plasma Membrane** (BIO, BC)
+  - General function in cell containment
+  - Composition of membranes
+  - Lipid components (BIO, BC, OC)
+  - Phospholipids (and phosphatids)
+  - Steroids
+  - Waxes
+  - Protein components
+  - Fluid mosaic model
+  - Membrane dynamics
+  - Solute transport across membranes
+  - Thermodynamic considerations
+  - Osmosis
+  - Colligative properties; osmotic pressure (GC)
+  - Passive transport
+  - Active transport
+  - Sodium/potassium pump
+  - Membrane channels
+  - Membrane potential
+  - Membrane receptors
+  - Exocytosis and endocytosis
+  - Intercellular junctions (BIO)
+  - Gap junctions
+  - Tight junctions
+  - Desmosomes
+- **Membrane-Bound Organelles and Defining Characteristics of Eukaryotic Cells** (BIO)
+  - Defining characteristics of eukaryotic cells: membrane-bound nucleus, presence of organelles, mitotic division
+  - Nucleus
+  - Compartmentalization, storage of genetic information
+  - Nucleolus: location and function
+  - Nuclear envelope, nuclear pores
+  - Mitochondria
+  - Site of ATP production
+  - Inner- and outer-membrane structure (BIO, BC)
+  - Self-replication
+  - Lysosomes: membrane-bound vesicles containing hydrolytic enzymes
+  - Endoplasmic reticulum
+  - Rough and smooth components
+  - Rough endoplasmic reticulum site of ribosomes
+  - Double-membrane structure
+  - Role in membrane biosynthesis
+  - Role in biosynthesis of secreted proteins
+  - Golgi apparatus: general structure and role in packaging and secretion
+  - Peroxisomes: organelles that collect peroxides
+- **Cytoskeleton** (BIO)
+  - General function in cell support and movement
+  - Microfilaments: composition and role in cleavage and contractility
+  - Microtubules: composition and role in support and transport
+  - Intermediate filaments, role in support
+  - Composition and function of cilia and flagella
+  - Centrioles, microtubule-organizing centers
+- **Tissues Formed From Eukaryotic Cells** (BIO)
+  - Epithelial cells
+  - Connective tissue cells
+
+#### 2B. The structure, growth, physiology, and genetics of prokaryotes and viruses
+*The highly organized assembly of molecules that is the cell represents the fundamental unit of structure, function, and organization in all living organisms. In the hierarchy of biological organization, the cell is the simplest collection of matter capable of carrying out the processes that distinguish living organisms. As such, cells have the ability to undergo metabolism; maintain homeostasis, including ionic gradients; grow; move in response to their local environments; respond to stimuli; reproduce; and adapt to their environment in successive generations. Life at cellular levels arises from structural order and its dynamic modulation. This happens in response to signals, thereby reflecting properties that result from individual and interactive features of molecular assemblies, their compartmentalization, and their interaction with environmental signals at many spatial and temporal scales. The content in this category covers the classification, structure, growth, physiology, and genetics of*
+
+- **Cell Theory** (BIO)
+  - History and development
+  - Impact on biology
+- **Classification and Structure of Prokaryotic Cells** (BIO)
+  - Prokaryotic domains
+  - Archaea
+  - Bacteria
+  - Major classifications of bacteria by shape
+  - Bacilli (rod-shaped)
+  - Spirilli (spiral-shaped)
+  - Cocci (spherical)
+  - Lack of nuclear membrane and mitotic apparatus
+  - Lack of typical eukaryotic organelles
+  - Presence of cell wall in bacteria
+  - Flagellar propulsion, mechanism
+- **Growth and Physiology of Prokaryotic Cells** (BIO)
+  - Reproduction by fission
+  - High degree of genetic adaptability, acquisition of antibiotic resistance
+  - Exponential growth
+  - Existence of anaerobic and aerobic variants
+  - Parasitic and symbiotic
+  - Chemotaxis
+- **Genetics of Prokaryotic Cells** (BIO)
+  - Existence of plasmids, extragenomic DNA
+  - Transformation: incorporation into bacterial genome of DNA fragments from external medium
+  - Conjugation
+  - Transposons (also present in eukaryotic cells)
+- **Virus Structure** (BIO)
+  - General structural characteristics (nucleic acid and protein, enveloped and nonenveloped)
+  - Lack organelles and nucleus
+  - Structural aspects of typical bacteriophage
+  - Genomic content — RNA or DNA
+  - Size relative to bacteria and eukaryotic cells
+- **Viral Life Cycle** (BIO)
+  - Self-replicating biological units that must reproduce within specific host cell
+  - Generalized phage and animal virus life cycles
+  - Attachment to host, penetration of cell membrane or cell wall, and entry of viral genetic material
+  - Use of host synthetic mechanism to replicate viral components
+  - Self-assembly and release of new viral particles
+  - Transduction: transfer of genetic material by viruses
+  - Retrovirus life cycle: integration into host DNA, reverse transcriptase, HIV
+  - Prions and viroids: subviral particles
+
+#### 2C. Processes of cell division, differentiation, and specialization
+- **Mitosis** (BIO)
+  - Mitotic process: prophase, metaphase, anaphase, telophase, interphase
+  - Mitotic structures
+  - Centrioles, asters, spindles
+  - Chromatids, centromeres, kinetochores
+  - Nuclear membrane breakdown and reorganization
+  - Mechanisms of chromosome movement
+  - Phases of cell cycle: G0, G1, S, G2, M
+  - Growth arrest
+  - Control of cell cycle
+  - Loss of cell cycle controls in cancer cells
+- **Biosignaling** (BC)
+  - Oncogenes, apoptosis
+- **Reproductive System** (BIO)
+  - Gametogenesis by meiosis
+  - Ovum and sperm
+  - Differences in formation
+  - Differences in morphology
+  - Relative contribution to next generation
+  - Reproductive sequence: fertilization, implantation, development, birth
+- **Embryogenesis** (BIO)
+  - Stages of early development (order and general features of each)
+  - Fertilization
+  - Cleavage
+  - Blastula formation
+  - Gastrulation
+  - First cell movements
+  - Formation of primary germ layers (endoderm, mesoderm, ectoderm)
+  - Neurulation
+  - Major structures arising out of primary germ layers
+  - Neural crest
+  - Environment-gene interaction in development
+- **Mechanisms of Development** (BIO)
+  - Cell specialization
+  - Determination
+  - Differentiation
+  - Tissue types
+  - Cell-cell communication in development
+  - Cell migration
+  - Pluripotency: stem cells
+  - Gene regulation in development
+  - Programmed cell death
+  - Existence of regenerative capacity in various species
+  - Senescence and aging Content Categories
+  - Category 3A focuses on the structure and functions of the nervous and endocrine systems and the ways the systems work together to coordinate the responses of other body systems to both external and internal stimuli.
+  - Category 3B focuses on the structure and functions of the organ systems ― circulatory, respiratory, digestive, immune, lymphatic, muscular, skeletal, and reproductive ― and the ways these systems interact to fulfill their concerted roles in the maintenance and continuance of the living organism. external stimuli to support homeostasis and the ability to reproduce. With these building blocks, medical students will be able to learn how the body responds to internal and
+
+### FC3 (25% of section) — Complex systems of tissues and organs sense the internal and external environments of multicellular organisms, and through integrated functioning, maintain a stable internal environment within an ever-changing external environment.
+
+#### 3A. Structure and functions of the nervous and endocrine systems and ways these systems coordinate the organ systems
+*The nervous and endocrine systems work together to detect external and internal signals, transmit and integrate information, and maintain homeostasis. They do all this by producing appropriate responses to internal and external cues and stressors. The integration of these systems both with one another and with the other organ systems ultimately results in the successful and adaptive behaviors that allow for the propagation of the species. Animals have evolved a nervous system that senses and processes internal and external information used to facilitate and enhance survival, growth, and reproduction. The nervous system interfaces with*
+
+- **Nervous System: Structure and Function** (BIO)
+  - Major functions
+  - High-level control and integration of body systems
+  - Adaptive capability to external influences
+  - Organization of vertebrate nervous system
+  - Sensor and effector neurons
+  - Sympathetic and parasympathetic nervous systems: antagonistic control
+  - Reflexes
+  - Feedback loop, reflex arc
+  - Role of spinal cord and supraspinal circuits
+  - Integration with endocrine system: feedback control
+- **Nerve Cell** (BIO)
+  - Cell body: site of nucleus, organelles
+  - Dendrites: branched extensions of cell body
+  - Axon: structure and function
+  - Myelin sheath, Schwann cells, insulation of axon
+  - Nodes of Ranvier: propagation of nerve impulse along axon
+  - Synapse: site of impulse propagation between cells
+  - Synaptic activity: transmitter molecules
+  - Resting potential: electrochemical gradient
+  - Action potential
+  - Threshold, all-or-none
+  - Sodium-potassium pump
+  - Excitatory and inhibitory nerve fibers: summation, frequency of firing
+  - Glial cells, neuroglia
+- **Electrochemistry** (GC)
+  - Concentration cell: direction of electron flow,
+- **Nernst equation Biosignaling** (BC)
+  - Gated ion channels
+  - Voltage gated
+  - Ligand gated
+  - Receptor enzymes
+  - G protein-coupled receptors
+- **Lipids** (BC, OC)
+  - Description; structure
+  - Steroids
+  - Terpenes and terpenoids
+- **Endocrine System: Hormones and Their Sources** (BIO)
+  - Function of endocrine system: specific chemical control at cell, tissue, and organ level
+  - Definitions of endocrine gland, hormone
+  - Major endocrine glands: names, locations, products
+  - Major types of hormones
+  - Neuroendocrinology ― relation between neurons and hormonal systems
+- **Endocrine System: Mechanisms of Hormone Action** (BIO)
+  - Cellular mechanisms of hormone action
+  - Transport of hormones: blood supply
+  - Specificity of hormones: target tissue
+  - Integration with nervous system: feedback control
+  - Regulation by second messengers
+
+#### 3B. Structure and integrative functions of the main organ systems
+*Animals use a number of highly organized and integrated organ systems to carry out the necessary functions associated with maintaining life processes. Within the body, no organ system is an island. Interactions and coordination between organ systems allow organisms to engage in the processes necessary to sustain life. For example, the organs and structures of the circulatory system carry out a number of functions, such as transporting: ▪ Nutrients absorbed in the digestive system. ▪ Gases absorbed from the respiratory system and muscle tissue. ▪ Hormones secreted from the endocrine system. ▪ Blood cells, produced in bone marrow, to and from cells in the body to help fight disease. The content in this category covers the structure and function of the major organ systems of the body, including the respiratory, circulatory, lymphatic, immune, digestive, excretory, reproductive, muscle, skeletal, and skin systems. Also covered in this category is the integration of these systems and their control*
+
+- **Respiratory System** (BIO)
+  - General function
+  - Gas exchange, thermoregulation
+  - Protection against disease: particulate matter
+  - Structure of lungs and alveoli
+  - Breathing mechanisms
+  - Diaphragm, rib cage, differential pressure
+  - Resiliency and surface tension effects
+  - Thermoregulation: nasal and tracheal capillary beds; evaporation, panting
+  - Particulate filtration: nasal hairs, mucus-cilia system in lungs
+  - Alveolar gas exchange
+  - Diffusion, differential partial pressure
+  - Henry’s Law (GC)
+  - pH control
+  - Regulation by nervous control
+  - CO sensitivity
+- **2 Circulatory System** (BIO)
+  - Functions: circulation of oxygen, nutrients, hormones, ions and fluids, removal of metabolic waste
+  - Role in thermoregulation
+  - Four-chambered heart: structure and function
+  - Endothelial cells
+  - Systolic and diastolic pressure
+  - Pulmonary and systemic circulation
+  - Arterial and venous systems (arteries, arterioles, venules, veins)
+  - Structural and functional differences
+  - Pressure and flow characteristics
+  - Capillary beds
+  - Mechanisms of gas and solute exchange
+  - Mechanism of heat exchange
+  - Source of peripheral resistance
+  - Composition of blood
+  - Plasma, chemicals, blood cells
+  - Erythrocyte production and destruction; spleen, bone marrow
+  - Regulation of plasma volume
+  - Coagulation, clotting mechanisms
+  - Oxygen transport by blood
+  - Hemoglobin, hematocrit
+  - Oxygen content
+  - Oxygen affinity
+  - Carbon dioxide transport and level in blood
+  - Nervous and endocrine control
+- **Lymphatic System** (BIO)
+  - Structure of lymphatic system
+  - Major functions
+  - Equalization of fluid distribution
+  - Transport of proteins and large glycerides
+  - Production of lymphocytes involved in immune reactions
+  - Return of materials to the blood
+- **Immune System** (BIO)
+  - Innate (nonspecific) vs. adaptive (specific) immunity
+  - Adaptive immune system cells
+  - T-lymphocytes
+  - B-lymphocytes
+  - Innate immune system cells
+  - Macrophages
+  - Phagocytes
+  - Tissues
+  - Bone marrow
+  - Spleen
+  - Thymus
+  - Lymph nodes
+  - Concept of antigen and antibody
+  - Antigen presentation
+  - Clonal selection
+  - Antigen-antibody recognition
+  - Structure of antibody molecule
+  - Recognition of self vs. nonself, autoimmune diseases
+  - Major histocompatibility complex
+- **Digestive System** (BIO)
+  - Ingestion
+  - Saliva as lubrication and source of enzymes
+  - Ingestion; esophagus, transport function
+  - Stomach
+  - Storage and churning of food
+  - Low pH, gastric juice, mucal protection against self-destruction
+  - Production of digestive enzymes, site of digestion
+  - Structure (gross)
+  - Liver
+  - Structural relationship of liver within gastrointestinal system
+  - Production of bile
+  - Role in blood glucose regulation, detoxification
+  - Bile
+  - Storage in gall bladder
+  - Function
+  - Pancreas
+  - Production of enzymes
+  - Transport of enzymes to small intestine
+  - Small intestine
+  - Absorption of food molecules and water
+  - Function and structure of villi
+  - Production of enzymes, site of digestion
+  - Neutralization of stomach acid
+  - Structure (anatomic subdivisions)
+  - Large intestine
+  - Absorption of water
+  - Bacterial flora
+  - Structure (gross)
+  - Rectum: storage and elimination of waste, feces
+  - Muscular control
+  - Peristalsis
+  - Endocrine control
+  - Hormones
+  - Target tissues
+  - Nervous control: the enteric nervous system
+- **Excretory System** (BIO)
+  - Roles in homeostasis
+  - Blood pressure
+  - Osmoregulation
+  - Acid-base balance
+  - Removal of soluble nitrogenous waste
+  - Kidney structure
+  - Cortex
+  - Medulla
+  - Nephron structure
+  - Glomerulus
+  - Bowman’s capsule
+  - Proximal tubule
+  - Loop of Henle
+  - Distal tubule
+  - Collecting duct
+  - Formation of urine
+  - Glomerular filtration
+  - Secretion and reabsorption of solutes
+  - Concentration of urine
+  - Counter-current multiplier mechanism
+  - Storage and elimination: ureter, bladder, urethra
+  - Osmoregulation: capillary reabsorption of H O, amino acids, glucose, ions 2
+  - Muscular control: sphincter muscle
+- **Reproductive System** (BIO)
+  - Male and female reproductive structures and their functions
+  - Gonads
+  - Genitalia
+  - Differences between male and female structures
+  - Hormonal control of reproduction
+  - Male and female sexual development
+  - Female reproductive cycle
+  - Pregnancy, parturition, lactation
+  - Integration with nervous control
+- **Muscle System** (BIO)
+  - Important functions
+  - Support: mobility
+  - Peripheral circulatory assistance
+  - Thermoregulation (shivering reflex)
+  - Structure of three basic muscle types: striated, smooth, cardiac
+  - Muscle structure and control of contraction
+  - T-tubule system
+  - Contractile apparatus
+  - Sarcoplasmic reticulum
+  - Fiber type
+  - Contractile velocity of different muscle types
+  - Regulation of cardiac muscle contraction
+  - Oxygen debt: fatigue
+  - Nervous control
+  - Motor neurons
+  - Neuromuscular junction, motor end plates
+  - Sympathetic and parasympathetic innervation
+  - Voluntary and involuntary muscles
+- **Specialized Cell ― Muscle Cell** (BIO)
+  - Structural characteristics of striated, smooth, and cardiac muscle
+  - Abundant mitochondria in red muscle cells: ATP source
+  - Organization of contractile elements: actin and myosin filaments, crossbridges, sliding filament model
+  - Sarcomeres: “I” and “A” bands, “M” and “Z” lines, “H” zone
+  - Presence of troponin and tropomyosin
+  - Calcium regulation of contraction
+- **Skeletal System** (BIO)
+  - Functions
+  - Structural rigidity and support
+  - Calcium storage
+  - Physical protection
+  - Skeletal structure
+  - Specialization of bone types, structures
+  - Joint structures
+  - Endoskeleton vs. exoskeleton
+  - Bone structure
+  - Calcium-protein matrix
+  - Cellular composition of bone
+  - Cartilage: structure and function
+  - Ligaments, tendons
+  - Endocrine control
+- **Skin System** (BIO)
+  - Structure
+  - Layer differentiation, cell types
+  - Relative impermeability to water
+  - Functions in homeostasis and osmoregulation
+  - Functions in thermoregulation
+  - Hair, erectile musculature
+  - Fat layer for insulation
+  - Sweat glands, location in dermis
+  - Vasoconstriction and vasodilation in surface capillaries
+  - Physical protection
+  - Nails, calluses, hair
+  - Protection against abrasion, disease organisms
+  - Hormonal control: sweating, vasodilation, and vasoconstriction
+  - Ea
+  - Te Content Categories
+  - Category 4A focuses on motion and its causes and various forms of energy and their interconversions.
+  - Category 4B focuses on the behavior of fluids, which is relevant to the functioning of the pulmonary and circulatory systems.
+  - Category 4C emphasizes the nature of electrical currents and voltages, how energy can be converted into electrical forms that can be used to perform chemical transformations or work, and how electrical impulses can be transmitted over long distances in the nervous system.
+  - Category 4D focuses on the properties of light and sound, how the interactions of light and sound with matter can be used by an organism to sense its environment, and how these interactions can also be used to generate structural information or images.
+  - Category 4E focuses on subatomic particles, the atomic nucleus, nuclear radiation, the structure of the atom, and how the configuration of any particular atom can be used to predict its physical and chemical properties. physiological functions of the respiratory, cardiovascular, and neurological systems in health and disease. With these building blocks, medical students will be able to use core principles of physics to learn about the
+
+---
+
+## Section CP — Chemical and Physical Foundations of Biological Systems
+
+### FC4 (40% of section) — Complex living organisms transport materials, sense their environment, process signals, and respond to changes using processes understood in terms of physical principles.
+
+#### 4A. Translational motion, forces, work, energy, and equilibrium in living systems
+*The motion of any object can be described in terms of displacement, velocity, and acceleration. Objects accelerate when subjected to external forces and are at equilibrium when the net force and the net torque acting on them are zero. Many aspects of motion can be calculated with the knowledge that energy is conserved, even though it may be converted into different forms. In a living system, the energy for*
+
+- **Translational Motion** (PHY)
+  - Units and dimensions
+  - Vectors, components
+  - Vector addition
+  - Speed, velocity (average and instantaneous)
+  - Acceleration
+- **Force** (PHY)
+  - Newton’s First Law, inertia
+  - Newton’s Second Law (F = ma)
+  - Newton’s Third Law, forces equal and opposite
+  - Friction, static and kinetic
+  - Center of mass
+- **Equilibrium** (PHY)
+  - Vector analysis of forces acting on a point object
+  - Torques, lever arms
+- **Work** (PHY)
+  - Work done by a constant force: W = Fd cosθ
+  - Mechanical advantage
+  - Work Kinetic Energy Theorem
+  - Conservative forces
+- **Energy of Point Object Systems** (PHY)
+  - Kinetic Energy: KE = ½mv2; units
+  - Potential Energy
+  - PE = mgh (gravitational, local)
+  - PE = ½kx2 (spring)
+  - Conservation of energy
+  - Power, units
+- **Periodic Motion** (PHY)
+  - Amplitude, frequency, phase
+  - Transverse and longitudinal waves: wavelength and propagation speed
+
+#### 4B. Importance of fluids for the circulation of blood, gas movement, and gas exchange
+*Fluids are featured in several physiologically important processes, including the circulation of blood, gas movement into and out of the lungs, and gas exchange with the blood. The energetic requirements of fluid dynamics can be modeled using physical equations. A thorough understanding of fluids is necessary to understand the origins of numerous forms of disease.*
+
+- **Fluids** (PHY)
+  - Density, specific gravity
+  - Buoyancy, Archimedes’ Principle
+  - Hydrostatic pressure
+  - Pascal’s Law
+  - Hydrostatic pressure; P = ρgh (pressure vs. depth)
+  - Viscosity: Poiseuille Flow
+  - Continuity equation (A∙v = constant)
+  - Concept of turbulence at high velocities
+  - Surface tension
+  - Bernoulli’s equation
+  - Venturi effect, pitot tube
+- **Circulatory System** (BIO)
+  - Arterial and venous systems; pressure and flow characteristics
+- **Gas Phase** (GC, PHY)
+  - Absolute temperature, K, Kelvin scale
+  - Pressure, simple mercury barometer
+  - Molar volume at 0°C and 1 atm = 22.4 L/mol
+  - Ideal gas
+  - Definition
+  - Ideal Gas Law: PV = nRT
+  - Boyle’s Law: PV = constant
+  - Charles’ Law: V/T = constant
+  - Avogadro’s Law: V/n = constant
+  - Kinetic Molecular Theory of Gases
+  - Heat capacity at constant volume and at
+- **constant pressure** (PHY)
+  - Boltzmann’s Constant (PHY)
+  - Deviation of real gas behavior from Ideal Gas Law
+  - Qualitative
+  - Quantitative (Van der Waals’ Equation)
+  - Partial pressure, mole fraction
+  - Dalton’s Law relating partial pressure to composition
+
+#### 4C. Electrochemistry and electrical circuits and their elements
+*Charged particles can be set in motion by the action of an applied electrical field and can be used to transmit energy or information over long distances. The energy released during certain chemical reactions can be converted to electrical energy, which can be harnessed to perform other reactions or work. Physiologically, a concentration gradient of charged particles is set up across the cell membrane of neurons at considerable energetic expense. This allows for the*
+
+- **Electrostatics** (PHY)
+  - Charge, conductors, charge conservation
+  - Insulators
+  - Coulomb’s Law
+  - Electric field E
+  - Field lines
+  - Field due to charge distribution
+  - Electrostatic energy, electric potential at a point in space
+- **Circuit Elements** (PHY)
+  - Current I = ΔQ/Δt, sign conventions, units
+  - Electromotive force, voltage
+  - Resistance
+  - Ohm’s Law: I = V/R
+  - Resistors in series
+  - Resistors in parallel
+  - Resistivity: ρ = R•A/L
+  - Capacitance
+  - Parallel plate capacitor
+  - Energy of charged capacitor
+  - Capacitors in series
+  - Capacitors in parallel
+  - Dielectrics
+  - Conductivity
+  - Metallic
+  - Electrolytic
+  - Meters
+- **Magnetism** (PHY)
+  - Definition of magnetic field B
+  - Motion of charged particles in magnetic fields;
+- **Lorentz force Electrochemistry** (GC)
+  - Electrolytic cell
+  - Electrolysis
+  - Anode, cathode
+  - Electrolyte
+  - Faraday’s Law relating amount of elements deposited (or gas liberated) at an electrode to current
+  - Electron flow; oxidation and reduction at the electrodes
+  - Galvanic or Voltaic cells
+  - Half-reactions
+  - Reduction potentials; cell potential
+  - Direction of electron flow
+  - Concentration cell
+  - Batteries
+  - Electromotive force, voltage
+  - Lead-storage batteries
+  - Nickel-cadmium batteries
+- **Specialized Cell ― Nerve Cell** (BIO)
+  - Myelin sheath, Schwann cells, insulation of axon
+  - Nodes of Ranvier: propagation of nerve impulse along axon
+
+#### 4D. How light and sound interact with matter
+*Light is a form of electromagnetic radiation — waves of electric and magnetic fields that transmit energy. The behavior of light depends on its frequency (or wavelength). The properties of light are used in the optical elements of the eye to focus rays of light on sensory elements. When light interacts with matter, spectroscopic changes occur that can be used to identify the material on an atomic or molecular level. Differential absorption of electromagnetic radiation can be used to generate images useful in diagnostic medicine. Interference and diffraction of light waves are used in many analytical and diagnostic techniques. The photon model of light explains why electromagnetic radiation of different wavelengths interacts differently with matter. When mechanical energy is transmitted through solids, liquids, and gases, oscillating pressure waves known as “sound” are generated. Sound waves are audible if the sensory elements of the ear vibrate in response to exposure to these vibrations. The detection of reflected sound waves is used in ultrasound imaging. This noninvasive technique readily locates dense subcutaneous structures, such as bone and cartilage, and is very useful in diagnostic medicine. The content in this category covers the properties of both light and sound and how these energy waves interact with matter.*
+
+- **Sound** (PHY)
+  - Production of sound
+  - Relative speed of sound in solids, liquids, and gases
+  - Intensity of sound, decibel units, log scale
+  - Attenuation (damping)
+  - Doppler Effect: moving sound source or observer, reflection of sound from a moving object
+  - Pitch
+  - Resonance in pipes and strings
+  - Ultrasound
+  - Shock waves
+- **Light, Electromagnetic Radiation** (PHY)
+  - Concept of Interference; Young’s double-slit experiment
+  - Thin films, diffraction grating, single-slit diffraction
+  - Other diffraction phenomena, X-ray diffraction
+  - Polarization of light: linear and circular
+  - Properties of electromagnetic radiation
+  - Velocity equals constant c, in vacuo
+  - Electromagnetic radiation consists of perpendicularly oscillating electric and magnetic fields; direction of propagation is perpendicular to both
+  - Classification of electromagnetic spectrum, photon energy E = hf
+  - Visual spectrum, color
+- **Molecular Structure and Absorption Spectra** (OC)
+  - Infrared region
+  - Intramolecular vibrations and rotations
+  - Recognizing common characteristic group absorptions, fingerprint region
+  - Visible region (GC)
+  - Absorption in visible region gives complementary color (e.g., carotene)
+  - Effect of structural changes on absorption (e.g., indicators)
+  - Ultraviolet region
+  - π-Electron and nonbonding electron transitions
+  - Conjugated systems
+  - NMR spectroscopy
+  - Protons in a magnetic field; equivalent protons
+  - Spin-spin splitting
+- **Geometrical Optics** (PHY)
+  - Reflection from plane surface: angle of incidence equals angle of reflection
+  - Refraction, refractive index n; Snell’s law: n sin θ 1 1 = n sin θ 2 2
+  - Dispersion, change of index of refraction with wavelength
+  - Conditions for total internal reflection
+  - Spherical mirrors
+  - Center of curvature
+  - Focal length
+  - Real and virtual images
+  - Thin lenses
+  - Converging and diverging lenses
+  - Use of formula 1/p + 1/q = 1/f, with sign conventions
+  - Lens strength, diopters
+  - Combination of lenses
+  - Lens aberration
+  - Optical Instruments, including the human eye
+
+#### 4E. Atoms, nuclear decay, electronic structure, and atomic chemical behavior
+*Atoms are classified by their atomic number: the number of protons in the atomic nucleus, which also includes neutrons. Chemical interactions between atoms are the result of electrostatic forces involving the electrons and the nuclei. Because neutrons are uncharged, they do not dramatically affect the chemistry of any particular type of atom, but they do affect the stability of the nucleus itself. When a nucleus is unstable, decay results from one of several different processes, which are random but occur at well-characterized average rates. The products of nuclear decay (alpha, beta, and gamma rays) can interact with living tissue, breaking chemical bonds and ionizing atoms and molecules in the process. The electronic structure of an atom is responsible for its chemical and physical properties. Only discrete energy levels are allowed for electrons. These levels are described individually by quantum numbers. Since the outermost, or valence, electrons are responsible for the strongest chemical interactions, a description of these electrons alone is a good first approximation to describe the behavior of any particular type of atom. Mass spectrometry is an analytical tool that allows characterization of atoms or molecules based on well- recognized fragmentation patterns and the charge-to- mass ratio (m/z) of ions generated in the gas phase. The content in this category covers atomic structure, nuclear decay, electronic structure, and the periodic nature of atomic chemical behavior.*
+
+- **Atomic Nucleus** (PHY, GC)
+  - Atomic number, atomic weight
+  - Neutrons, protons, isotopes
+  - Nuclear forces, binding energy
+  - Radioactive decay
+  - α, β, γ decay
+  - Half-life, exponential decay, semi-log plots
+  - Mass spectrometer
+  - Mass spectroscopy
+- **Electronic Structure** (PHY, GC)
+  - Orbital structure of hydrogen atom, principal quantum number n, number of electrons per
+- **orbital** (GC)
+  - Ground state, excited states
+  - Absorption and emission line spectra
+  - Use of Pauli Exclusion Principle
+  - Paramagnetism and diamagnetism
+  - Conventional notation for electronic structure (GC)
+  - Bohr atom
+  - Heisenberg Uncertainty Principle
+  - Effective nuclear charge (GC)
+  - Photoelectric effect
+- **The Periodic Table ― Classification of Elements Into Groups by Electronic Structure** (GC)
+  - Alkali metals
+  - Alkaline earth metals: their chemical characteristics
+  - Halogens: their chemical characteristics
+  - Noble gases: their physical and chemical characteristics
+  - Transition metals
+  - Representative elements
+  - Metals and nonmetals
+  - Oxygen group
+- **The Periodic Table ― Variations of Chemical Properties with Group and Row** (GC)
+  - Valence electrons
+  - First and second ionization energy
+  - Definition
+  - Prediction from electronic structure for elements in different groups or rows
+  - Electron affinity
+  - Definition
+  - Variation with group and row
+  - Electronegativity
+  - Definition
+  - Comparative values for some representative elements and important groups
+  - Electron shells and the sizes of atoms
+  - Electron shells and the sizes of ions
+- **Stoichiometry** (GC)
+  - Molecular weight
+  - Empirical vs. molecular formula
+  - Metric units commonly used in the context of chemistry
+  - Description of composition by percent mass
+  - Mole concept, Avogadro’s number N A
+  - Definition of density
+  - Oxidation number
+  - Common oxidizing and reducing agents
+  - Disproportionation reactions
+  - Description of reactions by chemical equations
+  - Conventions for writing chemical equations
+  - Balancing equations, including redox equations
+  - Limiting reactants
+  - Theoretical yields
+
+### FC5 (60% of section) — The principles that govern chemical interactions and reactions form the basis for a broader understanding of the molecular dynamics of living systems.
+
+#### 5A. Unique nature of water and its solutions
+*To fully understand the complex and dynamic nature of living systems, it is first necessary to understand the unique nature of water and its solutions. The unique properties of water allow it to strongly interact with and mobilize many types of solutes, including ions. Water is also unique in its ability to absorb energy and buffer living systems from the chemical changes necessary to sustain life. The content in this category covers the nature of solutions, solubility, acids, bases, and buffers.*
+
+- **Acid-Base Equilibria** (GC, BC)
+  - Brønsted-Lowry definition of acid, base
+  - Ionization of water
+  - K , its approximate value (K = [H+][OH–] = 10–14 w w at 25°C, 1 atm)
+  - Definition of pH: pH of pure water
+  - Conjugate acids and bases (e.g., NH + and NH ) 4 3
+  - Strong acids and bases (e.g., nitric, sulfuric)
+  - Weak acids and bases (e.g., acetic, benzoic)
+  - Dissociation of weak acids and bases with or without added salt
+  - Hydrolysis of salts of weak acids or bases
+  - Calculation of pH of solutions of salts of weak acids or bases
+  - Equilibrium constants K and K : pK , pK a b a b
+  - Buffers
+  - Definition and concepts (common buffer systems)
+  - Influence on titration curves
+- **Ions in Solutions** (GC, BC)
+  - Anion, cation: common names, formulas, and charges for familiar ions (e.g., NH + ammonium, 4 PO 3– phosphate, SO 2– sulfate) 4 4
+  - Hydration, the hydronium ion
+- **Solubility** (GC)
+  - Units of concentration (e.g., molarity)
+  - Solubility product constant; the equilibrium expression K sp
+  - Common-ion effect, its use in laboratory separations
+  - Complex ion formation
+  - Complex ions and solubility
+  - Solubility and pH
+- **Titration** (GC)
+  - Indicators
+  - Neutralization
+  - Interpretation of the titration curves
+  - Redox titration
+
+#### 5B. Nature of molecules and intermolecular interactions
+*Covalent bonding involves the sharing of electrons between atoms. If the result of such interactions is not a network solid, then the covalently bonded substance will be discrete and molecular. The shape of molecules can be predicted based on electrostatic principles and quantum mechanics since only two electrons can occupy the same orbital. Bond polarity (both direction and magnitude) can be predicted based on knowledge of the valence electron structure of the constituent atoms. The strength of intermolecular interactions depends on molecular shape and the polarity of the covalent bonds present. The solubility and other physical properties of molecular substances depend on the strength of intermolecular interactions. The content in this category covers the nature of molecules and includes covalent bonding, molecular structure, nomenclature, and intermolecular interactions.*
+
+- **Covalent Bond** (GC)
+  - Lewis electron dot formulas
+  - Resonance structures
+  - Formal charge
+  - Lewis acids and bases
+  - Partial ionic character
+  - Role of electronegativity in determining charge distribution
+  - Dipole moment
+  - σ and π bonds
+  - Hybrid orbitals: sp3, sp2, sp, and respective geometries
+  - Valence shell electron pair repulsion and the prediction of shapes of molecules (e.g., NH , H O, 3 2 CO ) 2
+  - Structural formulas for molecules involving H, C, N, O, F, S, P, Si, Cl
+  - Delocalized electrons and resonance in ions and molecules
+  - Multiple bonding
+  - Effect on bond length and bond energies
+  - Rigidity in molecular structure
+  - Stereochemistry of covalently bonded molecules
+  - Isomers
+  - Structural isomers
+  - Stereoisomers (e.g., diastereomers, enantiomers, cis-trans isomers)
+  - Conformational isomers
+  - Polarization of light, specific rotation
+  - Absolute and relative configuration
+  - Conventions for writing R and S forms
+  - Conventions for writing E and Z forms
+- **Liquid Phase ― Intermolecular Forces** (GC)
+  - Hydrogen bonding
+  - Dipole Interactions
+  - Van der Waals’ Forces (London dispersion forces)
+
+#### 5C. Separation and purification methods
+*Analysis of complex mixtures of substances ― especially biologically relevant materials ― typically requires separation of the components. Many methods have been developed to accomplish this task, and the method used is dependent on the types of substances which comprise the mixture. All these methods rely on the magnification of potential differences in the strength of intermolecular interactions. The content in this category covers separation and purification methods including extraction, liquid and gas chromatography, and electrophoresis.*
+
+- **Separations and Purifications** (OC, BC)
+  - Extraction: distribution of solute between two immiscible solvents
+  - Distillation
+  - Chromatography: basic principles involved in separation process
+  - Column chromatography
+  - Gas-liquid chromatography
+  - High-pressure liquid chromatography
+  - Paper chromatography
+  - Thin-layer chromatography
+  - Separation and purification of peptides and
+- **proteins** (BC)
+  - Electrophoresis
+  - Quantitative analysis
+  - Chromatography
+  - Size-exclusion
+  - Ion-exchange
+  - Affinity
+  - Racemic mixtures, separation of enantiomers (OC)
+
+#### 5D. Structure, function, and reactivity of biologically relevant molecules
+*The structure of biological molecules forms the basis of their chemical reactions including oligomerization and polymerization. Unique aspects of each type of biological molecule dictate their role in living systems, whether providing structure or information storage or serving as fuel and catalysts. The content in this category covers the structure, function, and reactivity of biologically relevant molecules including the mechanistic considerations that dictate their modes of reactivity.*
+
+- **Nucleotides and Nucleic Acids** (BC, BIO)
+  - Nucleotides and nucleosides: composition
+  - Sugar phosphate backbone
+  - Pyrimidine, purine residues
+  - Deoxyribonucleic acid: DNA; ribonucleic acid: RNA; double helix; RNA structures
+  - Chemistry (BC)
+  - Other functions (BC)
+- **Amino Acids, Peptides, Proteins** (OC, BC)
+  - Amino acids: description
+  - Absolute configuration at the α position
+  - Dipolar ions
+  - Classification
+  - Acidic or basic
+  - Hydrophilic or hydrophobic
+  - Synthesis of α-amino acids (OC)
+  - Strecker Synthesis
+  - Gabriel Synthesis
+  - Peptides and proteins: reactions
+  - Sulfur linkage for cysteine and cystine
+  - Peptide linkage: polypeptides and proteins
+  - Hydrolysis (BC)
+  - General principles
+  - Primary structure of proteins
+  - Secondary structure of proteins
+  - Tertiary structure of proteins
+  - Isoelectric point
+- **The Three-Dimensional Protein Structure** (BC)
+  - Conformational stability
+  - Hydrophobic interactions
+  - Solvation layer (entropy)
+  - Quaternary structure
+  - Denaturing and folding
+- **Nonenzymatic Protein Function** (BC)
+  - Binding
+  - Immune system
+  - Motor
+- **Lipids** (BC, OC)
+  - Description, types
+  - Storage
+  - Triacyl glycerols
+  - Free fatty acids: saponification
+  - Structural
+  - Phospholipids and phosphatids
+  - Sphingolipids (BC)
+  - Waxes
+  - Signals, cofactors
+  - Fat-soluble vitamins
+  - Steroids
+  - Prostaglandins (BC)
+- **Carbohydrates** (OC)
+  - Description
+  - Nomenclature and classification, common names
+  - Absolute configuration
+  - Cyclic structure and conformations of hexoses
+  - Epimers and anomers
+  - Hydrolysis of the glycoside linkage
+  - Keto-enol tautomerism of monosaccharides
+  - Disaccharides (BC)
+  - Polysaccharides (BC)
+- **Aldehydes and Ketones** (OC)
+  - Description
+  - Nomenclature
+  - Physical properties
+  - Important reactions
+  - Nucleophilic addition reactions at C=O bond
+  - Acetal, hemiacetal
+  - Imine, enamine
+  - Hydride reagents
+  - Cyanohydrin
+  - Oxidation of aldehydes
+  - Reactions at adjacent positions: enolate chemistry
+  - Keto-enol tautomerism (α-racemization)
+  - Aldol condensation, retro-aldol
+  - Kinetic vs. thermodynamic enolate
+  - General principles
+  - Effect of substituents on reactivity of C=O; steric hindrance
+  - Acidity of α-H; carbanions
+- **Alcohols** (OC)
+  - Description
+  - Nomenclature
+  - Physical properties (acidity, hydrogen bonding)
+  - Important reactions
+  - Oxidation
+  - Substitution reactions: S 1 or S 2 N N
+  - Protection of alcohols
+  - Preparation of mesylates and tosylates
+- **Carboxylic Acids** (OC)
+  - Description
+  - Nomenclature
+  - Physical properties
+  - Important reactions
+  - Carboxyl group reactions
+  - Amides (and lactam), esters (and lactone), anhydride formation
+  - Reduction
+  - Decarboxylation
+  - Reactions at 2-position, substitution
+- **Acid Derivatives (Anhydrides, Amides, Esters)** (OC)
+  - Description
+  - Nomenclature
+  - Physical properties
+  - Important reactions
+  - Nucleophilic substitution
+  - Transesterification
+  - Hydrolysis of amides
+  - General principles
+  - Relative reactivity of acid derivatives
+  - Steric effects
+  - Electronic effects
+  - Strain (e.g., β-lactams)
+- **Phenols** (OC, BC)
+  - Oxidation and reduction (e.g., hydroquinones, ubiquinones): biological 2e– redox centers
+- **Polycyclic and Heterocyclic Aromatic Compounds** (OC, BC)
+  - Biological aromatic heterocycles
+
+#### 5E. Principles of chemical thermodynamics and kinetics
+*The processes that occur in living systems are dynamic, and they follow the principles of chemical thermodynamics and kinetics. The position of chemical equilibrium is dictated by the relative energies of products and reactants. The rate at which chemical equilibrium is attained is dictated by a variety of factors: concentration of reactants, temperature, and the amount of catalyst (if any). Biological systems have evolved to harness energy and use it in very efficient ways to support all processes of life, including homeostasis and anabolism. Biological catalysts, known as enzymes, have evolved that allow all the relevant chemical reactions required to sustain life to occur both rapidly and efficiently and under the narrow set of conditions required. The content in this category covers all principles of chemical thermodynamics and kinetics including enzymatic catalysis.*
+
+- **Enzymes** (BC, BIO)
+  - Classification by reaction type
+  - Mechanism
+  - Substrates and enzyme specificity
+  - Active-site model
+  - Induced-fit model
+  - Cofactors, coenzymes, and vitamins
+  - Kinetics
+  - General (catalysis)
+  - Michaelis-Menten
+  - Cooperativity
+  - Effects of local conditions on enzyme activity
+  - Inhibition
+  - Regulatory enzymes
+  - Allosteric
+  - Covalently modified
+- **Principles of Bioenergetics** (BC)
+  - Bioenergetics/thermodynamics
+  - Free energy, K eq
+  - Concentration
+  - Phosphorylation/ATP
+  - ATP hydrolysis ΔG << 0
+  - ATP group transfers
+  - Biological oxidation-reduction
+  - Half-reactions
+  - Soluble electron carriers
+  - Flavoproteins
+- **Energy Changes in Chemical Reactions ― Thermochemistry, Thermodynamics** (GC, PHY)
+  - Thermodynamic system – state function
+  - Zeroth Law – concept of temperature
+  - First Law − conservation of energy in thermodynamic processes
+  - PV diagram: work done = area under or enclosed by
+- **curve** (PHY)
+  - Second Law – concept of entropy
+  - Entropy as a measure of “disorder”
+  - Relative entropy for gas, liquid, and crystal states
+  - Measurement of heat changes (calorimetry), heat capacity, specific heat
+  - Heat transfer – conduction, convection, radiation
+  - Endothermic, exothermic reactions (GC)
+  - Enthalpy, H, and standard heats of reaction and formation
+  - Hess’ Law of Heat Summation
+  - Bond dissociation energy as related to heats of
+- **formation** (GC)
+  - Free energy: G (GC)
+  - Spontaneous reactions and ΔG° (GC)
+  - Coefficient of expansion (PHY)
+  - Heat of fusion, heat of vaporization
+  - Phase diagram: pressure and temperature
+- **Rate Processes in Chemical Reactions ― Kinetics and Equilibrium** (GC)
+  - Reaction rate
+  - Dependence of reaction rate on concentration of reactants
+  - Rate law, rate constant
+  - Reaction order
+  - Rate-determining step
+  - Dependence of reaction rate on temperature
+  - Activation energy
+  - Activated complex or transition state
+  - Interpretation of energy profiles showing energies of reactants, products, activation energy, and ΔH for the reaction
+  - Use of the Arrhenius Equation
+  - Kinetic control vs. thermodynamic control of a reaction
+  - Catalysts
+  - Equilibrium in reversible chemical reactions
+  - Law of Mass Action
+  - Equilibrium Constant
+  - Application of Le Châtelier’s Principle
+  - Relationship of the equilibrium constant and ΔG°
+  - Ea
+  - Te
+
+---
+
+## Section PS — Psychological, Social, and Biological Foundations of Behavior
+
+### FC6 (25% of section) — Biological, psychological, and sociocultural factors influence the ways that individuals perceive, think about, and react to the world.
+
+#### 6A. Sensing the environment
+*Psychological, sociocultural, and biological factors affect how we sense and perceive the world. All sensory processing begins with first detecting a stimulus in the environment through sensory cells, receptors, and biological pathways. After collecting sensory information, we then interpret and make sense of it. Although sensation and perception are distinct functions, they are both influenced by psychological, social, and biological factors and thus become almost indistinguishable in practice. This complexity is illuminated by examining human sight, hearing, touch, taste, and smell. The content in this category covers sensation and perception across all human senses.*
+
+- **Sensory Processing** (PSY, BIO)
+  - Sensation
+  - Threshold
+  - Weber’s Law (PSY)
+  - Signal detection theory (PSY)
+  - Sensory adaptation
+  - Psychophysics
+  - Sensory receptors
+  - Sensory pathways
+  - Types of sensory receptors
+- **Vision** (PSY, BIO)
+  - Structure and function of the eye
+  - Visual processing
+  - Visual pathways in the brain
+  - Parallel processing (PSY)
+  - Feature detection (PSY)
+- **Hearing** (PSY, BIO)
+  - Structure and function of the ear
+  - Auditory processing (e.g., auditory pathways in the brain)
+  - Sensory reception by hair cells
+- **Other Senses** (PSY, BIO)
+  - Somatosensation (e.g., pain perception)
+  - Taste (e.g., taste buds (chemoreceptors) that detect specific chemicals)
+  - Smell
+  - Olfactory cells (chemoreceptors) that detect specific chemicals
+  - Pheromones (BIO)
+  - Olfactory pathways in the brain (BIO)
+  - Kinesthetic sense (PSY)
+  - Vestibular sense
+- **Perception** (PSY)
+  - Bottom-up/top-down processing
+  - Perceptual organization (e.g., depth, form, motion, constancy)
+  - Gestalt principles
+
+#### 6B. Making sense of the environment
+*The way we think about the world depends on our awareness, thoughts, knowledge, and memories. It is also influenced by our ability to solve problems, make decisions, form judgments, and communicate. Psychological, sociocultural, and biological influences determine the development and use of these different yet convergent processes. Biological factors underlie the mental processes that create our reality, shape our perception of the world, and influence the way we perceive and react to every aspect of our lives. The content in this category covers critical aspects of cognition ― including consciousness, cognitive development, problem-solving and decision-making, intelligence, memory, and language.*
+
+- **Attention** (PSY)
+  - Selective attention
+  - Divided attention
+- **Cognition** (PSY)
+  - Information-processing model
+  - Cognitive development
+  - Piaget’s stages of cognitive development
+  - Cognitive changes in late adulthood
+  - Role of culture in cognitive development
+  - Influence of heredity and environment on cognitive development
+  - Biological factors that affect cognition (PSY, BIO)
+  - Problem-solving and decision-making
+  - Types of problem-solving
+  - Barriers to effective problem-solving
+  - Approaches to problem-solving
+  - Heuristics and biases (e.g., overconfidence, belief perseverance)
+  - Intellectual functioning
+  - Theories of intelligence
+  - Influence of heredity and environment on intelligence
+  - Variations in intellectual ability
+- **Consciousness** (PSY)
+  - States of consciousness
+  - Alertness (PSY, BIO)
+  - Sleep
+  - Stages of sleep
+  - Sleep cycles and changes to sleep cycles
+  - Sleep and circadian rhythms (PSY, BIO)
+  - Dreaming
+  - Sleep-wake disorders
+  - Hypnosis and meditation
+  - Consciousness-altering drugs
+  - Types of consciousness-altering drugs and their effects on the nervous system and behavior
+  - Drug addiction and the reward pathway in the brain
+- **Memory** (PSY)
+  - Encoding
+  - Process of encoding information
+  - Processes that aid in encoding memories
+  - Storage
+  - Types of memory storage (e.g., sensory, working, long-term)
+  - Semantic networks and spreading activation
+  - Retrieval
+  - Recall, recognition, and relearning
+  - Retrieval cues
+  - The role of emotion in retrieving memories (PSY, BIO)
+  - Processes that aid retrieval
+  - Forgetting
+  - Aging and memory
+  - Memory dysfunctions (e.g., Alzheimer’s disease, Korsakoff’s syndrome)
+  - Decay
+  - Interference
+  - Memory construction and source monitoring
+  - Changes in synaptic connections underlie memory
+- **and learning** (PSY, BIO)
+  - Neural plasticity
+  - Memory and learning
+  - Long-term potentiation
+- **Language** (PSY)
+  - Theories of language development (e.g., learning, nativist, interactionist)
+  - Influence of language on cognition
+  - Brain areas that control language and speech (PSY, BIO)
+
+#### 6C. Responding to the world
+*We experience a barrage of environmental stimuli throughout the course of our lives. In many cases, environmental stimuli trigger physiological responses, such as an elevated heart rate, increased perspiration, or heightened feelings of anxiety. How we perceive and interpret these physiological responses is complex and influenced by psychological, sociocultural, and biological factors. Emotional responses, such as feelings of happiness, sadness, anger, or stress, are often born out of our interpretation of this interplay of physiological responses. Our experience with emotions and stress not only affects our behavior, but also shapes our interactions with others. The content in this category covers the basic components and theories of emotion and their underlying psychological, sociocultural, and biological factors. It also addresses stress, stress outcomes, and stress management.*
+
+- **Emotion** (PSY)
+  - Three components of emotion (i.e., cognitive, physiological, behavioral)
+  - Universal emotions (i.e., fear, anger, happiness, surprise, joy, disgust, sadness)
+  - Adaptive role of emotion
+  - Theories of emotion
+  - James-Lange theory
+  - Cannon-Bard theory
+  - Schachter-Singer theory
+  - The role of biological processes in perceiving emotion
+  - Brain regions involved in the generation and experience of emotions
+  - The role of the limbic system in emotion
+  - Emotion and the autonomic nervous system
+  - Physiological markers of emotion (signatures of emotion)
+- **Stress** (PSY)
+  - The nature of stress
+  - Appraisal
+  - Different types of stressors (e.g., cataclysmic events, personal)
+  - Effects of stress on psychological functions
+  - Stress outcomes, response to stressors
+  - Physiological (PSY, BIO)
+  - Emotional
+  - Behavioral
+  - Managing stress (e.g., exercise, relaxation, spirituality) Content Categories
+  - Category 7A focuses on the individual psychological and biological factors that affect behavior.
+  - Category 7B focuses on how social factors, such as groups and social norms, affect behavior.
+  - Category 7C focuses on how learning affects behavior, as well as the role of attitude theories in behavior and behavior change. increase risk for disease. With these building blocks, medical students will be able to learn how behavior can either support health or
+
+### FC7 (35% of section) — Biological, psychological, and sociocultural factors influence behavior and behavior change.
+
+#### 7A. Individual influences on behavior
+*A complex interplay of psychological and biological factors shapes behavior. Biological structures and processes serve as the pathways by which bodies carry out activities. They also affect predispositions to behave in certain ways, shape personalities, and influence the likelihood of developing psychological disorders. Psychological factors also affect behavior and, consequently, health and well-being. The content in this category covers biological bases of behavior, including the effect of genetics and how the nervous and endocrine systems affect behavior. It also addresses how personality, psychological disorders, motivation, and attitudes affect behavior. Some of these topics are learned in the context of nonhuman animal species.*
+
+- **Biological Bases of Behavior** (PSY, BIO)
+  - The nervous system
+  - Neurons (e.g., the reflex arc)
+  - Neurotransmitters
+  - Structure and function of the peripheral nervous system
+  - Structure and function of the central nervous system
+  - The brain
+  - Forebrain
+  - Midbrain
+  - Hindbrain
+  - Lateralization of cortical functions
+  - Methods used in studying the brain
+  - The spinal cord
+  - Neuronal communication and its influence on
+- **behavior** (PSY)
+  - Influence of neurotransmitters on behavior (PSY)
+  - The endocrine system
+  - Components of the endocrine system
+  - Effects of the endocrine system on behavior
+  - Behavioral genetics
+  - Genes, temperament, and heredity
+  - Adaptive value of traits and behaviors
+  - Interaction between heredity and environmental influences
+  - Influence of genetic and environmental factors on the development of behaviors
+  - Experience and behavior (PSY)
+  - Regulatory genes and behavior (BIO)
+  - Genetically based behavioral variation in natural populations
+  - Human physiological development (PSY)
+  - Prenatal development
+  - Motor development
+  - Developmental changes in adolescence
+- **Personality** (PSY)
+  - Theories of personality
+  - Psychoanalytic perspective
+  - Humanistic perspective
+  - Trait perspective
+  - Social cognitive perspective
+  - Biological perspective
+  - Behaviorist perspective
+  - Situational approach to explaining behavior
+- **Psychological Disorders** (PSY)
+  - Understanding psychological disorders
+  - Biomedical vs. biopsychosocial approaches
+  - Classifying psychological disorders
+  - Rates of psychological disorders
+  - Types of psychological disorders
+  - Anxiety disorders
+  - Obsessive-compulsive disorder
+  - Trauma- and stressor-related disorders
+  - Somatic symptom and related disorders
+  - Bipolar and related disorders
+  - Depressive disorders
+  - Schizophrenia
+  - Dissociative disorders
+  - Personality disorders
+  - Biological bases of nervous system disorders (PSY, BIO)
+  - Schizophrenia
+  - Depression
+  - Alzheimer’s disease
+  - Parkinson’s disease
+  - Stem cell-based therapy to regenerate neurons in
+- **the central nervous system** (BIO)
+- **Motivation** (PSY)
+  - Factors that influence motivation
+  - Instinct
+  - Arousal
+  - Drives (e.g., negative-feedback systems) (PSY, BIO)
+  - Needs
+  - Theories that explain how motivation affects human behavior
+  - Drive reduction theory
+  - Incentive theory
+  - Other theories (e.g., cognitive, need-based)
+  - Biological and sociocultural motivators that regulate behavior (e.g., hunger, sex drive, substance addiction)
+- **Attitudes** (PSY)
+  - Components of attitudes (i.e., cognitive, affective, behavioral)
+  - The link between attitudes and behavior
+  - Processes by which behavior influences attitudes (e.g., foot-in-the door phenomenon, role-playing effects)
+  - Processes by which attitudes influence behavior
+  - Cognitive dissonance theory
+
+#### 7B. Social processes that influence human behavior
+*Many social processes influence human behavior; in fact, the mere presence of other individuals can influence our behavior. Groups and social norms also exert influence over our behavior. Oftentimes, social processes influence our behavior through unwritten rules that define acceptable and unacceptable behavior in society. Our understanding of groups and social norms is learned through the process of socialization. What we learn about the groups and society to which we belong affects our behavior and influences our perceptions and interactions with others. The content in this category covers how the presence of others, group decision-making processes, social norms, and socialization shape our behavior.*
+
+- **How the Presence of Others Affects Individual Behavior** (PSY)
+  - Social facilitation
+  - Deindividuation
+  - Bystander effect
+  - Social loafing
+  - Social control (SOC)
+  - Peer pressure (PSY, SOC)
+  - Conformity (PSY, SOC)
+  - Obedience (PSY, SOC)
+- **Group Decision-Making Processes** (PSY, SOC)
+  - Group polarization (PSY)
+  - Groupthink
+- **Normative and Nonnormative Behavior** (SOC)
+  - Social norms (PSY, SOC)
+  - Sanctions (SOC)
+  - Folkways, mores, and taboos (SOC)
+  - Anomie (SOC)
+  - Deviance
+  - Perspectives on deviance (e.g., differential association, labeling theory, strain theory)
+  - Aspects of collective behavior (e.g., fads, mass hysteria, riots)
+- **Socialization** (PSY, SOC)
+  - Agents of socialization (e.g., the family, mass media, peers, workplace)
+
+#### 7C. Attitude and behavior change
+*Learning is a relatively permanent change in behavior brought about by experience. There are a number of different types of learning, which include habituation as well as associative, observational, and social learning. Although people can learn new behaviors and change their attitudes, psychological, environmental, and*
+
+- **Habituation and Dishabituation** (PSY)
+- **Associative Learning** (PSY)
+  - Classical conditioning (PSY, BIO)
+  - Neutral, conditioned, and unconditioned stimuli
+  - Conditioned and unconditioned response
+  - Processes: acquisition, extinction, spontaneous recovery, generalization, discrimination
+  - Operant conditioning (PSY, BIO)
+  - Processes of shaping and extinction
+  - Types of reinforcement: positive, negative, primary, conditional
+  - Reinforcement schedules: fixed-ratio, variable- ratio, fixed-interval, variable-interval
+  - Punishment
+  - Escape and avoidance learning
+  - The role of cognitive processes in associative learning
+  - Biological processes that affect associative learning (e.g., biological predispositions, instinctive drift) (PSY,
+- **BIO) Observational Learning** (PSY)
+  - Modeling
+  - Biological processes that affect observational learning
+  - Mirror neurons
+  - Role of the brain in experiencing vicarious emotions
+  - Applications of observational learning to explain individual behavior
+- **Theories of Attitude and Behavior Change** (PSY)
+  - Elaboration likelihood model
+  - Social cognitive theory
+  - Factors that affect attitude change (e.g., changing behavior, characteristics of the message and target, social factors) Content Categories
+  - Category 8A focuses on the notion of self and identity formation.
+  - Category 8B focuses on the attitudes and beliefs that affect social interaction.
+  - Category 8C focuses on the actions and processes underlying social interactions. patients and other members of the health care team. With these building blocks, medical students will be able to learn how to communicate and collaborate with
+
+### FC8 (20% of section) — Psychological, sociocultural, and biological factors influence the way we think about ourselves and others, as well as how we interact with others.
+
+#### 8A. Self-identity
+*The self refers to the thoughts and beliefs we have about ourselves. Our notion of the self is complex and multifaceted. It includes gender, racial, and ethnic identities, as well as beliefs about our ability to accomplish tasks and exert control over different situations. Our notion of the self develops over time and is shaped by a variety of factors, including society, culture, individuals and groups, and our unique experiences. How we view ourselves influences our perceptions of others and, by extension, our interactions with them. The content in this category covers the notions of self- concept and identity, along with the role of self- esteem, self-efficacy, and locus of control in the development of self-concept. Identity formation,*
+
+- **control in self-concept and self-identity** (PSY)
+  - Different types of identities (e.g., race/ethnicity, gender, age, sexual orientation, class)
+- **Formation of Identity** (PSY, SOC)
+  - Theories of identity development (e.g., gender, moral, psychosexual, social)
+  - Influence of social factors on identity formation
+  - Influence of individuals (e.g., imitation, looking- glass self, role-taking)
+  - Influence of groups (e.g., reference group)
+  - Influence of culture and socialization on identity formation
+
+#### 8B. Social thinking
+*Social thinking refers to the ways we view others and our environment, as well as how we interpret others’ behaviors. A variety of factors ― personality, environment, and culture ― factor into the beliefs and attitudes we develop. Our beliefs and attitudes about others and the environment also shape the way we interact with each other. To interact with others, we need to interpret different aspects of a situation, including our perception of ourselves, the behavior of others, and the environment. The content in this category covers our attitudes about others and how those attitudes develop, including how perceptions of culture and environment affect attributions of behavior. It also covers how our attitudes about different groups ― prejudice, stereotypes, stigma, and ethnocentrism ― may influence our interactions with group members.*
+
+- **Attributing Behavior to Persons or Situations** (PSY)
+  - Attributional processes (e.g., fundamental attribution error, role of culture in attributions)
+  - How self-perceptions shape our perceptions of others
+  - How perceptions of the environment shape our perceptions of others
+- **Prejudice and Bias** (PSY, SOC)
+  - Processes that contribute to prejudice
+  - Power, prestige, and class (SOC)
+  - The role of emotion in prejudice (PSY)
+  - The role of cognition in prejudice (PSY)
+  - Stereotypes
+  - Stigma (SOC)
+  - Ethnocentrism (SOC)
+  - Ethnocentrism vs. cultural relativism
+- **Processes Related to Stereotypes** (PSY)
+  - Self-fulfilling prophecy
+  - Stereotype threat
+
+#### 8C. Social interactions
+*Humans are social beings by nature. Though the sentiment is simple, the actions and processes underlying and shaping our social interactions are not. The changing nature of social interaction is important for understanding the mechanisms and processes through which people interact with each other, both individually and within groups. A variety of factors ―*
+
+- **Elements of Social Interaction** (PSY, SOC)
+  - Status (SOC)
+  - Types of status (e.g., achieved, ascribed)
+  - Role
+  - Role conflict and role strain (SOC)
+  - Role exit (SOC)
+  - Groups
+  - Primary and secondary groups (SOC)
+  - In-group vs. out-group
+  - Group size (e.g., dyads, triads) (SOC)
+  - Networks (SOC)
+  - Organizations (SOC)
+  - Formal organization
+  - Bureaucracy
+  - Characteristics of an ideal bureaucracy
+  - Perspectives on bureaucracy (e.g., iron law of oligarchy, McDonaldization) Self-Presentation and Interacting With Others (PSY, SOC)
+  - Expressing and detecting emotion
+  - The role of gender in the expression and detection of emotion
+  - The role of culture in the expression and detection of emotion
+  - Presentation of self
+  - Impression management
+  - Front-stage vs. back-stage self (dramaturgical
+- **approach)** (SOC)
+  - Verbal and nonverbal communication
+  - Animal signals and communication (PSY, BIO)
+- **Social Behavior** (PSY)
+  - Attraction
+  - Aggression
+  - Attachment
+  - Altruism
+  - Social support (PSY, SOC)
+  - Biological explanations of social behavior in animals
+  - Foraging behavior (BIO)
+  - Mating behavior and mate choice
+  - Applying game theory (BIO)
+  - Altruism
+  - Inclusive fitness (BIO)
+- **Discrimination** (PSY, SOC)
+  - Individual vs. institutional discrimination (SOC)
+  - The relationship between prejudice and discrimination
+  - How power, prestige, and class facilitate
+- **discrimination Content Categories** (SOC)
+  - Category 9A focuses on the link between social structures and human interactions.
+  - Category 9B focuses on the demographic characteristics and processes that define a society. demographic backgrounds influence their perception of health and disease, the health care team, and therapeutic interventions. With these building blocks, medical students will be able to learn about the ways patients’ social and
+
+### FC9 (15% of section) — Cultural and social differences influence well-being.
+
+#### 9A. Understanding social structure
+*Social structure organizes all human societies. Elements of social structure include social institutions and culture. These elements are linked in a variety of ways and shape our experiences and interactions with others ― a process that is reciprocal. The content in this category provides a foundation for understanding social structure and the various forms of interactions within and among societies. It includes theoretical approaches to studying society and social groups, specific social institutions relevant to student preparation for medical school, and the construct of culture.*
+
+- **Theoretical Approaches** (SOC)
+  - Microsociology vs. macrosociology
+  - Functionalism
+  - Conflict theory
+  - Symbolic interactionism
+  - Social constructionism
+  - Exchange-rational choice
+  - Feminist theory
+- **Social Institutions** (SOC)
+  - Education
+  - Hidden curriculum
+  - Teacher expectancy
+  - Educational segregation and stratification
+  - Family (PSY, SOC)
+  - Forms of kinship (SOC)
+  - Diversity in family forms
+  - Marriage and divorce
+  - Violence in the family (e.g., child abuse, elder
+- **abuse, spousal abuse)** (SOC)
+  - Religion
+  - Religiosity
+  - Types of religious organizations (e.g., churches, sects, cults)
+  - Religion and social change (e.g., modernization, secularization, fundamentalism)
+  - Government and economy
+  - Power and authority
+  - Comparative economic and political systems
+  - Division of labor
+  - Health and medicine
+  - Medicalization
+  - The sick role
+  - Delivery of health care
+  - Illness experience
+  - Social epidemiology
+- **Culture** (PSY, SOC)
+  - Elements of culture (e.g., beliefs, language, rituals, symbols, values)
+  - Material vs. symbolic culture (SOC)
+  - Culture lag (SOC)
+  - Culture shock (SOC)
+  - Assimilation (SOC)
+  - Multiculturalism (SOC)
+  - Subcultures and countercultures (SOC)
+  - Mass media and popular culture (SOC)
+  - Evolution and human culture (PSY, BIO)
+  - Transmission and diffusion (SOC)
+
+#### 9B. Demographic characteristics and processes
+*To understand the structure of a society, it is important to understand the demographic characteristics and processes that define it. Knowledge of the demographic structure of societies and an understanding of how societies change help us comprehend the distinct processes and mechanisms through which social interaction occurs.*
+
+- **Demographic Structure of Society** (PSY, SOC)
+  - Age
+  - Aging and the life course
+  - Age cohorts (SOC)
+  - Social significance of aging
+  - Gender
+  - Sex vs. gender
+  - The social construction of gender (SOC)
+  - Gender segregation (SOC)
+  - Race and ethnicity (SOC)
+  - The social construction of race
+  - Racialization
+  - Racial formation
+  - Immigration status (SOC)
+  - Patterns of immigration
+  - Intersections with race and ethnicity
+  - Sexual orientation
+- **Demographic Shifts and Social Change** (SOC)
+  - Theories of demographic change (e.g., Malthusian theory and demographic transition)
+  - Population growth and decline (e.g., population projections, population pyramids)
+  - Fertility, migration, and mortality
+  - Fertility and mortality rates (e.g., total, crude, age-specific)
+  - Patterns in fertility and mortality
+  - Push and pull factors in migration
+  - Social movements
+  - Relative deprivation
+  - Organization of social movements
+  - Movement strategies and tactics
+  - Globalization
+  - Factors contributing to globalization (e.g., communication technology, economic interdependence)
+  - Perspectives on globalization
+  - Social changes in globalization (e.g., civil unrest, terrorism)
+  - Urbanization
+  - Industrialization and urban growth
+  - Suburbanization and urban decline
+  - Gentrification and urban renewal Content Category
+  - Category 10A focuses on a broad understanding of social class, including theories of stratification, social mobility, and poverty. can affect access to care and the probability of maintaining health and recovering from disease. With these building blocks, medical students will be able to learn about the ways social and economic factors
+
+### FC10 (5% of section) — Social stratification and access to resources influence well-being.
+
+#### 10A. Social inequality
+*Barriers to access to institutional resources exist for the segment of the population that is disenfranchised or lacks power within a given society. Barriers to access might include language, geographic location, socioeconomic status, immigration status, and racial/ethnic identity. Institutionalized racism and discrimination are also factors that prevent some groups from obtaining equal access to resources. An understanding of the barriers to access to institutional resources, informed by perspectives such as social justice, is essential to address health and health care disparities. The content in this category covers spatial inequality, the structure and patterns of social class, and health disparities in relation to class, race/ethnicity, and gender.*
+
+- **Spatial Inequality** (SOC)
+  - Residential segregation
+  - Neighborhood safety and violence
+  - Environmental justice (location and exposure to health risks)
+- **Social Class** (SOC)
+  - Aspects of social stratification
+  - Social class and socioeconomic status
+  - Class consciousness and false consciousness
+  - Cultural capital and social capital
+  - Social reproduction
+  - Power, privilege, and prestige
+  - Intersectionality (e.g., race, gender, age)
+  - Socioeconomic gradient in health
+  - Global inequalities
+  - Patterns of social mobility
+  - Intergenerational and intragenerational mobility
+  - Vertical and horizontal mobility
+  - Meritocracy
+  - Poverty
+  - Relative and absolute poverty
+  - Social exclusion (segregation and isolation)
+- **Health Disparities** (SOC)
+  - (e.g., class, gender, and race inequalities in health)
+- **Health Care Disparities** (SOC)
+  - (e.g., class, gender, and race inequalities in health care)
+
+---
+
+## Section CARS — Critical Analysis and Reasoning Skills
+
+*Pure reasoning. No memorizable content; entirely passage-based comprehension and analysis. Content generation here means sourcing/authoring passages and reasoning items, not facts.*
