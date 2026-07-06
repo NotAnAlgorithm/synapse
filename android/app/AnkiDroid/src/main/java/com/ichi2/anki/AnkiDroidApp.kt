@@ -190,6 +190,10 @@ open class AnkiDroidApp :
 
         setupLifecycleLogging()
         activityAgnosticDialogs = ActivityAgnosticDialogs.register(this)
+        // Track the foreground activity for Synapse's reviewer offers (mint/tutor)
+        // so they can be shown from the shared, Activity-less hook logic.
+        com.ichi2.anki.synapse.SynapseReviewerHooks
+            .installActivityTracking(this)
         setupTextToSpeech()
     }
 

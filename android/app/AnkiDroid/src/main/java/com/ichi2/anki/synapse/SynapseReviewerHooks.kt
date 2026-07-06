@@ -27,12 +27,14 @@ import com.ichi2.anki.AnkiDroidApp
 import com.ichi2.anki.CollectionManager.withCol
 import com.ichi2.anki.R
 import com.ichi2.anki.common.coroutines.applicationScope
+import com.ichi2.anki.launchCatchingTask
 import com.ichi2.anki.libanki.CardId
 import com.ichi2.anki.libanki.Collection
 import com.ichi2.anki.libanki.Note
 import com.ichi2.anki.libanki.NoteId
 import com.ichi2.anki.snackbar.showSnackbar
 import com.ichi2.anki.utils.ext.showDialogFragment
+import com.ichi2.anki.withProgress
 import com.ichi2.utils.create
 import com.ichi2.utils.listItems
 import com.ichi2.utils.negativeButton
@@ -68,10 +70,16 @@ object SynapseReviewerHooks {
                 .filterIsInstance<FragmentActivity>()
                 .lastOrNull { it.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) }
 
-    /** Register the (idempotent) lifecycle tracker the first time a hook fires. */
-    private fun ensureTracking() {
+    /**
+     * Register the (idempotent) foreground-activity tracker. Call once at app
+     * startup (see `AnkiDroidApp.onCreate`) so activities are captured from the
+     * first `onStart` — `registerActivityLifecycleCallbacks` does not report the
+     * already-started activity, so lazy registration mid-session would miss the
+     * current screen and make [currentActivity] null. Also invoked defensively by
+     * the reviewer hooks.
+     */
+    fun installActivityTracking(app: Application = AnkiDroidApp.instance) {
         if (callbacksRegistered) return
-        val app = AnkiDroidApp.instance
         app.registerActivityLifecycleCallbacks(
             object : Application.ActivityLifecycleCallbacks {
                 override fun onActivityStarted(activity: Activity) {
@@ -124,7 +132,7 @@ object SynapseReviewerHooks {
      */
     fun onAgainMiss(cardId: CardId) {
         if (cardId == 0L) return
-        ensureTracking()
+        installActivityTracking()
         applicationScope.launch {
             try {
                 val info = withCol { missInfoForCard(this, cardId) } ?: return@launch
@@ -241,15 +249,19 @@ object SynapseReviewerHooks {
      * or unreachable.
      */
     fun generateForConcept(
+        activity: FragmentActivity,
         conceptTag: String,
         sourceNoteId: NoteId?,
     ) {
         val tag = conceptTag.trim()
         if (tag.isEmpty()) return
-        applicationScope.launch {
+        // Feedback is shown on the activity that launched the flow, so it never
+        // silently no-ops (the foreground-activity tracker may not have captured
+        // the current screen yet). A progress spinner covers the up-to-90s call.
+        activity.launchCatchingTask {
             if (!SynapseAiClient.isConfigured()) {
-                currentActivity?.showSnackbar(R.string.synapse_ai_not_configured)
-                return@launch
+                activity.showSnackbar(R.string.synapse_ai_not_configured)
+                return@launchCatchingTask
             }
             val conceptHint =
                 if (sourceNoteId != null) {
@@ -262,18 +274,21 @@ object SynapseReviewerHooks {
                 }
             val response =
                 try {
-                    SynapseAiClient.generate(tag)
+                    activity.withProgress(activity.getString(R.string.synapse_generating)) {
+                        SynapseAiClient.generate(tag)
+                    }
                 } catch (ex: SynapseAiClient.ServiceUnavailable) {
                     Timber.w(ex, "Synapse: generate failed")
-                    currentActivity?.showSnackbar(R.string.synapse_ai_unavailable)
-                    return@launch
+                    activity.showSnackbar(ex.message ?: activity.getString(R.string.synapse_ai_unavailable))
+                    return@launchCatchingTask
                 }
             if (!response.isDraft) {
+                // Surface the service's own reason (e.g. "no grounding for this concept",
+                // "generator unavailable", a flaw-check message) rather than a generic error.
                 val message = response.message ?: response.reason
-                currentActivity?.showSnackbar(message ?: getStringSafe(R.string.synapse_generate_no_draft))
-                return@launch
+                activity.showSnackbar(message ?: activity.getString(R.string.synapse_generate_no_draft))
+                return@launchCatchingTask
             }
-            val activity = currentActivity ?: return@launch
             activity.showDialogFragment(
                 GenerateReviewDialog.newInstance(
                     response = response,
@@ -310,12 +325,13 @@ object SynapseReviewerHooks {
                     SynapseAiClient.tutor(request)
                 } catch (ex: SynapseAiClient.ServiceUnavailable) {
                     Timber.w(ex, "Synapse: tutor failed")
-                    currentActivity?.showSnackbar(R.string.synapse_ai_unavailable)
+                    currentActivity?.let { it.showSnackbar(ex.message ?: it.getString(R.string.synapse_ai_unavailable)) }
                     return@launch
                 }
             val turns = response.assistantTexts()
             if (turns.isEmpty()) {
-                currentActivity?.showSnackbar(R.string.synapse_tutor_no_guidance)
+                val message = response.message ?: response.reason
+                currentActivity?.let { it.showSnackbar(message ?: it.getString(R.string.synapse_tutor_no_guidance)) }
                 return@launch
             }
             val activity = currentActivity ?: return@launch
@@ -384,6 +400,4 @@ object SynapseReviewerHooks {
             mastered = state.mastered,
             hasCards = state.hasCards,
         )
-
-    private fun getStringSafe(resId: Int): String = currentActivity?.getString(resId) ?: ""
 }

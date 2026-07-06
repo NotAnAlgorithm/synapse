@@ -55,7 +55,7 @@ object SynapseGenerate {
                 .create {
                     title(R.string.synapse_generate_pick_concept)
                     listItems(labels) { _, index ->
-                        SynapseReviewerHooks.generateForConcept(tags[index], sourceNoteId = null)
+                        SynapseReviewerHooks.generateForConcept(activity, tags[index], sourceNoteId = null)
                     }
                     negativeButton(R.string.dialog_cancel)
                 }.show()

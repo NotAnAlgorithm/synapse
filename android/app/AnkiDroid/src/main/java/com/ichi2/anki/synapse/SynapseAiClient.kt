@@ -42,9 +42,10 @@ import java.util.concurrent.TimeUnit
  * ...). The service is OPTIONAL: when [CONFIG_SERVICE_URL][Synapse.CONFIG_SERVICE_URL]
  * is empty, ALL AI features are disabled and the base study loop is unaffected.
  *
- * Every failure (transport error, HTTP >= 400, non-JSON body) is surfaced as
- * [ServiceUnavailable] so callers can show an "AI unavailable" message and never
- * crash the reviewer.
+ * Structured service refusals/errors (JSON bodies with a `status`, even on a 4xx/5xx
+ * like 422 refused or 503 generator_unavailable) are returned to the caller so it can
+ * surface the specific message. Only hard failures (transport error, non-JSON error
+ * body, empty body) become [ServiceUnavailable]; either way the reviewer never crashes.
  */
 object SynapseAiClient {
     /** Generation can call an LLM, so allow a generous timeout (mirrors desktop's 90s). */
@@ -164,11 +165,16 @@ object SynapseAiClient {
                 client.newCall(request).execute().use { response ->
                     val text = response.body.string()
                     if (!response.isSuccessful) {
-                        throw ServiceUnavailable(
-                            "$function failed (${response.code}): ${text.take(500)}",
-                        )
-                    }
-                    if (text.isBlank()) {
+                        Timber.w("Synapse: %s -> HTTP %d: %s", function, response.code, text.take(500))
+                        // The service returns structured refusals/errors as JSON with a
+                        // 4xx/5xx status (e.g. 422 refused/rejected, 503
+                        // generator_unavailable). Pass those through so the caller can
+                        // surface the specific `status`/`message`; only a non-JSON error
+                        // body (gateway/auth/HTML) is treated as a hard failure.
+                        if (!text.trimStart().startsWith("{")) {
+                            throw ServiceUnavailable("$function failed (${response.code}): ${text.take(300)}")
+                        }
+                    } else if (text.isBlank()) {
                         throw ServiceUnavailable("$function returned an empty response")
                     }
                     text
@@ -276,6 +282,9 @@ data class TutorResponse(
     @kotlinx.serialization.SerialName("surfaced_prerequisite") val surfacedPrerequisite: String? = null,
     @kotlinx.serialization.SerialName("giveaway_blocked") val giveawayBlocked: Boolean = false,
     val reply: String? = null,
+    val status: String? = null,
+    val message: String? = null,
+    val reason: String? = null,
 ) {
     /** Assistant turn text(s), from `turns[].content` or the `reply` fallback. */
     fun assistantTexts(): List<String> {
