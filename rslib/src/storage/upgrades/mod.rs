@@ -9,10 +9,11 @@ pub(super) const SCHEMA_STARTING_VERSION: u8 = 11;
 ///
 /// Synapse (M1/M2): the wire/on-disk format is still schema 18; the versions
 /// above it — 19 (concepts projection), 20 (prerequisite edges), 21 (card
-/// lineage) — add LOCAL, DERIVED tables that never sync. They are dropped on
-/// downgrade to the schema-18 sync/colpkg format and rebuilt from source
-/// (tags / authored seed / custom_data) on next open.
-pub(super) const SCHEMA_MAX_VERSION: u8 = 21;
+/// lineage), 22 (AAMC-spine re-key of the concept projection) — add or refresh
+/// LOCAL, DERIVED tables that never sync. They are dropped on downgrade to the
+/// schema-18 sync/colpkg format and rebuilt from source (tags / authored seed /
+/// custom_data) on next open.
+pub(super) const SCHEMA_MAX_VERSION: u8 = 22;
 
 use super::SchemaVersion;
 use super::SqliteStorage;
@@ -69,6 +70,17 @@ impl SqliteStorage {
                 .execute_batch(include_str!("schema21_upgrade.sql"))?;
             self.upgrade_lineage_to_schema21()?;
         }
+        if ver < 22 {
+            // Synapse: re-key the LOCAL, DERIVED concept projection onto the
+            // AAMC MCAT spine's canonical
+            // `concept::<section>::<category>::<topic>` tags. No table shape
+            // change — the projection/edges are truncated and then rebuilt from
+            // the current note tags and the vendored spine seed.
+            self.db
+                .execute_batch(include_str!("schema22_upgrade.sql"))?;
+            self.rebuild_concepts_from_tags()?;
+            self.rebuild_concept_edges_from_seed()?;
+        }
 
         // in some future schema upgrade, we may want to change
         // _collapsed to _expanded in DeckCommon and invert existing values, so
@@ -102,8 +114,12 @@ impl SqliteStorage {
     /// wire/on-disk format; ends at `ver = 18`. Rebuilt from source on next
     /// open.
     fn drop_local_synapse_tables(&self) -> Result<()> {
-        // card_lineage (21) -> concept_edges (20) -> concepts + card_concepts
-        // (19). schema19_downgrade runs last and leaves ver = 18.
+        // spine re-key (22, no shape) -> card_lineage (21) -> concept_edges
+        // (20) -> concepts + card_concepts (19). schema22_downgrade only steps
+        // the version back to 21; schema19_downgrade runs last and leaves
+        // ver = 18.
+        self.db
+            .execute_batch(include_str!("schema22_downgrade.sql"))?;
         self.db
             .execute_batch(include_str!("schema21_downgrade.sql"))?;
         self.db
@@ -145,10 +161,10 @@ mod test {
     #[allow(clippy::assertions_on_constants)]
     fn assert_latest_schema_version() {
         // The wire/on-disk format is still schema 18; local Synapse tables push
-        // the openable max to 21 (see SCHEMA_MAX_VERSION). If this bumps again,
+        // the openable max to 22 (see SCHEMA_MAX_VERSION). If this bumps again,
         // ensure downgrade_to(SchemaVersion::V18) drops any new local table.
         assert_eq!(
-            21, SCHEMA_MAX_VERSION,
+            22, SCHEMA_MAX_VERSION,
             "on bump, update downgrade_to() to drop new local tables and keep V18 the sync format"
         );
     }

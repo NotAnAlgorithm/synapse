@@ -298,7 +298,7 @@ def pick_concept_and_generate(mw: aqt.main.AnkiQt) -> None:
     else:
         concept_tag = getOnlyText(
             "Enter a concept tag to generate for "
-            "(e.g. concept::biochem::enzyme_kinetics):",
+            "(e.g. concept::BB::1A::control_of_enzyme_activity):",
             parent=mw,
         ).strip()
         if not concept_tag:

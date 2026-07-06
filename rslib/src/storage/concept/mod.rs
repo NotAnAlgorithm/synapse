@@ -3,11 +3,13 @@
 
 //! Storage layer for the Synapse concept projection.
 //!
-//! The `concept::<section>::<id>` note-tag convention is the source of truth
-//! for the concept layer. These tables are a queryable, table-driven projection
-//! of that tag data: `concepts` assigns each distinct concept tag a stable,
-//! append-only id, and `card_concepts` maps each card to every concept tag on
-//! its note.
+//! The canonical `concept::<section>::<category>::<topic>` note-tag convention
+//! (e.g. `concept::BB::1A::amino_acids`) is the source of truth for the concept
+//! layer, keyed to the AAMC MCAT content spine: `<section>` is the AAMC section
+//! (BB/CP/PS) and `<category>` the content-category code (1A, 4C, …). These
+//! tables are a queryable, table-driven projection of that tag data: `concepts`
+//! assigns each distinct concept tag a stable, append-only id, and
+//! `card_concepts` maps each card to every concept tag on its note.
 //!
 //! Consistency with the tags is maintained by the note add/update path (which
 //! calls [`SqliteStorage::refresh_card_concepts_for_note`]) and can be fully
@@ -29,7 +31,7 @@ use crate::tags::split_tags;
 crate::define_newtype!(ConceptId, i64);
 
 /// Note-tag prefix identifying a concept tag, e.g.
-/// `concept::biochem::amino_acid_charge`.
+/// `concept::BB::1A::amino_acids`.
 pub(crate) const CONCEPT_TAG_PREFIX: &str = "concept::";
 
 /// A row of the `concepts` table.
@@ -53,16 +55,26 @@ pub(crate) struct CardConceptTag {
     pub section: String,
 }
 
-/// Extract the `<section>` (2nd `::` segment) from a full concept tag.
+/// Extract the AAMC `<section>` (2nd `::` segment) from a full concept tag.
 ///
-/// e.g. `concept::biochem::amino_acid_charge` -> `biochem`. Returns an empty
-/// string if the tag has no section segment.
+/// e.g. `concept::BB::1A::amino_acids` -> `BB`. Returns an empty string if the
+/// tag has no section segment.
 pub(crate) fn section_of_concept_tag(tag: &str) -> &str {
     tag.split("::").nth(1).unwrap_or_default()
 }
 
+/// Extract the `<category>` (3rd `::` segment) from a full concept tag.
+///
+/// e.g. `concept::BB::1A::amino_acids` -> `1A`. Returns an empty string if the
+/// tag has no category segment.
+#[allow(dead_code)] // AAMC-category accessor for read-model/graph consumers; exercised by tests
+pub(crate) fn category_of_concept_tag(tag: &str) -> &str {
+    tag.split("::").nth(2).unwrap_or_default()
+}
+
 /// Whether the given tag is a concept tag with a non-empty section, i.e. of the
-/// form `concept::<section>::...`. Malformed tags (`concept::` alone, or
+/// canonical form `concept::<section>::<category>::<topic>` (only a non-empty
+/// `<section>` is required here). Malformed tags (`concept::` alone, or
 /// `concept::foo` with no trailing segment) are ignored so the projection never
 /// carries a concept with an empty section.
 pub(crate) fn is_concept_tag(tag: &str) -> bool {
@@ -253,19 +265,31 @@ mod test {
 
     #[test]
     fn section_and_tag_parsing() {
-        assert_eq!(section_of_concept_tag("concept::biochem::amino"), "biochem");
-        assert_eq!(section_of_concept_tag("concept::physics"), "physics");
+        // Canonical `concept::<section>::<category>::<topic>` form.
+        assert_eq!(
+            section_of_concept_tag("concept::BB::1A::amino_acids"),
+            "BB"
+        );
+        assert_eq!(
+            category_of_concept_tag("concept::BB::1A::amino_acids"),
+            "1A"
+        );
+        assert_eq!(section_of_concept_tag("concept::CP"), "CP");
+        // no category segment -> empty
+        assert_eq!(category_of_concept_tag("concept::CP"), "");
         assert_eq!(section_of_concept_tag("concept::"), "");
+        assert_eq!(category_of_concept_tag("concept::"), "");
         assert_eq!(section_of_concept_tag("other::x::y"), "x");
+        assert_eq!(category_of_concept_tag("other::x::y"), "y");
 
-        assert!(is_concept_tag("concept::biochem::amino"));
-        assert!(is_concept_tag("concept::physics::kinematics"));
-        // section present but no trailing id is still a usable concept
-        assert!(is_concept_tag("concept::physics"));
+        assert!(is_concept_tag("concept::BB::1A::amino_acids"));
+        assert!(is_concept_tag("concept::CP::4A::translational_motion"));
+        // section present but no trailing segments is still a usable concept
+        assert!(is_concept_tag("concept::CP"));
         // malformed / non-concept tags are rejected
         assert!(!is_concept_tag("concept::"));
-        assert!(!is_concept_tag("concepts::biochem::x"));
-        assert!(!is_concept_tag("biochem::amino"));
+        assert!(!is_concept_tag("concepts::BB::1A::x"));
+        assert!(!is_concept_tag("BB::amino"));
         assert!(!is_concept_tag(""));
     }
 
@@ -273,28 +297,28 @@ mod test {
     fn concept_ids_are_stable_and_append_only() -> Result<()> {
         let mut col = Collection::new();
         // ver should be at the latest schema, with the concept tables present.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 21);
+        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 22);
 
         let nt = col.get_notetype_by_name("Basic")?.unwrap();
         let mut note = nt.new_note();
-        note.tags = vec!["concept::biochem::amino".into()];
+        note.tags = vec!["concept::BB::1A::amino_acids".into()];
         col.add_note(&mut note, DeckId(1))?;
 
         let first_id = col
             .storage
-            .get_concept_id_by_tag("concept::biochem::amino")?
+            .get_concept_id_by_tag("concept::BB::1A::amino_acids")?
             .unwrap();
 
         // create a second concept
         let mut note2 = nt.new_note();
         note2.set_field(0, "second")?;
-        note2.tags = vec!["concept::physics::kinematics".into()];
+        note2.tags = vec!["concept::CP::4A::translational_motion".into()];
         col.add_note(&mut note2, DeckId(1))?;
 
         // re-requesting the first tag returns the same id (never renumbered)
         assert_eq!(
             col.storage
-                .get_or_create_concept("concept::biochem::amino")?,
+                .get_or_create_concept("concept::BB::1A::amino_acids")?,
             first_id
         );
 
@@ -302,7 +326,7 @@ mod test {
         col.storage.rebuild_concepts_from_tags()?;
         assert_eq!(
             col.storage
-                .get_concept_id_by_tag("concept::biochem::amino")?
+                .get_concept_id_by_tag("concept::BB::1A::amino_acids")?
                 .unwrap(),
             first_id
         );
@@ -321,13 +345,19 @@ mod test {
         let mut note = nt.new_note();
         note.set_field(0, "front")?;
         note.set_field(1, "back")?;
-        note.tags = vec!["concept::biochem::amino".into(), "unrelated".into()];
+        // Use a spine topic NOT referenced by any seed prerequisite edge, so the
+        // schema-22 seed load has not already created it: adding this note must
+        // create exactly one new concept row.
+        note.tags = vec![
+            "concept::BB::1A::nonenzymatic_protein_function".into(),
+            "unrelated".into(),
+        ];
         col.add_note(&mut note, DeckId(1))?;
 
         // basic+reversed generates two cards; each maps to the single concept.
         let concept_id = col
             .storage
-            .get_concept_id_by_tag("concept::biochem::amino")?
+            .get_concept_id_by_tag("concept::BB::1A::nonenzymatic_protein_function")?
             .unwrap();
         let card_ids = col
             .storage
@@ -338,8 +368,9 @@ mod test {
         expected.sort_unstable();
         assert_eq!(col.storage.all_card_concepts_sorted()?, expected);
 
-        // the note added exactly one new concept ("concept::biochem::amino");
-        // the non-concept "unrelated" tag must not create a concept row.
+        // the note added exactly one new concept
+        // ("concept::BB::1A::nonenzymatic_protein_function"); the non-concept
+        // "unrelated" tag must not create a concept row.
         assert_eq!(col.storage.all_concepts()?.len(), baseline_concepts + 1);
         assert!(col.storage.get_concept_id_by_tag("unrelated")?.is_none());
 
@@ -352,23 +383,23 @@ mod test {
         let nt = col.get_notetype_by_name("Basic")?.unwrap();
         let mut note = nt.new_note();
         note.set_field(0, "front")?;
-        note.tags = vec!["concept::biochem::amino".into()];
+        note.tags = vec!["concept::BB::1A::amino_acids".into()];
         col.add_note(&mut note, DeckId(1))?;
         let cid = col
             .storage
             .all_card_ids_of_note_in_template_order(note.id)?[0];
         let amino = col
             .storage
-            .get_concept_id_by_tag("concept::biochem::amino")?
+            .get_concept_id_by_tag("concept::BB::1A::amino_acids")?
             .unwrap();
         assert_eq!(col.storage.all_card_concepts_sorted()?, vec![(cid, amino)]);
 
         // swap the concept tag for a different one
-        note.tags = vec!["concept::physics::kinematics".into()];
+        note.tags = vec!["concept::CP::4A::translational_motion".into()];
         col.update_note(&mut note)?;
         let kin = col
             .storage
-            .get_concept_id_by_tag("concept::physics::kinematics")?
+            .get_concept_id_by_tag("concept::CP::4A::translational_motion")?
             .unwrap();
         assert_eq!(col.storage.all_card_concepts_sorted()?, vec![(cid, kin)]);
 
@@ -393,7 +424,7 @@ mod test {
         let nt = col.get_notetype_by_name("Basic")?.unwrap();
         let mut note = nt.new_note();
         note.set_field(0, "front")?;
-        note.tags = vec!["concept::biochem::amino".into()];
+        note.tags = vec!["concept::BB::1A::amino_acids".into()];
         col.add_note(&mut note, DeckId(1))?;
         let cid = col
             .storage
@@ -406,15 +437,15 @@ mod test {
         let col = CollectionBuilder::default()
             .set_collection_path(tempfile.path())
             .build()?;
-        // ...and reopening runs the schema 19 + 20 + 21 migrations, which
+        // ...and reopening runs the schema 19 + 20 + 21 + 22 migrations, which
         // reconstruct it from the surviving `concept::` note tags.
-        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 21);
+        assert_eq!(col.storage.db_scalar::<u8>("select ver from col")?, 22);
         let after = col.storage.all_card_concepts_sorted()?;
         assert_eq!(after.len(), 1);
         assert_eq!(after[0].0, cid);
         assert_eq!(
             col.storage
-                .get_concept_id_by_tag("concept::biochem::amino")?
+                .get_concept_id_by_tag("concept::BB::1A::amino_acids")?
                 .map(|_| ()),
             Some(())
         );

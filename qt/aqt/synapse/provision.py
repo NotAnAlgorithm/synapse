@@ -4,10 +4,10 @@
 """Synapse M0 demo-environment provisioning.
 
 This module builds a small, self-contained Synapse demo inside an existing
-collection: it turns on FSRS, creates a dedicated "Synapse" deck-config preset
+collection: it turns on FSRS, creates a dedicated "MCAT" deck-config preset
 with non-blocked (randomised) ordering, defines an "MCAT Application" notetype,
-creates a "Synapse" deck bound to the preset, and seeds a handful of
-concept-tagged demo notes.
+creates an "MCAT" deck (with BB/CP/PS/Practice sub-decks) bound to the preset,
+and seeds a handful of concept-tagged demo notes.
 
 Design constraint: this file imports ONLY from ``anki.*`` (the pylib). It never
 touches ``aqt`` or Qt, takes no GUI objects, and every function operates on an
@@ -20,12 +20,14 @@ Non-obvious backend behaviours worth calling out:
   config set; it is only persisted through the deck-options update flow
   (``update_deck_configs`` with ``fsrs=True``). See :func:`enable_fsrs_and_preset`.
 * In that same flow the *target deck* is (re)bound to whichever config is
-  ``configs[-1]``. We exploit that to create the "Synapse" preset (a
+  ``configs[-1]``. We exploit that to create the "MCAT" preset (a
   ``DeckConfig`` with ``id == 0`` gets a fresh id assigned by the backend) and
-  bind the Synapse deck to it in a single atomic transaction.
-* Concept tags follow the convention ``concept::<section>::<id>`` where every
-  segment uses underscores and contains no spaces (Anki splits tags on
-  whitespace, so a space would create two tags).
+  bind the MCAT deck to it in a single atomic transaction.
+* Concept tags follow the canonical AAMC-spine convention
+  ``concept::<section>::<category>::<topic>`` where the 2nd segment is the AAMC
+  section (BB/CP/PS), the 3rd is the content-category id, and the 4th is the
+  parent topic. Every segment uses underscores and contains no spaces (Anki
+  splits tags on whitespace, so a space would create two tags).
 """
 
 from __future__ import annotations
@@ -44,9 +46,20 @@ _Config = DeckConfig.Config
 
 # --- Names / constants -------------------------------------------------------
 
-SYNAPSE_PRESET_NAME = "Synapse"
-SYNAPSE_DECK_NAME = "Synapse"
+SYNAPSE_PRESET_NAME = "MCAT"
+SYNAPSE_DECK_NAME = "MCAT"
 MCAT_NOTETYPE_NAME = "MCAT Application"
+
+# AAMC-section sub-decks (memorization/concept cards, imported separately) plus
+# a Practice sub-deck for the application/demo notes this file seeds. All four
+# are bound to the same MCAT preset so study at the parent ``MCAT`` deck
+# interleaves everything.
+SYNAPSE_SECTION_DECK_NAMES = [
+    f"{SYNAPSE_DECK_NAME}::BB",
+    f"{SYNAPSE_DECK_NAME}::CP",
+    f"{SYNAPSE_DECK_NAME}::PS",
+]
+SYNAPSE_PRACTICE_DECK_NAME = f"{SYNAPSE_DECK_NAME}::Practice"
 
 # Additional M1 application-item notetypes (decision #4: richer items are new
 # notetypes + templates only; no AI grading). See ITEM_NOTETYPES below for their
@@ -182,11 +195,12 @@ ITEM_NOTETYPES: list[ItemNotetypeSpec] = [
 # --- Seed data ---------------------------------------------------------------
 # Edit this list to change the demo content. Each entry is one note. `concept`
 # is the human-readable concept name (stored in the Concept field); `tag` is the
-# machine concept tag (``concept::<section>::<id>``) attached as the note's tag.
+# machine concept tag (``concept::<section>::<category>::<topic>``, where the
+# 2nd segment is the AAMC section) attached as the note's tag.
 SEED_NOTES: list[dict[str, str]] = [
     # --- Biochem: amino acid charge ---
     {
-        "tag": "concept::biochem::amino_acid_charge",
+        "tag": "concept::BB::1A::amino_acids",
         "concept": "Amino acid charge",
         "stem": "At physiological pH (7.4), what is the net charge of a lysine "
         "side chain in a peptide?",
@@ -195,7 +209,7 @@ SEED_NOTES: list[dict[str, str]] = [
         "at pH 7.4 it stays protonated and carries a +1 charge.",
     },
     {
-        "tag": "concept::biochem::amino_acid_charge",
+        "tag": "concept::BB::1A::amino_acids",
         "concept": "Amino acid charge",
         "stem": "An enzyme is most active at pH 3. Which residue is most likely "
         "protonated and contributing a positive charge there?",
@@ -204,7 +218,7 @@ SEED_NOTES: list[dict[str, str]] = [
         "making it the residue whose charge shifts most in acidic conditions.",
     },
     {
-        "tag": "concept::biochem::amino_acid_charge",
+        "tag": "concept::BB::1A::amino_acids",
         "concept": "Amino acid charge",
         "stem": "During isoelectric focusing a protein stops migrating at pH 5.2. "
         "What does this pH represent?",
@@ -214,7 +228,7 @@ SEED_NOTES: list[dict[str, str]] = [
     },
     # --- Biochem: enzyme kinetics ---
     {
-        "tag": "concept::biochem::enzyme_kinetics",
+        "tag": "concept::BB::1A::control_of_enzyme_activity",
         "concept": "Enzyme kinetics",
         "stem": "A competitive inhibitor is added to an enzyme assay. How does "
         "the apparent Km change?",
@@ -223,7 +237,7 @@ SEED_NOTES: list[dict[str, str]] = [
         "apparent affinity) while leaving Vmax unchanged.",
     },
     {
-        "tag": "concept::biochem::enzyme_kinetics",
+        "tag": "concept::BB::1A::control_of_enzyme_activity",
         "concept": "Enzyme kinetics",
         "stem": "On a Lineweaver-Burk plot a noncompetitive inhibitor shifts the "
         "y-intercept upward. What does that indicate?",
@@ -232,7 +246,7 @@ SEED_NOTES: list[dict[str, str]] = [
         "Vmax has decreased, the signature of noncompetitive inhibition.",
     },
     {
-        "tag": "concept::biochem::enzyme_kinetics",
+        "tag": "concept::BB::1A::control_of_enzyme_activity",
         "concept": "Enzyme kinetics",
         "stem": "Substrate concentration is far above Km. What is the approximate "
         "reaction rate relative to Vmax?",
@@ -242,14 +256,14 @@ SEED_NOTES: list[dict[str, str]] = [
     },
     # --- Physics: circuits / Ohm's law ---
     {
-        "tag": "concept::physics::circuits_ohms_law",
+        "tag": "concept::CP::4C::circuit_elements",
         "concept": "Ohm's law",
         "stem": "A 12 V battery drives 3 A through a resistor. What is the resistance?",
         "answer": "4 ohms",
         "explanation": "By Ohm's law R = V/I = 12 V / 3 A = 4 ohms.",
     },
     {
-        "tag": "concept::physics::circuits_ohms_law",
+        "tag": "concept::CP::4C::circuit_elements",
         "concept": "Ohm's law",
         "stem": "Two identical resistors are placed in parallel. How does the "
         "total resistance compare to one resistor alone?",
@@ -258,7 +272,7 @@ SEED_NOTES: list[dict[str, str]] = [
         "resistance is half that of a single resistor.",
     },
     {
-        "tag": "concept::physics::circuits_ohms_law",
+        "tag": "concept::CP::4C::circuit_elements",
         "concept": "Ohm's law",
         "stem": "A resistor dissipates 6 W while carrying 2 A. What voltage is "
         "across it?",
@@ -267,7 +281,7 @@ SEED_NOTES: list[dict[str, str]] = [
     },
     # --- Psych: operant conditioning ---
     {
-        "tag": "concept::psych::operant_conditioning",
+        "tag": "concept::PS::7C::associative_learning",
         "concept": "Operant conditioning",
         "stem": "A rat's lever-pressing increases after a shock is removed each "
         "time it presses. What process is this?",
@@ -276,7 +290,7 @@ SEED_NOTES: list[dict[str, str]] = [
         "behavior is negative reinforcement.",
     },
     {
-        "tag": "concept::psych::operant_conditioning",
+        "tag": "concept::PS::7C::associative_learning",
         "concept": "Operant conditioning",
         "stem": "A slot machine pays out after an unpredictable number of pulls. "
         "Which reinforcement schedule is this?",
@@ -285,7 +299,7 @@ SEED_NOTES: list[dict[str, str]] = [
         "variable-ratio schedule, which yields high, steady responding.",
     },
     {
-        "tag": "concept::psych::operant_conditioning",
+        "tag": "concept::PS::7C::associative_learning",
         "concept": "Operant conditioning",
         "stem": "A child stops throwing tantrums after losing screen time for each "
         "outburst. What process reduced the behavior?",
@@ -304,7 +318,7 @@ SEED_NOTES: list[dict[str, str]] = [
 ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
     WHICH_PRINCIPLE_NOTETYPE_NAME: [
         {
-            "tag": "concept::biochem::enzyme_kinetics",
+            "tag": "concept::BB::1A::control_of_enzyme_activity",
             "fields": {
                 "Stem": "Doubling [substrate] far below Km roughly doubles the "
                 "initial reaction rate.",
@@ -317,7 +331,7 @@ ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
             },
         },
         {
-            "tag": "concept::physics::circuits_ohms_law",
+            "tag": "concept::CP::4C::circuit_elements",
             "fields": {
                 "Stem": "A wire's current rises linearly as the voltage across it "
                 "increases, at constant temperature.",
@@ -332,7 +346,7 @@ ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
     ],
     DATA_SNIPPET_NOTETYPE_NAME: [
         {
-            "tag": "concept::biochem::enzyme_kinetics",
+            "tag": "concept::BB::1A::control_of_enzyme_activity",
             "fields": {
                 "Data": "Assay | Vmax | Km<br>Control | 100 | 5<br>+Drug X | 100 | 15",
                 "Question": "What kind of inhibitor is Drug X?",
@@ -343,7 +357,7 @@ ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
             },
         },
         {
-            "tag": "concept::physics::circuits_ohms_law",
+            "tag": "concept::CP::4C::circuit_elements",
             "fields": {
                 "Data": "V (V) | I (A)<br>2 | 0.5<br>4 | 1.0<br>6 | 1.5",
                 "Question": "What is the resistance of this component?",
@@ -356,7 +370,7 @@ ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
     ],
     EXPLAIN_WHY_NOTETYPE_NAME: [
         {
-            "tag": "concept::biochem::amino_acid_charge",
+            "tag": "concept::BB::1A::amino_acids",
             "fields": {
                 "Prompt": "Explain why glycine has no net charge at its pI but "
                 "lysine's pI is well above 7.",
@@ -368,7 +382,7 @@ ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
             },
         },
         {
-            "tag": "concept::psych::operant_conditioning",
+            "tag": "concept::PS::7C::associative_learning",
             "fields": {
                 "Prompt": "Explain why a variable-ratio schedule produces behavior "
                 "that is especially resistant to extinction.",
@@ -387,14 +401,25 @@ ITEM_SEED_NOTES: dict[str, list[dict[str, Any]]] = {
 
 
 def section_of(concept_tag: str) -> str:
-    """Return the section, i.e. the 2nd ``::`` segment of a concept tag.
+    """Return the AAMC section, i.e. the 2nd ``::`` segment of a concept tag.
 
-    ``concept::biochem::amino_acid_charge`` -> ``biochem``.
+    ``concept::BB::1A::amino_acids`` -> ``BB``.
     """
     parts = concept_tag.split("::")
     if len(parts) < 2:
         raise ValueError(f"not a concept tag: {concept_tag!r}")
     return parts[1]
+
+
+def category_of(concept_tag: str) -> str:
+    """Return the content category, i.e. the 3rd ``::`` segment of a concept tag.
+
+    ``concept::BB::1A::amino_acids`` -> ``1A``.
+    """
+    parts = concept_tag.split("::")
+    if len(parts) < 3:
+        raise ValueError(f"not a concept tag: {concept_tag!r}")
+    return parts[2]
 
 
 # --- Step 1: FSRS + Synapse preset ------------------------------------------
@@ -404,9 +429,9 @@ def enable_fsrs_and_preset(
     col: anki.collection.Collection,
     opts: SynapseOptions | None = None,
 ) -> DeckConfigId:
-    """Ensure the "Synapse" preset exists, optionally enabling collection FSRS.
+    """Ensure the "MCAT" preset exists, optionally enabling collection FSRS.
 
-    Returns the config id of the "Synapse" preset. ``opts`` selects which
+    Returns the config id of the "MCAT" preset. ``opts`` selects which
     scheduling features to write onto the preset and whether FSRS is turned on;
     ``None`` means the default (recommended) Synapse behaviour.
 
@@ -414,7 +439,7 @@ def enable_fsrs_and_preset(
     everything through ``update_deck_configs``. In that flow the *target deck*
     is rebound to ``configs[-1]``; here the target is simply the current deck
     (we only care about the global fsrs flag + creating the preset), and we make
-    the preset the last config so nothing else is disturbed. The Synapse deck is
+    the preset the last config so nothing else is disturbed. The MCAT decks are
     bound to the preset separately in :func:`create_synapse_deck`, which keeps
     the two concerns independent and each idempotent.
     """
@@ -503,12 +528,12 @@ def _find_config_by_name(fu: Any, name: str) -> DeckConfig | None:
 
 
 def _preset_id(col: anki.collection.Collection) -> DeckConfigId:
-    """Look up the Synapse preset id by name (after it has been saved)."""
+    """Look up the MCAT preset id by name (after it has been saved)."""
     fu = col.decks.get_deck_configs_for_update(col.decks.get_current_id())
     for cwe in fu.all_config:
         if cwe.config.name == SYNAPSE_PRESET_NAME:
             return DeckConfigId(cwe.config.id)
-    raise RuntimeError("Synapse preset not found after creation")
+    raise RuntimeError("MCAT preset not found after creation")
 
 
 # --- Step 2: MCAT Application notetype ---------------------------------------
@@ -574,23 +599,66 @@ def create_item_notetypes(
     return {spec.name: create_item_notetype(col, spec) for spec in ITEM_NOTETYPES}
 
 
-# --- Step 3: Synapse deck ----------------------------------------------------
+# --- Step 3: MCAT decks ------------------------------------------------------
 
 
-def create_synapse_deck(
-    col: anki.collection.Collection, preset_id: DeckConfigId
+def _bind_deck_to_preset(
+    col: anki.collection.Collection,
+    deck_name: str,
+    preset_id: DeckConfigId,
 ) -> DeckId:
-    """Create (or reuse) the "Synapse" deck and bind it to the preset."""
-    did = col.decks.id(SYNAPSE_DECK_NAME)
+    """Create (or reuse) ``deck_name`` and bind it to the preset. Returns its id.
+
+    Idempotent: ``col.decks.id`` creates the deck (and any missing parents) when
+    absent, and ``set_config_id_for_deck_dict`` just rewrites the deck dict's
+    ``"conf"`` so re-binding an already-bound deck is a no-op.
+    """
+    did = col.decks.id(deck_name)
     assert did is not None  # id() creates when missing
 
-    # Bind the deck to the Synapse preset (idempotent: set_config_id just
-    # rewrites the deck dict's "conf").
     deck = col.decks.get(did)
     assert deck is not None
     if deck.get("conf") != preset_id:
         col.decks.set_config_id_for_deck_dict(deck, preset_id)
 
+    return did
+
+
+def create_synapse_deck(
+    col: anki.collection.Collection, preset_id: DeckConfigId
+) -> DeckId:
+    """Create (or reuse) the "MCAT" deck tree and bind it all to the preset.
+
+    Provisions the parent ``MCAT`` deck plus the ``MCAT::BB``, ``MCAT::CP``,
+    ``MCAT::PS`` (memorization/concept cards, imported separately) and
+    ``MCAT::Practice`` (application/demo notes seeded here) sub-decks. Every deck
+    is bound to the *same* MCAT preset so study at the parent ``MCAT`` deck
+    interleaves everything. Returns the parent ``MCAT`` deck id.
+
+    Sub-decks are bound individually because ``set_config_id_for_deck_dict``
+    binds a single deck dict; ``col.decks.id`` on a ``"MCAT::BB"``-style name
+    auto-creates the parent, so binding each leaf covers the whole tree.
+    """
+    # Parent + all sub-decks share the MCAT preset. Binding the parent first
+    # ensures it exists before children reference it (id() would create it
+    # anyway, but this keeps the parent explicitly bound too).
+    parent_did = _bind_deck_to_preset(col, SYNAPSE_DECK_NAME, preset_id)
+    for name in SYNAPSE_SECTION_DECK_NAMES:
+        _bind_deck_to_preset(col, name, preset_id)
+    _bind_deck_to_preset(col, SYNAPSE_PRACTICE_DECK_NAME, preset_id)
+
+    return parent_did
+
+
+def practice_deck_id(col: anki.collection.Collection) -> DeckId:
+    """Return the ``MCAT::Practice`` deck id (creating it if missing).
+
+    The demo seed notes are all application/practice items, so they live here
+    rather than in the section (BB/CP/PS) sub-decks, which hold the separately
+    imported memorization cards.
+    """
+    did = col.decks.id(SYNAPSE_PRACTICE_DECK_NAME)
+    assert did is not None
     return did
 
 
@@ -602,10 +670,12 @@ def seed_notes(
     notetype_id: NotetypeId,
     deck_id: DeckId,
 ) -> int:
-    """Seed the demo MCAT notes. Idempotent. Returns the number added.
+    """Seed the demo MCAT notes into ``deck_id``. Idempotent. Returns count.
 
-    Guard: if the Synapse deck already contains any MCAT Application notes we
-    skip seeding entirely rather than risk duplicates.
+    These are application/practice items, so callers pass the ``MCAT::Practice``
+    deck id. Guard: if the MCAT deck tree already contains any MCAT Application
+    notes we skip seeding entirely rather than risk duplicates. (``deck:MCAT``
+    matches the parent and all sub-decks, so this covers ``MCAT::Practice``.)
     """
     if col.find_notes(f'deck:{SYNAPSE_DECK_NAME} note:"{MCAT_NOTETYPE_NAME}"'):
         return 0
@@ -634,11 +704,12 @@ def seed_item_notes(
     notetype_ids: dict[str, NotetypeId],
     deck_id: DeckId,
 ) -> int:
-    """Seed demo notes for the M1 item notetypes. Idempotent. Returns count.
+    """Seed demo notes for the M1 item notetypes into ``deck_id``. Idempotent.
 
-    Per notetype: skip seeding if the Synapse deck already holds any note of
-    that notetype (so re-provisioning never duplicates). Each seed spec's
-    ``fields`` dict must cover exactly that notetype's fields.
+    These are application/practice items, so callers pass the ``MCAT::Practice``
+    deck id. Per notetype: skip seeding if the MCAT deck tree already holds any
+    note of that notetype (so re-provisioning never duplicates). Each seed
+    spec's ``fields`` dict must cover exactly that notetype's fields.
     """
     added = 0
     for name, specs in ITEM_SEED_NOTES.items():
@@ -755,11 +826,14 @@ def provision_with_options(
 
     deck_id = create_synapse_deck(col, config_id)
 
-    # Seed demo content only when requested. Seeding is itself idempotent, so
-    # skipping it never leaves a half-populated deck.
+    # All seeded notes are application/practice items → route them to the
+    # MCAT::Practice sub-deck (the section sub-decks hold the separately imported
+    # memorization cards). Seed demo content only when requested. Seeding is
+    # itself idempotent, so skipping it never leaves a half-populated deck.
     if opts.install_seed_content:
-        notes_added = seed_notes(col, notetype_id, deck_id)
-        item_notes_added = seed_item_notes(col, item_notetype_ids, deck_id)
+        practice_did = practice_deck_id(col)
+        notes_added = seed_notes(col, notetype_id, practice_did)
+        item_notes_added = seed_item_notes(col, item_notetype_ids, practice_did)
     else:
         notes_added = 0
         item_notes_added = 0

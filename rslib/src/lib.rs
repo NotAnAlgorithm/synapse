@@ -40,6 +40,7 @@ pub mod services;
 mod stats;
 pub mod storage;
 pub mod sync;
+pub(crate) mod synapse;
 pub mod tags;
 pub mod template;
 pub mod template_filters;

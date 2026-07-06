@@ -8,7 +8,7 @@ pure-pylib ``aqt/aqt/synapse/provision.py`` module, loaded by file path so we
 never import Qt), then calls the ``concept_coverage`` backend RPC and asserts:
 
 * concepts the demo seeds cards for are reported as covered;
-* concepts in the outline that have no card are reported as gaps;
+* spine concepts that have no card are reported as gaps;
 * section/collection rollups add up.
 
 Run with the pylib test harness (e.g. ``just test-py`` / pytest against the
@@ -50,9 +50,13 @@ def test_coverage_reports_covered_and_gaps() -> None:
 
         resp = col._backend.concept_coverage(search="deck:Synapse")
 
-        # The outline has expected concepts, and the demo seeds some of them.
-        assert resp.expected_count > 0
+        # The spine is the expected set, and the demo seeds some of it: 161
+        # topics across the 3 AAMC sections (BB/CP/PS) and 31 content categories.
+        assert resp.expected_count == 161
         assert 0 < resp.covered_count < resp.expected_count
+        assert len(resp.sections) == 3
+        assert {s.section for s in resp.sections} == {"BB", "CP", "PS"}
+        assert len(resp.categories) == 31
 
         # Collect (tag -> covered) across all categories.
         covered: dict[str, bool] = {}
@@ -62,21 +66,21 @@ def test_coverage_reports_covered_and_gaps() -> None:
                 covered[concept.concept] = concept.covered
                 card_counts[concept.concept] = concept.card_count
 
-        # Concepts the demo seeds cards for are covered.
+        # The canonical demo-4 concepts the demo seeds cards for are covered.
         for tag in (
-            "concept::biochem::amino_acid_charge",
-            "concept::biochem::enzyme_kinetics",
-            "concept::physics::circuits_ohms_law",
-            "concept::psych::operant_conditioning",
+            "concept::BB::1A::amino_acids",
+            "concept::BB::1A::control_of_enzyme_activity",
+            "concept::CP::4C::circuit_elements",
+            "concept::PS::7C::associative_learning",
         ):
             assert covered.get(tag) is True, f"expected {tag} covered"
             assert card_counts.get(tag, 0) > 0
 
-        # Outline concepts with no seeded card are gaps.
+        # Spine concepts with no seeded card are gaps.
         for tag in (
-            "concept::biochem::glycolysis",
-            "concept::physics::kinematics",
-            "concept::psych::attribution",
+            "concept::BB::1A::protein_structure",
+            "concept::CP::4A::translational_motion",
+            "concept::PS::6A::sensory_processing",
         ):
             assert covered.get(tag) is False, f"expected {tag} to be a gap"
             assert card_counts.get(tag, 0) == 0

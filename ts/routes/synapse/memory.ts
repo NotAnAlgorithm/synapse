@@ -92,10 +92,15 @@ export function overallMemory(concepts: readonly ConceptScore[]): OverallMemory 
     };
 }
 
+/** Canonical AAMC section ordering for the dashboard. Sections not listed
+ * here (including unsectioned "") sort after these, by locale. */
+const SECTION_ORDER = ["BB", "CP", "PS", "CARS"] as const;
+
 /**
  * Per-section rollups (F1). Groups concepts by `section` and computes a
  * weighted-mean Memory over each section's sufficient concepts, alongside
- * coverage (concept/card counts). Sorted by section name for stable display;
+ * coverage (concept/card counts). Sorted in canonical AAMC section order
+ * (BB, CP, PS, CARS, then anything else by locale) for stable display;
  * unsectioned concepts (empty `section`) are grouped under "" and sorted last.
  */
 export function sectionRollups(concepts: readonly ConceptScore[]): SectionRollup[] {
@@ -130,6 +135,19 @@ export function sectionRollups(concepts: readonly ConceptScore[]): SectionRollup
         if (b.section === "" && a.section !== "") {
             return -1;
         }
+        // Impose canonical AAMC section order (BB, CP, PS, CARS); sections not
+        // in the list fall to the end and sort among themselves by locale.
+        const ai = SECTION_ORDER.indexOf(a.section as (typeof SECTION_ORDER)[number]);
+        const bi = SECTION_ORDER.indexOf(b.section as (typeof SECTION_ORDER)[number]);
+        if (ai !== -1 || bi !== -1) {
+            if (ai === -1) {
+                return 1;
+            }
+            if (bi === -1) {
+                return -1;
+            }
+            return ai - bi;
+        }
         return localeCompare(a.section, b.section);
     });
 }
@@ -161,8 +179,22 @@ export function conceptLabel(concept: string): string {
     return cleaned.length > 0 ? cleaned : concept;
 }
 
-/** Human-friendly section label (underscores → spaces; empty → fallback). */
+/** Readable names for the canonical AAMC section codes (the 2nd `::` segment
+ * of a concept tag). Unknown values fall back to underscore→space cleaning. */
+const SECTION_LABELS: Record<string, string> = {
+    BB: "Biological & Biochemical Foundations",
+    CP: "Chemical & Physical Foundations",
+    PS: "Psychological, Social & Biological Foundations",
+    CARS: "Critical Analysis & Reasoning",
+};
+
+/** Human-friendly section label: maps AAMC section codes (BB/CP/PS/CARS) to
+ * readable names, else cleans underscores → spaces; empty → fallback. */
 export function sectionLabel(section: string): string {
+    const known = SECTION_LABELS[section];
+    if (known !== undefined) {
+        return known;
+    }
     const cleaned = section.replace(/_/g, " ").trim();
     return cleaned.length > 0 ? cleaned : "Uncategorized";
 }

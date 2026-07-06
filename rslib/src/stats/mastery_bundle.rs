@@ -311,28 +311,34 @@ mod test {
     #[test]
     fn focus_with_prerequisites_orders_weakest_first() -> Result<()> {
         let mut col = Collection::new();
-        // enzyme_kinetics depends (via SEED_EDGES) on amino_acid_charge and
-        // protein_structure.
-        add_concept_card(&mut col, "kinetics", "concept::biochem::enzyme_kinetics");
+        // enzyme_structure_and_function depends (via the spine seed) on
+        // amino_acids and protein_structure.
+        add_concept_card(
+            &mut col,
+            "enzyme",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
 
-        // amino_acid_charge: two well-remembered scored cards -> mastered.
-        let a1 = add_concept_card(&mut col, "a1", "concept::biochem::amino_acid_charge");
-        let a2 = add_concept_card(&mut col, "a2", "concept::biochem::amino_acid_charge");
+        // amino_acids: two well-remembered scored cards -> mastered.
+        let a1 = add_concept_card(&mut col, "a1", "concept::BB::1A::amino_acids");
+        let a2 = add_concept_card(&mut col, "a2", "concept::BB::1A::amino_acids");
         make_well_remembered(&mut col, a1);
         make_well_remembered(&mut col, a2);
 
         // protein_structure: has a card but no memory state -> unmastered,
         // has_cards, memory 0 -> it is the weak prerequisite.
-        add_concept_card(&mut col, "ps", "concept::biochem::protein_structure");
+        add_concept_card(&mut col, "ps", "concept::BB::1A::protein_structure");
 
-        let resp =
-            col.concept_mastery_bundle(&["concept::biochem::enzyme_kinetics".to_string()], "")?;
+        let resp = col.concept_mastery_bundle(
+            &["concept::BB::1A::enzyme_structure_and_function".to_string()],
+            "",
+        )?;
         assert_eq!(resp.bundles.len(), 1);
         let bundle = &resp.bundles[0];
 
         let focus = bundle.focus.as_ref().expect("focus present");
-        assert_eq!(focus.concept, "concept::biochem::enzyme_kinetics");
-        assert_eq!(focus.section, "biochem");
+        assert_eq!(focus.concept, "concept::BB::1A::enzyme_structure_and_function");
+        assert_eq!(focus.section, "BB");
         assert!(focus.has_cards);
         assert_eq!(focus.card_count, 1);
 
@@ -343,19 +349,19 @@ mod test {
             .iter()
             .map(|p| p.concept.as_str())
             .collect();
-        assert!(tags.contains(&"concept::biochem::amino_acid_charge"));
-        assert!(tags.contains(&"concept::biochem::protein_structure"));
+        assert!(tags.contains(&"concept::BB::1A::amino_acids"));
+        assert!(tags.contains(&"concept::BB::1A::protein_structure"));
 
         // Weakest-first: the unmastered-with-cards prerequisite leads.
         let top = &bundle.prerequisites[0];
-        assert_eq!(top.concept, "concept::biochem::protein_structure");
+        assert_eq!(top.concept, "concept::BB::1A::protein_structure");
         assert!(top.has_cards);
         assert!(!top.mastered);
         assert_eq!(top.memory, 0.0);
 
         // The mastered prerequisite comes last and reads as mastered.
         let amino = &bundle.prerequisites[1];
-        assert_eq!(amino.concept, "concept::biochem::amino_acid_charge");
+        assert_eq!(amino.concept, "concept::BB::1A::amino_acids");
         assert!(amino.mastered);
         assert!(amino.has_cards);
         assert_eq!(amino.scored_card_count, 2);
@@ -389,42 +395,52 @@ mod test {
         let mut col = Collection::new();
         // Two cards for the focus concept, one for a prerequisite. Scoping to a
         // single card's note restricts the counts to what is in scope.
-        add_concept_card(&mut col, "k1", "concept::biochem::enzyme_kinetics");
-        add_concept_card(&mut col, "k2", "concept::biochem::enzyme_kinetics");
-        add_concept_card(&mut col, "amino", "concept::biochem::amino_acid_charge");
+        add_concept_card(
+            &mut col,
+            "e1",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
+        add_concept_card(
+            &mut col,
+            "e2",
+            "concept::BB::1A::enzyme_structure_and_function",
+        );
+        add_concept_card(&mut col, "amino", "concept::BB::1A::amino_acids");
 
         // Whole collection: focus sees both its cards; the seeded prerequisite
         // that has a card in scope reads has_cards.
-        let full =
-            col.concept_mastery_bundle(&["concept::biochem::enzyme_kinetics".to_string()], "")?;
+        let full = col.concept_mastery_bundle(
+            &["concept::BB::1A::enzyme_structure_and_function".to_string()],
+            "",
+        )?;
         let full_focus = full.bundles[0].focus.as_ref().unwrap();
         assert_eq!(full_focus.card_count, 2);
         let amino_full = full.bundles[0]
             .prerequisites
             .iter()
-            .find(|p| p.concept == "concept::biochem::amino_acid_charge")
+            .find(|p| p.concept == "concept::BB::1A::amino_acids")
             .expect("amino prerequisite present");
         assert!(amino_full.has_cards);
 
         // Scope to just the focus concept's cards. The focus is unchanged, but
         // the out-of-scope prerequisite now reads "no cards in scope".
         let scoped = col.concept_mastery_bundle(
-            &["concept::biochem::enzyme_kinetics".to_string()],
-            "tag:concept::biochem::enzyme_kinetics",
+            &["concept::BB::1A::enzyme_structure_and_function".to_string()],
+            "tag:concept::BB::1A::enzyme_structure_and_function",
         )?;
         let scoped_focus = scoped.bundles[0].focus.as_ref().unwrap();
         assert_eq!(scoped_focus.card_count, 2);
         let amino_scoped = scoped.bundles[0]
             .prerequisites
             .iter()
-            .find(|p| p.concept == "concept::biochem::amino_acid_charge")
+            .find(|p| p.concept == "concept::BB::1A::amino_acids")
             .expect("amino prerequisite still listed");
         assert!(!amino_scoped.has_cards);
         assert_eq!(amino_scoped.card_count, 0);
 
         // A search matching nothing zeroes the focus but never errors.
         let empty = col.concept_mastery_bundle(
-            &["concept::biochem::enzyme_kinetics".to_string()],
+            &["concept::BB::1A::enzyme_structure_and_function".to_string()],
             "tag:concept::nope::missing",
         )?;
         let empty_focus = empty.bundles[0].focus.as_ref().unwrap();

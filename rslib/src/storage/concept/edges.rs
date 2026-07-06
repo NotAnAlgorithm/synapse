@@ -17,8 +17,9 @@
 //!   (rows where X is `from`).
 //!
 //! Because concept ids are local/derived (assigned append-only from
-//! `concept::` note tags), the graph is authored as a static SEED of
-//! `(from_tag, to_tag)` pairs ([`SEED_EDGES`]) and resolved to ids via
+//! `concept::` note tags), the graph is authored in the vendored AAMC MCAT
+//! spine as prerequisite lists per topic, projected to `(from_tag, to_tag)`
+//! pairs by [`crate::synapse::spine::seed_edges`] and resolved to ids via
 //! [`SqliteStorage::get_or_create_concept`] by
 //! [`SqliteStorage::rebuild_concept_edges_from_seed`], which the schema-20
 //! migration runs and which doubles as a repair entry point.
@@ -29,6 +30,7 @@ use super::ConceptId;
 use super::SqliteStorage;
 use crate::error::Result;
 use crate::prelude::*;
+use crate::synapse::spine;
 
 /// A prerequisite edge in the concept graph: `from` is a prerequisite of `to`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -36,44 +38,6 @@ pub(crate) struct ConceptEdge {
     pub from: ConceptId,
     pub to: ConceptId,
 }
-
-/// Authored prerequisite seed, expressed as `(prerequisite_tag, dependent_tag)`
-/// over the M1 demo concepts. Each pair reads "master the first before the
-/// second". Extend this table as the concept catalogue grows; ids are resolved
-/// at load time so only the tags need be stable.
-///
-/// The referenced concept tags are created on demand when the seed is loaded,
-/// so a pair may be authored before any note carries the tag.
-pub(crate) const SEED_EDGES: &[(&str, &str)] = &[
-    // --- Biochemistry ---
-    // Understanding amino-acid charge underpins reasoning about enzyme
-    // structure/kinetics and buffering.
-    (
-        "concept::biochem::amino_acid_charge",
-        "concept::biochem::enzyme_kinetics",
-    ),
-    (
-        "concept::biochem::amino_acid_charge",
-        "concept::biochem::protein_structure",
-    ),
-    (
-        "concept::biochem::protein_structure",
-        "concept::biochem::enzyme_kinetics",
-    ),
-    // --- Physics ---
-    // Kinematics precedes dynamics; both feed energy; energy precedes optics'
-    // wave/energy treatment.
-    (
-        "concept::physics::kinematics",
-        "concept::physics::newtons_laws",
-    ),
-    ("concept::physics::newtons_laws", "concept::physics::energy"),
-    ("concept::physics::energy", "concept::physics::optics"),
-    // --- Psychology / behavioural sciences ---
-    // Neurons underlie sensation, which underlies perception.
-    ("concept::psych::neurons", "concept::psych::sensation"),
-    ("concept::psych::sensation", "concept::psych::perception"),
-];
 
 impl SqliteStorage {
     /// Insert a prerequisite edge (`from` is a prerequisite of `to`).
@@ -135,16 +99,16 @@ impl SqliteStorage {
             .collect()
     }
 
-    /// (Re)load the authored [`SEED_EDGES`] into `concept_edges`, resolving
-    /// each tag pair to (local, derived) concept ids. Existing edges are
-    /// left in place (insert-or-ignore), so this is safe to run repeatedly
-    /// and is used both by the schema-20 migration and as a repair entry
-    /// point.
+    /// (Re)load the authored spine prerequisite edges (see
+    /// [`spine::seed_edges`]) into `concept_edges`, resolving each tag pair to
+    /// (local, derived) concept ids. Existing edges are left in place
+    /// (insert-or-ignore), so this is safe to run repeatedly and is used both
+    /// by the schema-20 migration and as a repair entry point.
     ///
     /// The referenced concepts are created if missing, mirroring how the
     /// concept projection assigns stable append-only ids from tags.
     pub(crate) fn rebuild_concept_edges_from_seed(&self) -> Result<()> {
-        for (from_tag, to_tag) in SEED_EDGES {
+        for (from_tag, to_tag) in spine::seed_edges() {
             // Defensive: an authored pair with identical tags would resolve to
             // the same id and be rejected by `add_concept_edge` as a self-edge,
             // which — running inside the schema-20 migration — would prevent the
@@ -152,8 +116,8 @@ impl SqliteStorage {
             if from_tag == to_tag {
                 continue;
             }
-            let from = self.get_or_create_concept(from_tag)?;
-            let to = self.get_or_create_concept(to_tag)?;
+            let from = self.get_or_create_concept(&from_tag)?;
+            let to = self.get_or_create_concept(&to_tag)?;
             self.add_concept_edge(from, to)?;
         }
         Ok(())
@@ -169,33 +133,34 @@ mod test {
         let col = Collection::new();
         // The schema-20 migration ran the seed load on open.
         let edges = col.storage.all_concept_edges()?;
-        assert_eq!(edges.len(), SEED_EDGES.len());
+        assert_eq!(edges.len(), spine::seed_edges().len());
 
-        // amino_acid_charge is a prerequisite of enzyme_kinetics.
+        // amino_acids is a prerequisite of enzyme_structure_and_function.
         let amino = col
             .storage
-            .get_concept_id_by_tag("concept::biochem::amino_acid_charge")?
+            .get_concept_id_by_tag("concept::BB::1A::amino_acids")?
             .unwrap();
-        let kinetics = col
+        let enzyme = col
             .storage
-            .get_concept_id_by_tag("concept::biochem::enzyme_kinetics")?
+            .get_concept_id_by_tag("concept::BB::1A::enzyme_structure_and_function")?
             .unwrap();
         let structure = col
             .storage
-            .get_concept_id_by_tag("concept::biochem::protein_structure")?
+            .get_concept_id_by_tag("concept::BB::1A::protein_structure")?
             .unwrap();
 
-        // enzyme_kinetics depends on both amino_acid_charge and protein_structure.
-        let prereqs = col.storage.get_prerequisites(kinetics)?;
+        // enzyme_structure_and_function depends on both amino_acids and
+        // protein_structure.
+        let prereqs = col.storage.get_prerequisites(enzyme)?;
         assert!(prereqs.contains(&amino));
         assert!(prereqs.contains(&structure));
 
-        // amino_acid_charge is a prerequisite of both enzyme_kinetics and
-        // protein_structure (its dependents), but has no prerequisites of its
-        // own.
+        // amino_acids is a prerequisite of both enzyme_structure_and_function
+        // and protein_structure (its dependents), but has no prerequisites of
+        // its own.
         assert!(col.storage.get_prerequisites(amino)?.is_empty());
         let dependents = col.storage.get_dependents(amino)?;
-        assert!(dependents.contains(&kinetics));
+        assert!(dependents.contains(&enzyme));
         assert!(dependents.contains(&structure));
 
         Ok(())
